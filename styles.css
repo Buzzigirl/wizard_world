@@ -383,27 +383,38 @@ body.low-hp::after {
 }
 
 /* Chat (Very Bottom & Full Width) */
+/* Chat (Above Input) */
 .chat-overlay {
     position: absolute;
-    bottom: 5px;
-    /* Very bottom */
+    bottom: 90px;
+    /* Moved up to make room for input */
     left: 50%;
     transform: translateX(-50%);
     width: 96%;
-    /* Almost full width */
     height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
     background: rgba(0, 0, 0, 0.6);
-    /* Slightly darker */
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     padding: 10px;
     backdrop-filter: blur(10px);
+    z-index: 20;
+}
+
+/* Controls (Very Bottom) */
+.control-zone {
+    position: absolute;
+    bottom: 15px;
+    /* Very bottom */
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
     z-index: 30;
-    /* Higher z-index */
 }
 
 .msg {
