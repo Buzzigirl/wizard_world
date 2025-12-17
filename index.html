@@ -4,28 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy: Roguelike V6</title>
+    <title>Wiz Academy: Roguelike V7</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
     <div id="app" class="app-container">
-        <!-- Screens -->
-        <div id="screen-class" class="screen full-center">
+
+        <!-- Screen 0: Intro (Goal Explanation) -->
+        <div id="screen-intro" class="screen full-center">
+            <div class="intro-box glass">
+                <h1>🧙‍♂️ Wizard World: Grammar Quest</h1>
+                <div class="intro-content">
+                    <h3>🎯 교육 목표</h3>
+                    <p>이 게임은 영문법을 자연스럽게 익히고 활용하는 것을 목표로 합니다.</p>
+                    <p>몬스터와의 대화 상황에서 적절한 문장을 완성하여 문제를 해결하세요.</p>
+
+                    <h3>⚔️ 게임 목표</h3>
+                    <p>3가지 테마의 보스를 물리치고 마법 세계의 평화를 되찾으세요.</p>
+                    <p>오답 시에는 데미지를 입으니 신중하게 주문을 외워야 합니다.</p>
+                </div>
+                <button id="btn-intro-start" class="btn-start">도전 시작 (동의)</button>
+            </div>
+        </div>
+
+        <!-- Screen 1: Class -->
+        <div id="screen-class" class="screen full-center hidden">
             <h1>영웅을 선택하세요</h1>
             <div class="cards">
                 <button class="btn-class" data-id="WARRIOR">
                     <div class="icon">⚔️</div>
                     <h2>전사</h2>
+                    <p class="diff">Easy (초급)</p>
+                    <p class="desc">강인한 체력</p>
                 </button>
                 <button class="btn-class" data-id="ROGUE">
                     <div class="icon">🗡️</div>
                     <h2>도적</h2>
+                    <p class="diff">Normal (중급)</p>
+                    <p class="desc">균형 잡힌 능력</p>
                 </button>
                 <button class="btn-class" data-id="MAGE">
                     <div class="icon">🔮</div>
                     <h2>마법사</h2>
+                    <p class="diff">Hard (상급)</p>
+                    <p class="desc">강력한 마법</p>
                 </button>
             </div>
         </div>
@@ -79,14 +103,17 @@
                         <span id="monster-hp-text">100/100</span>
                     </div>
 
-                    <!-- Image always present, toggled via src/class -->
+                    <!-- Monster Image (Card Style) -->
                     <img id="monster-img" class="monster-img" src="" alt="Monster">
+
+                    <!-- Hero Back View (New) -->
+                    <img id="hero-img" class="hero-back" src="assets/hero_back.png" alt="Hero">
 
                     <div id="monster-name">Monster Name</div>
                     <div id="monster-situation">Situation Text...</div>
                 </div>
 
-                <!-- Chat Overlay (Reduced Size, Glass) -->
+                <!-- Chat Overlay (Dark Background) -->
                 <div id="chat-list" class="chat-overlay"></div>
 
                 <div class="control-zone">
@@ -99,31 +126,29 @@
             <div class="panel-right">
                 <h3>PARTNER</h3>
                 <div id="fairy-area" class="fairy-area">
-                    <!-- Placeholder or Image -->
                     <div class="fairy-char">🧚</div>
                 </div>
-                <!-- Fairy Info & Scaffolding -->
                 <div class="fairy-info-box">
                     <div id="fairy-name">FAIRY</div>
                     <div id="fairy-scaffold" class="scaffold-msg">"You can do it!"</div>
                 </div>
 
                 <button class="hint-btn">💡 힌트 사용 (-10 MP)</button>
-            </div>
 
-            <!-- Vertical HUD -->
-            <div class="vertical-hud">
-                <div class="v-bar-container">
-                    <div class="v-bar red">
-                        <div id="bar-hp" class="v-fill" style="height:100%"></div>
+                <!-- HUD Moved Here (Bottom Center of Panel) -->
+                <div class="hud-center">
+                    <div class="v-bar-container">
+                        <div class="v-bar red">
+                            <div id="bar-hp" class="v-fill" style="height:100%"></div>
+                        </div>
+                        <span id="val-hp">100</span><i class="fas fa-heart icon-hud"></i>
                     </div>
-                    <span id="val-hp">100</span><i class="fas fa-heart icon-hud"></i>
-                </div>
-                <div class="v-bar-container">
-                    <div class="v-bar blue">
-                        <div id="bar-mp" class="v-fill" style="height:100%"></div>
+                    <div class="v-bar-container">
+                        <div class="v-bar blue">
+                            <div id="bar-mp" class="v-fill" style="height:100%"></div>
+                        </div>
+                        <span id="val-mp">50</span><i class="fas fa-bolt icon-hud"></i>
                     </div>
-                    <span id="val-mp">50</span><i class="fas fa-bolt icon-hud"></i>
                 </div>
             </div>
         </div>

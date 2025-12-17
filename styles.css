@@ -1,11 +1,10 @@
-/* Roguelike V6 Styles (Glassmorphism & Fixes) */
+/* Roguelike V7 Styles (Game Feel & Polish) */
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Inter:wght@400;700&display=swap');
 
 :root {
     --bg-dark: #0f172a;
     --accent: #8b5cf6;
     --glass-bg: rgba(255, 255, 255, 0.05);
-    /* Lighter, more glass-like */
     --glass-border: rgba(255, 255, 255, 0.2);
     font-size: 24px;
 }
@@ -26,6 +25,19 @@ body.low-hp::after {
     box-shadow: inset 0 0 150px rgba(220, 38, 38, 0.6);
     pointer-events: none;
     z-index: 999;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 .hidden {
@@ -40,23 +52,62 @@ body.low-hp::after {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2670');
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2670');
     background-size: cover;
 }
 
-/* Glass Panels */
+/* Intro Screen */
+.intro-box {
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+    max-width: 800px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 2px solid var(--accent);
+    color: white;
+}
+
+.intro-content {
+    margin: 30px 0;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.btn-start {
+    font-size: 2rem;
+    padding: 15px 50px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Do Hyeon', sans-serif;
+    box-shadow: 0 0 20px var(--accent);
+}
+
+.btn-start:hover {
+    transform: scale(1.1);
+    background: #7c3aed;
+}
+
+/* Panels */
 .main-grid {
     position: absolute;
     inset: 0;
     display: grid;
-    grid-template-columns: 260px 1fr 260px;
+    grid-template-columns: 260px 1fr 300px;
+    /* Right panel wider for HUD */
     height: 100vh;
 }
 
 .panel-left,
 .panel-right {
     background: rgba(15, 23, 42, 0.6);
-    /* Semi-transparent */
     backdrop-filter: blur(15px);
     border-right: 1px solid var(--glass-border);
     padding: 20px;
@@ -68,6 +119,7 @@ body.low-hp::after {
 .panel-right {
     border: none;
     border-left: 1px solid var(--glass-border);
+    position: relative;
 }
 
 .panel-center {
@@ -78,7 +130,7 @@ body.low-hp::after {
     padding: 20px;
 }
 
-/* Selection Cards */
+/* Cards (Class Select) */
 .cards {
     display: flex;
     gap: 20px;
@@ -90,36 +142,44 @@ body.low-hp::after {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid var(--glass-border);
     color: white;
-    padding: 30px;
-    border-radius: 24px;
+    padding: 20px;
+    border-radius: 20px;
     width: 220px;
     cursor: pointer;
     transition: 0.3s;
     backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .btn-class:hover,
 .btn-fairy:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     border-color: white;
 }
 
-.icon {
-    font-size: 3rem;
-    margin-bottom: 10px;
+.diff {
+    color: #fbbf24;
+    font-size: 1rem;
+    margin: 5px 0;
 }
 
-/* World Map */
+.desc {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+/* Map */
 .map-grid {
     display: flex;
-    gap: 40px;
+    gap: 30px;
 }
 
 .map-point {
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid var(--glass-border);
@@ -130,13 +190,12 @@ body.low-hp::after {
     cursor: pointer;
     transition: 0.3s;
     color: white;
-    backdrop-filter: blur(5px);
 }
 
 .map-point:hover {
     transform: scale(1.1);
-    background: rgba(255, 255, 255, 0.25);
     border-color: white;
+    box-shadow: 0 0 20px white;
 }
 
 .map-point.cleared {
@@ -150,79 +209,100 @@ body.low-hp::after {
     pointer-events: none;
 }
 
-/* Monster Zone - KEY FIX: Remove hidden by default, use JS to toggle */
+/* Monster Zone (Battle Area) */
 .monster-zone {
-    margin-top: 20px;
+    margin-top: 10px;
     text-align: center;
     width: 100%;
+    height: 500px;
     position: relative;
-    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Monster Token Style */
 .monster-img {
-    height: 380px;
-    max-width: 100%;
+    height: 300px;
+    width: 300px;
     object-fit: contain;
-    filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.6));
-    animation: float-mob 3s ease-in-out infinite;
-}
-
-@keyframes float-mob {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
+    border-radius: 30px;
+    border: 5px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    /* Slight bg for contrast */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    transition: 0.5s;
+    background-color: white;
+    /* Force white bg as requested "Token" style */
 }
 
 .monster-img.slashed {
-    animation: slash-death 1.5s forwards;
+    animation: slash 1s forwards;
 }
 
-@keyframes slash-death {
+@keyframes slash {
     to {
+        transform: scale(0.9) rotate(10deg);
+        filter: grayscale(1) blur(5px);
         opacity: 0;
-        transform: scale(0.9) rotate(5deg);
-        filter: grayscale(1);
     }
 }
 
-/* Monster Info */
+/* Hero Back View */
+.hero-back {
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+    height: 350px;
+    z-index: 10;
+    filter: drop-shadow(0 0 10px black);
+    transform: scaleX(-1);
+    /* Face right if needed */
+}
+
+/* Monster Info Overlay */
 #monster-name {
-    font-size: 2.2rem;
-    margin-top: 15px;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
     text-shadow: 2px 2px 4px black;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 5px 20px;
+    border-radius: 15px;
 }
 
 #monster-situation {
-    font-size: 1.4rem;
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
     color: #fbbf24;
     background: rgba(0, 0, 0, 0.6);
-    padding: 5px 15px;
+    padding: 5px 10px;
     border-radius: 10px;
-    display: inline-block;
-    margin-top: 5px;
 }
 
-/* HP Bar */
+/* HP Bar (Top of Monster) */
 .hp-bar-bg {
-    width: 400px;
-    height: 30px;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 15px;
-    overflow: hidden;
-    margin: 0 auto 10px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    position: relative;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 25px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    border: 1px solid white;
+    z-index: 20;
 }
 
 #monster-hp-bar {
     height: 100%;
-    background: linear-gradient(90deg, #ef4444, #b91c1c);
+    background: #ef4444;
     transition: width 0.3s;
 }
 
@@ -232,12 +312,11 @@ body.low-hp::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    text-shadow: 1px 1px 2px black;
-    font-weight: bold;
+    font-size: 0.9rem;
+    text-shadow: 1px 1px 1px black;
 }
 
-/* Chat Overlay - V6: Reduced size, centered */
+/* Chat (V7 Darker) */
 .chat-overlay {
     position: absolute;
     bottom: 100px;
@@ -245,128 +324,37 @@ body.low-hp::after {
     transform: translateX(-50%);
     width: 60%;
     height: 140px;
-    /* Reduced height */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     pointer-events: none;
+    z-index: 20;
 }
 
 .msg {
-    padding: 8px 16px;
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.6);
-    /* Slightly darker for readability */
+    padding: 8px 20px;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.85);
+    /* Darker background */
     color: white;
     font-size: 1.1rem;
-    backdrop-filter: blur(4px);
-    opacity: 0.8;
-    transition: 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     text-shadow: 1px 1px 2px black;
 }
 
 .msg.glow {
-    opacity: 1;
-    transform: scale(1.05);
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    border-color: #fbbf24;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
 }
 
-/* Fairy & Scaffolding */
-.fairy-area {
-    font-size: 5rem;
-    margin-bottom: 10px;
-}
-
-.fairy-info-box {
-    text-align: center;
+/* HUD Center (Right Panel) */
+.hud-center {
+    margin-top: auto;
     margin-bottom: 20px;
-    width: 100%;
-}
-
-#fairy-name {
-    font-size: 1.5rem;
-    color: #fbbf24;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.scaffold-msg {
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    padding: 10px;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    position: relative;
-    animation: pop-in 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-}
-
-.scaffold-msg::after {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 0 8px 8px 8px;
-    border-style: solid;
-    border-color: transparent transparent rgba(255, 255, 255, 0.9) transparent;
-}
-
-@keyframes pop-in {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Controls */
-.control-zone {
-    position: absolute;
-    bottom: 30px;
-    width: 60%;
     display: flex;
-    gap: 10px;
-}
-
-#inp-spell {
-    flex: 1;
-    padding: 15px;
-    font-size: 1.3rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-}
-
-#btn-cast {
-    padding: 0 30px;
-    font-size: 1.3rem;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-/* Vertical HUD */
-.vertical-hud {
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    gap: 15px;
-    z-index: 50;
+    gap: 20px;
 }
 
 .v-bar-container {
@@ -376,13 +364,15 @@ body.low-hp::after {
 }
 
 .v-bar {
-    width: 30px;
-    height: 180px;
+    width: 50px;
+    height: 250px;
+    /* Bigger */
     background: rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    border-radius: 25px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
 .v-fill {
@@ -393,71 +383,130 @@ body.low-hp::after {
 }
 
 .v-bar.red .v-fill {
-    background: #ef4444;
+    background: linear-gradient(to top, #991b1b, #ef4444);
 }
 
 .v-bar.blue .v-fill {
-    background: #3b82f6;
+    background: linear-gradient(to top, #1e40af, #3b82f6);
 }
 
 .icon-hud {
-    margin-top: 8px;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    margin-top: 10px;
 }
 
-/* Tower Map */
-#map-container {
-    margin-top: auto;
+/* Controls */
+.control-zone {
+    position: absolute;
+    bottom: 30px;
+    width: 70%;
     display: flex;
-    flex-direction: column;
     gap: 10px;
-    margin-bottom: 40px;
+    z-index: 30;
 }
 
+#inp-spell {
+    flex: 1;
+    padding: 20px;
+    font-size: 1.4rem;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: 1px solid white;
+}
+
+#btn-cast {
+    padding: 0 40px;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Sidebar Map Tooltip */
 .map-node {
+    position: relative;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    margin-bottom: 10px;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.map-node:hover::after {
+    content: attr(data-goal);
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+    border: 1px solid white;
+}
+
+.map-label {
+    position: absolute;
+    left: -30px;
+    font-size: 0.8rem;
+    color: #cbd5e1;
 }
 
 .map-node.current {
-    background: #f59e0b;
-    transform: scale(1.3);
-    border-color: white;
+    border-color: #fbbf24;
+    background: #fbbf24;
+    color: black;
+    transform: scale(1.2);
 }
 
-/* Responsive */
+/* Fairy */
+.fairy-info-box {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.scaffold-msg {
+    background: white;
+    color: black;
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: 10px;
+    position: relative;
+}
+
+.scaffold-msg::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 0 5px 10px 5px;
+    border-style: solid;
+    border-color: transparent transparent white transparent;
+}
+
 @media(max-width: 1024px) {
     .main-grid {
         grid-template-columns: 1fr;
     }
 
-    .panel-left {
+    .panel-left,
+    .panel-right {
         display: none;
     }
 
-    .panel-right {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border: none;
-        height: auto;
-        padding: 0;
-        width: 150px;
+    .hero-back {
+        display: none;
     }
 
-    .fairy-area {
-        font-size: 3rem;
-    }
-
-    .scaffold-msg {
-        font-size: 0.9rem;
-        padding: 5px;
-    }
+    /* Hide hero on mobile */
 }
