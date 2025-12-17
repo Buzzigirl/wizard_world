@@ -23,22 +23,30 @@ export const CLASSES = {
 export const FAIRIES = {
     FIRE: {
         id: 'FIRE', name: '이그니스', type: '불', img: 'assets/fairy_fire.png', icon: '🔥',
-        desc: '뜨거운 열정으로 당신을 응원합니다. (공격적 성향)',
+        desc: '뜨거운 열정으로 당신을 응원합니다.',
+        greeting: "안녕! 나랑 같이 불태워보자!",
+        personality: "난 공격적인 플레이가 좋아! (공격형)",
         scaffold: ["포기하지 마!", "강하게 밀어붙여!", "넌 할 수 있어!"]
     },
     WATER: {
         id: 'WATER', name: '아쿠아', type: '물', img: 'assets/fairy_water.png', icon: '💧',
-        desc: '차분한 지혜로 상황을 분석합니다. (방어적 성향)',
+        desc: '차분한 지혜로 상황을 분석합니다.',
+        greeting: "흐르는 물처럼 유연하게... 함께 할래요?",
+        personality: "안전하고 신중한게 최고지. (방어형)",
         scaffold: ["차분하게 생각해봐.", "물처럼 유연하게.", "심호흡을 해봐."]
     },
     WIND: {
         id: 'WIND', name: '실피드', type: '바람', img: 'assets/fairy_wind.png', icon: '🍃',
-        desc: '자유로운 발상으로 힌트를 줍니다. (속도 중시)',
+        desc: '자유로운 발상으로 힌트를 줍니다.',
+        greeting: "야호! 바람을 타고 어디든 가보자구!",
+        personality: "속도가 생명이야! 답도 빠르게! (속도형)",
         scaffold: ["바람을 타고 가자!", "답이 스쳐 지나가?", "자유롭게 상상해!"]
     },
     GROUND: {
         id: 'GROUND', name: '테라', type: '땅', img: 'assets/fairy_ground.png', icon: '🪨',
-        desc: '묵묵히 곁을 지켜주는 든든한 파트너. (안정 중시)',
+        desc: '묵묵히 곁을 지켜주는 든든한 파트너.',
+        greeting: "단단한 바위처럼, 내가 뒤를 지켜주지.",
+        personality: "기반이 튼튼해야 무너지지 않아. (안정형)",
         scaffold: ["기반을 다져야 해.", "단단한 마음가짐.", "묵직한 한 방."]
     }
 };

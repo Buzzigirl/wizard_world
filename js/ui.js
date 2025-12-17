@@ -51,9 +51,17 @@ export class UIManager {
         document.querySelectorAll('.btn-class').forEach(b => b.addEventListener('click', () => {
             this.game.initPlayer(b.dataset.id); this.showScreen('fairy');
         }));
-        document.querySelectorAll('.btn-fairy').forEach(b => b.addEventListener('click', () => {
-            this.game.fairy = FAIRIES[b.dataset.id]; this.showWorldMap();
-        }));
+        // Initial screen setup
+        this.renderFairySelection();
+
+        // Event delegation for fairy selection
+        this.els.screens.fairy.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-fairy');
+            if (btn) {
+                this.game.fairy = FAIRIES[btn.dataset.id];
+                this.showWorldMap();
+            }
+        });
 
         this.els.game.btn.addEventListener('click', () => {
             this.game.castSpell(this.els.game.input.value.trim());
@@ -235,5 +243,38 @@ export class UIManager {
 
     showGameOver() {
         document.getElementById('perk-list').innerHTML = '<button class="perk-btn" onclick="location.reload()">다시 시작</button>';
+    }
+
+    renderFairySelection() {
+        const container = this.els.screens.fairy.querySelector('.cards');
+        const speechBubble = document.getElementById('fairy-speech-bubble');
+        container.innerHTML = '';
+
+        Object.values(FAIRIES).forEach(f => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-card btn-fairy';
+            btn.dataset.id = f.id;
+
+            // Image based card
+            btn.innerHTML = `
+                <div class="fairy-img-container">
+                    <img src="${f.img}" alt="${f.name}" class="fairy-select-img">
+                </div>
+                <h2>${f.name}</h2>
+                <div class="fairy-type-icon">${f.icon}</div>
+            `;
+
+            // Hover Events for Speech Bubble
+            btn.onmouseenter = () => {
+                speechBubble.textContent = `"${f.personality}"`;
+                speechBubble.classList.add('active');
+            };
+            btn.onmouseleave = () => {
+                speechBubble.textContent = "마우스를 올려보세요!";
+                speechBubble.classList.remove('active');
+            };
+
+            container.appendChild(btn);
+        });
     }
 }
