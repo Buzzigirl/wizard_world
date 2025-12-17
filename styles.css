@@ -891,3 +891,17 @@ body.low-hp::after {
 .msg.scaffold.motivational .scaffold-badge {
     background: #dc2626;
 }
+
+/* Locked Map Point */
+.map-point.locked {
+    filter: grayscale(1);
+    opacity: 0.6;
+    background: rgba(0, 0, 0, 0.6);
+    border-color: #444;
+    cursor: not-allowed;
+}
+.map-point.locked .label {
+    color: #888;
+    text-shadow: none;
+}
+

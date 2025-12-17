@@ -120,7 +120,13 @@ export class UIManager {
         container.innerHTML = '';
         THEMES.forEach((t, i) => {
             const btn = document.createElement('button');
-            const locked = false;
+            // Locking Logic: Theme locked if prev theme not cleared (except first one)
+            // Assuming THEMES order matches progression: Forest(0) -> Desert(1) -> Castle(2)
+            // clearedThemes contains IDs e.g., 'FOREST'
+            const prevTheme = i > 0 ? THEMES[i - 1] : null;
+            const isPrevCleared = prevTheme ? this.game.clearedThemes.includes(prevTheme.id) : true;
+            const locked = !isPrevCleared; // Locked if prev NOT cleared (and not first)
+
             const cleared = this.game.clearedThemes.includes(t.id);
             btn.className = `map-point ${locked ? 'locked' : ''} ${cleared ? 'cleared' : ''}`;
 
@@ -130,6 +136,10 @@ export class UIManager {
                                 <span class="desc">${t.desc}</span>
                              </div>`;
 
+            // Hover effect works for ALL (as requested)
+            btn.onmouseenter = () => this.setBackground(t.bg);
+            btn.onmouseleave = () => this.setBackground(LOBBY_BG);
+
             if (!locked) {
                 btn.onclick = () => {
                     // Remove listeners to prevent race condition
@@ -137,8 +147,10 @@ export class UIManager {
                     this.game.themeIdx = i;
                     this.startGame();
                 };
-                btn.onmouseenter = () => this.setBackground(t.bg);
-                btn.onmouseleave = () => this.setBackground(LOBBY_BG);
+            } else {
+                // Optional: distinct cursor or feedback for locked?
+                btn.style.cursor = 'not-allowed';
+                btn.onclick = () => alert("이전 지역을 클리어해야 합니다!");
             }
             container.appendChild(btn);
         });
@@ -147,15 +159,15 @@ export class UIManager {
     startGame() {
         this.showScreen('game');
         this.playMusic(this.game.getTheme().music);
-
-        this.els.game.btn.textContent = this.game.playerClass.action;
-        this.els.game.input.placeholder = `${this.game.playerClass.action}을(를) 위해 문장을 입력하세요...`;
-
+        this.game.stage = 1;
         this.loadStage();
     }
 
-    playMusic(url) {
-        if (this.bgm.src !== url) { this.bgm.src = url; this.bgm.volume = 0.3; this.bgm.play().catch(() => { }); }
+    playMusic(src) {
+        if (this.bgm.src !== src) {
+            this.bgm.src = src;
+            this.bgm.play().catch(() => { });
+        }
     }
 
     loadStage() {
@@ -169,7 +181,7 @@ export class UIManager {
         this.els.hud.displayStage.textContent = mob.isBoss ? "BOSS" : `Stage ${this.game.stage}`;
 
         this.els.game.mImg.src = mob.img;
-        this.els.game.mImg.classList.remove('hidden', 'slashed');
+        this.els.game.mImg.className = 'monster-img'; // Reset animations
         this.els.game.mName.textContent = mob.name;
 
         this.els.game.fairyArea.innerHTML = `<img src="${this.game.fairy.img}" class="fairy-img-anim">`;
@@ -180,12 +192,22 @@ export class UIManager {
         this.renderMap();
         this.addChat('system', `[전투 시작] ${this.game.playerClass.action} 준비!`);
 
-        // Initial Guide Message
-        // Initial Guide Message
-        const dialogue = this.game.getCurrentDialogue();
-        if (dialogue) {
-            // Use setTimeout to ensure it appears after "Battle Start" message
-            setTimeout(() => this.addChat('guide', `[가이드] ${dialogue.guide}`), 500);
+        // Show initial Guide if Mob
+        // Boss handles guide via Phases
+        /* 
+           logic moved here: Boss guide comes from phase.msg or dialogue logic. 
+           Mob guide comes from first dialogue.
+        */
+        if (!mob.isBoss && mob.dialogues.length > 0) {
+            const d = this.game.getCurrentDialogue();
+            if (d) this.addChat('guide', `[가이드] ${d.guide}`);
+        } else if (mob.isBoss) {
+            // Initial Boss msg
+            const phase = this.game.getMonsterPhase();
+            if (phase.msg) this.addChat('system', phase.msg);
+            // Also guide?
+            const d = this.game.getCurrentDialogue();
+            if (d) setTimeout(() => this.addChat('guide', `[가이드] ${d.guide}`), 500);
         }
     }
 
@@ -195,14 +217,23 @@ export class UIManager {
     }
 
     updateRoundUI() {
-        const phase = this.game.getMonsterPhase();
-        this.els.game.mSituation.textContent = phase.msg;
+        // Update Monster State (Phase msg for Boss)
+        const m = this.game.currentMonster;
+        let phase = null;
+        if (m.isBoss) {
+            phase = this.game.getMonsterPhase();
+            this.els.game.mSituation.textContent = phase.msg;
+        } else {
+            // Mobs: Dynamic situation based on HP? Or just use phases
+            phase = this.game.getMonsterPhase();
+            this.els.game.mSituation.textContent = phase.msg;
+        }
+
         this.updateHUD();
 
         // Show guide message for current phase if boss, or general desc if mob
-        if (this.game.currentMonster.isBoss && phase.desc) {
-            this.addChat('guide', `[가이드] ${phase.desc}`);
-        }
+        // Logic handled in loadStage or castSpell (Next guide)
+        // Redundant check removed to avoid spam
     }
 
     updateHUD() {
@@ -231,18 +262,18 @@ export class UIManager {
         for (let i = 3; i >= 1; i--) {
             const node = document.createElement('div');
             let icon = '⚔️';
-            let name = '';
+            // let name = ''; // Removed name display
 
             if (i === 3) {
                 icon = '💀'; // Boss Skull
-                name = theme.boss.name;
+                // name = theme.boss.name; 
             } else {
                 // Map Stage 1, 2 to Monsters. 
                 // Logic: Stage 1 -> Mob 0? No, usually Stage 1, 2, 3...
                 // GameState generateMonster(stage): returns monsters[stage-1] or [stage%length]
                 // Let's assume standard mapping: Stage 1 -> monsters[0], Stage 2 -> monsters[1]
                 const mobIdx = (i - 1) % monsters.length;
-                name = monsters[mobIdx].name;
+                // name = monsters[mobIdx].name;
                 icon = i < this.game.stage ? '🚩' : '⚔️';
             }
 
@@ -263,11 +294,53 @@ export class UIManager {
     }
 
     addChat(type, msg, scaffoldType = null) {
-        // Special routing for Guide messages
-        if (type === 'guide') {
+        // Special routing for Guide AND Scaffold messages
+        if (type === 'guide' || type === 'scaffold') {
             if (this.els.game.guideBox) {
-                this.els.game.guideBox.innerHTML = msg.replace(/\n/g, '<br>');
+                let content = msg;
+
+                // If Scaffold, Add Badge
+                if (type === 'scaffold' && scaffoldType) {
+                    let icon = '';
+                    let label = '';
+                    let colorClass = scaffoldType.toLowerCase();
+                    switch (scaffoldType) {
+                        case 'Perfect': icon = '✨'; label = 'Perfect!'; break;
+                        case 'Metacognitive': icon = '💡'; label = 'Check!'; break;
+                        case 'Strategic': icon = '🎯'; label = 'Order?'; break;
+                        case 'Conceptual': icon = '🧠'; label = 'Missing?'; break;
+                        case 'Motivational': icon = '💪'; label = 'Hint'; break;
+                    }
+                    if (label) {
+                        content = `<span class="scaffold-badge" style="background-color: var(--badge-${colorClass});">${icon} ${label}</span> ${msg}`;
+                        // Note: Using inline style for badge logic if classes rely on parent
+                        // But I added .msg.scaffold.strategic .scaffold-badge logic which depends on parent class.
+                        // Here guideBox is the parent. I should give guideBox the appropriate classes.
+                    }
+                }
+
+                this.els.game.guideBox.innerHTML = content.replace(/\n/g, '<br>');
                 this.els.game.guideBox.classList.remove('hidden');
+
+                // Update guideBox classes to trigger CSS specificity
+                // Remove format classes first
+                this.els.game.guideBox.classList.remove('perfect', 'metacognitive', 'strategic', 'conceptual', 'motivational');
+
+                // Add new class if scaffold
+                // Note: styles.css uses .msg.scaffold.perfect .scaffold-badge
+                // I need: .guide-panel.scaffold.perfect .scaffold-badge (need to update CSS?)
+                // OR wrap content in a div that mimics the selector.
+                // Let's wrap content in a div that mimics .msg structure? 
+                // Or just update specific styles for guideBox?
+                // Simpler: Just rely on the badge classes I added? 
+                // Ah, the badge background colors in .msg.scaffold.perfect .scaffold-badge are specific.
+                // I need to add those classes to guideBox to reuse CSS.
+                if (type === 'scaffold' && scaffoldType) {
+                    this.els.game.guideBox.className = `guide-panel msg scaffold ${scaffoldType.toLowerCase()}`;
+                } else {
+                    this.els.game.guideBox.className = `guide-panel`; // Reset for normal guide
+                }
+
                 // Visual Pulse
                 this.els.game.guideBox.style.transform = "scale(1.05)";
                 setTimeout(() => this.els.game.guideBox.style.transform = "scale(1)", 200);
@@ -277,33 +350,7 @@ export class UIManager {
 
         const div = document.createElement('div');
         div.className = `msg ${type}`;
-
-        // Scaffold Feedback Styling
-        if (type === 'scaffold' && scaffoldType) {
-            div.classList.add(scaffoldType.toLowerCase()); // e.g. 'scaffold strategic'
-
-            // Add Icon based on Scaffold Type
-            let icon = '';
-            let label = '';
-            switch (scaffoldType) {
-                case 'Perfect': icon = '✨'; label = 'Perfect!'; break;
-                case 'Metacognitive': icon = '💡'; label = 'Check!'; break;
-                case 'Strategic': icon = '🎯'; label = 'Order?'; break;
-                case 'Conceptual': icon = '🧠'; label = 'Missing?'; break;
-                case 'Motivational': icon = '💪'; label = 'Hint'; break;
-            }
-            // Prepend Label
-            if (label) {
-                const badge = document.createElement('span');
-                badge.className = 'scaffold-badge';
-                badge.textContent = `${icon} ${label}`;
-                div.appendChild(badge);
-                div.appendChild(document.createTextNode(' ')); // Spacer
-            }
-        }
-
-        div.appendChild(document.createTextNode(msg)); // Append text safely
-
+        div.textContent = msg;
         this.els.game.chat.appendChild(div);
 
         // Auto scroll
