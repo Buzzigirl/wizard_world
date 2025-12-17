@@ -4,152 +4,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy: Roguelike V4</title>
+    <title>Wiz Academy: Roguelike V5</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
     <div id="app" class="app-container">
 
-        <!-- ==================== 1. 캐릭터 선택 ==================== -->
+        <!-- Screen 1: Class -->
         <div id="screen-class" class="screen full-center">
             <h1>영웅을 선택하세요</h1>
             <div class="cards">
                 <button class="btn-class" data-id="WARRIOR">
                     <div class="icon">⚔️</div>
-                    <h2>전사 (Easy)</h2>
-                    <p>높은 체력, 강한 공격</p>
+                    <h2>전사</h2>
+                    <p>강인한 체력</p>
                 </button>
                 <button class="btn-class" data-id="ROGUE">
                     <div class="icon">🗡️</div>
-                    <h2>도적 (Normal)</h2>
-                    <p>균형 잡힌 능력치</p>
+                    <h2>도적</h2>
+                    <p>균형 잡힌 능력</p>
                 </button>
                 <button class="btn-class" data-id="MAGE">
                     <div class="icon">🔮</div>
-                    <h2>마법사 (Hard)</h2>
-                    <p>높은 마나, 마법 특화</p>
+                    <h2>마법사</h2>
+                    <p>강력한 마법</p>
                 </button>
             </div>
         </div>
 
-        <!-- ==================== 2. 요정 선택 ==================== -->
+        <!-- Screen 2: Fairy -->
         <div id="screen-fairy" class="screen full-center hidden">
             <h1>파트너 요정을 선택하세요</h1>
             <div class="cards">
                 <button class="btn-fairy" data-id="FIRE">
                     <div class="icon">🔥</div>
                     <h2>이그니스</h2>
-                    <p>열정적인 성격</p>
                 </button>
                 <button class="btn-fairy" data-id="WATER">
                     <div class="icon">💧</div>
                     <h2>아쿠아</h2>
-                    <p>차분한 성격</p>
                 </button>
                 <button class="btn-fairy" data-id="WIND">
                     <div class="icon">🍃</div>
                     <h2>실피드</h2>
-                    <p>장난꾸러기</p>
                 </button>
                 <button class="btn-fairy" data-id="GROUND">
                     <div class="icon">🪨</div>
                     <h2>테라</h2>
-                    <p>진지한 성격</p>
                 </button>
             </div>
         </div>
 
-        <!-- ==================== 3. 월드맵 (NEW) ==================== -->
+        <!-- Screen 3: World Map -->
         <div id="screen-worldmap" class="screen full-center hidden">
             <h1>탐험할 지역을 선택하세요</h1>
-            <div id="world-points" class="map-grid">
-                <!-- JS Inject -->
-            </div>
+            <div id="world-points" class="map-grid"></div>
         </div>
 
-        <!-- ==================== 4. 메인 게임 ==================== -->
+        <!-- Screen 4: Main Game -->
         <div id="screen-game" class="screen main-grid hidden">
             <!-- Left: Tower Map -->
             <div class="panel-left">
-                <h3>진행 상황</h3>
-                <div id="map-container">
-                    <!-- Nodes injected bottom-up -->
-                </div>
+                <h3>TOWER</h3>
+                <div id="map-container"></div>
             </div>
 
             <!-- Center: Stage -->
             <div class="panel-center">
-                <!-- Top HUD -->
                 <div class="top-hud">
                     <div id="theme-badges" class="badges"></div>
                 </div>
                 <div class="stage-info">
-                    <span id="display-theme">숲</span> | <span id="display-stage">Stage 1</span>
+                    <span id="display-theme">Theme</span> | <span id="display-stage">Stage</span>
                 </div>
 
-                <!-- Monster Area -->
+                <!-- Monster Zone -->
                 <div class="monster-zone">
                     <div class="hp-bar-bg">
                         <div id="monster-hp-bar" style="width:100%"></div>
-                        <span id="monster-hp-text" class="hp-text-overlay">100 / 100</span>
+                        <span id="monster-hp-text">100 / 100</span>
                     </div>
-                    <div id="monster-icon" class="bounce">🦁</div>
-                    <div id="monster-name">Wild Beast</div>
-                    <div id="monster-situation" class="situation-text">상황 설명 텍스트</div>
+                    <!-- Icon or Image -->
+                    <div id="monster-icon" class="bounce hidden">🦁</div>
+                    <img id="monster-img" class="monster-img hidden" src="" alt="Monster">
+
+                    <div id="monster-name">Monster</div>
+                    <div id="monster-situation" class="situation-text">Situation</div>
+
+                    <!-- Slash FX Container -->
+                    <div id="slash-fx" class="slash-fx hidden"></div>
                 </div>
 
-                <!-- Guide & Chat (Narrator Overlay) -->
-                <div id="guide-msg" class="guide-box">힌트 메시지</div>
+                <!-- Chat Overlay -->
+                <!-- Center aligned, fills middle -->
                 <div id="chat-list" class="chat-overlay"></div>
+
+                <!-- Guide -->
+                <div id="guide-msg" class="guide-box">Hint</div>
 
                 <!-- Controls -->
                 <div class="control-zone">
-                    <input type="text" id="inp-spell" placeholder="해결책을 입력하세요...">
+                    <input type="text" id="inp-spell" placeholder="주문을 입력하세요 (Enter)">
                     <button id="btn-cast">CAST</button>
                 </div>
             </div>
 
             <!-- Right: Fairy -->
             <div class="panel-right">
-                <h3>파트너</h3>
+                <h3>PARTNER</h3>
                 <div class="fairy-area">
                     <div id="fairy-bubble" class="speech-bubble hidden">Hint!</div>
                     <div id="fairy-char" class="float">🧚</div>
                 </div>
-                <p class="hint-cost">클릭하여 힌트 사용<br>(-10 MP)</p>
+                <button class="hint-btn">힌트 사용 (-10 MP)</button>
             </div>
 
-            <!-- Bottom HUD -->
-            <div class="status-hud">
-                <div class="stat-group">
-                    <div class="stat-icon">⚔️</div>
-                    <span id="val-atk">10</span>
-                </div>
-                <div class="bottle hp">
-                    <div id="bar-hp" class="liquid red"></div>
+            <!-- Vertical HUD (Left/Right Splitted or Bottom Right Stacked) -->
+            <!-- User asked: "Upwards stick" style -->
+            <div class="vertical-hud">
+                <div class="v-bar-container">
+                    <div class="v-bar red">
+                        <div id="bar-hp" class="v-fill" style="height: 100%"></div>
+                    </div>
                     <span id="val-hp">100</span>
+                    <i class="fas fa-heart icon-hud"></i>
                 </div>
-                <div class="bottle mp">
-                    <div id="bar-mp" class="liquid blue"></div>
+                <div class="v-bar-container">
+                    <div class="v-bar blue">
+                        <div id="bar-mp" class="v-fill" style="height: 100%"></div>
+                    </div>
                     <span id="val-mp">50</span>
+                    <i class="fas fa-bolt icon-hud"></i>
                 </div>
             </div>
         </div>
 
-        <!-- ==================== 5. 이벤트 모달 ==================== -->
+        <!-- Event Modal -->
         <div id="screen-event" class="screen full-center hidden overlay">
             <div class="modal-box glass">
-                <h1 id="event-title">이벤트</h1>
-                <p id="event-desc">설명</p>
+                <h1 id="event-title">Event</h1>
+                <p id="event-desc">Desc</p>
                 <div id="event-options" class="options-list"></div>
             </div>
         </div>
 
-        <!-- ==================== 6. 게임 오버 ==================== -->
+        <!-- Game Over -->
         <div id="screen-gameover" class="screen full-center hidden">
             <h1>GAME OVER</h1>
-            <p>특전을 선택하고 다시 도전하세요:</p>
             <div id="perk-list" class="cards"></div>
         </div>
 
