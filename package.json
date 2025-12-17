@@ -1,0 +1,15 @@
+{
+  "name": "wizard-world",
+  "version": "1.0.0",
+  "description": "Grammar Quest - Gamification-based English learning game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["education", "gamification", "english", "grammar"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
