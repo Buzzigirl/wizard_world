@@ -1,11 +1,10 @@
 // ==========================================
-// Class 2: Roguelike Grammar Quest V7 (Game Feel & Polish)
-// Features: Intro, Player Avatar, Dynamic Actions, UI Fixes
+// Class 2: Roguelike Grammar Quest V8 (Premium Glass & Fixes)
+// Features: iPhone Style Glass UI, Individual Fairies, Descriptions
 // ==========================================
 
 const CONFIG = { API_KEY: "" };
 
-// Updated Class Data with Action Names and Difficulty Labels
 const CLASSES = {
     WARRIOR: {
         id: 'WARRIOR', name: '전사 (Warrior)',
@@ -24,21 +23,26 @@ const CLASSES = {
     }
 };
 
+// Updated Fairies with Indiv Images and Descriptions
 const FAIRIES = {
     FIRE: {
-        id: 'FIRE', name: '이그니스', type: '불', img: 'assets/fairies.png', icon: '🔥',
+        id: 'FIRE', name: '이그니스', type: '불', img: 'assets/fairy_fire.png', icon: '🔥',
+        desc: '뜨거운 열정으로 당신을 응원합니다. (공격적 성향)',
         scaffold: ["포기하지 마!", "강하게 밀어붙여!", "넌 할 수 있어!"]
     },
     WATER: {
-        id: 'WATER', name: '아쿠아', type: '물', img: 'assets/fairies.png', icon: '💧',
+        id: 'WATER', name: '아쿠아', type: '물', img: 'assets/fairy_water.png', icon: '💧',
+        desc: '차분한 지혜로 상황을 분석합니다. (방어적 성향)',
         scaffold: ["차분하게 생각해봐.", "물처럼 유연하게.", "심호흡을 해봐."]
     },
     WIND: {
-        id: 'WIND', name: '실피드', type: '바람', img: 'assets/fairies.png', icon: '🍃',
+        id: 'WIND', name: '실피드', type: '바람', img: 'assets/fairy_wind.png', icon: '🍃',
+        desc: '자유로운 발상으로 힌트를 줍니다. (속도 중시)',
         scaffold: ["바람을 타고 가자!", "답이 스쳐 지나가?", "자유롭게 상상해!"]
     },
     GROUND: {
-        id: 'GROUND', name: '테라', type: '땅', img: 'assets/fairies.png', icon: '🪨',
+        id: 'GROUND', name: '테라', type: '땅', img: 'assets/fairy_ground.png', icon: '🪨',
+        desc: '묵묵히 곁을 지켜주는 든든한 파트너. (안정 중시)',
         scaffold: ["기반을 다져야 해.", "단단한 마음가짐.", "묵직한 한 방."]
     }
 };
@@ -46,6 +50,7 @@ const FAIRIES = {
 const THEMES = [
     {
         id: 'FOREST', name: '신비한 숲',
+        desc: '초급 모험가를 위한 숲입니다. 멧돼지와 엔트가 출현합니다.',
         bg: 'https://images.unsplash.com/photo-1448375240586-dfd8f3793371?q=80&w=2670',
         music: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
         mobImg: 'assets/boar.png', bossImg: 'assets/treant.png',
@@ -67,6 +72,7 @@ const THEMES = [
     },
     {
         id: 'DESERT', name: '작열하는 사막',
+        desc: '중급 모험가를 위한 사막입니다. 전갈과 샌드웜을 조심하세요.',
         bg: 'https://images.unsplash.com/photo-1545648839-772922756f4d?q=80&w=2574',
         music: 'https://cdn.pixabay.com/audio/2021/11/01/audio_00fa556557.mp3',
         mobImg: 'assets/scorpion.png', bossImg: 'assets/sandworm.png',
@@ -88,6 +94,7 @@ const THEMES = [
     },
     {
         id: 'CASTLE', name: '마왕성',
+        desc: '최상급 난이도. 마왕과의 최종 결전이 기다립니다.',
         bg: 'https://images.unsplash.com/photo-1599596549216-b186b864a75e?q=80',
         music: 'https://cdn.pixabay.com/audio/2022/03/15/audio_201de9832c.mp3',
         mobImg: 'assets/demon_soldier.png', bossImg: 'assets/demon_king.png',
@@ -119,7 +126,7 @@ class GameState {
     saveProgress() { localStorage.setItem('clearedThemes', JSON.stringify(this.clearedThemes)); }
 
     reset() {
-        this.mode = 'INTRO'; // Changed start mode
+        this.mode = 'INTRO';
         this.playerClass = null;
         this.fairy = null;
         this.themeIdx = 0;
@@ -178,13 +185,13 @@ class UIController {
         this.els = this.cacheDOM();
         this.bgm = new Audio(); this.bgm.loop = true;
         this.initEvents();
-        this.showScreen('intro'); // Start at Intro
+        this.showScreen('intro');
     }
 
     cacheDOM() {
         return {
             screens: {
-                intro: document.getElementById('screen-intro'), // New
+                intro: document.getElementById('screen-intro'),
                 class: document.getElementById('screen-class'),
                 fairy: document.getElementById('screen-fairy'),
                 world: document.getElementById('screen-worldmap'),
@@ -209,11 +216,11 @@ class UIController {
                 chat: document.getElementById('chat-list'),
                 input: document.getElementById('inp-spell'),
                 btn: document.getElementById('btn-cast'),
-                guide: document.getElementById('guide-msg'), // Removed? No present
+                guide: document.getElementById('guide-msg'),
                 fairyArea: document.getElementById('fairy-area'),
                 fairyName: document.getElementById('fairy-name'),
                 fairyScaffold: document.getElementById('fairy-scaffold'),
-                heroImg: document.getElementById('hero-img') // New
+                // Hero removed
             }
         };
     }
@@ -247,7 +254,14 @@ class UIController {
             const locked = i > 0 && !this.game.clearedThemes.includes(THEMES[i - 1].id);
             const cleared = this.game.clearedThemes.includes(t.id);
             btn.className = `map-point ${locked ? 'locked' : ''} ${cleared ? 'cleared' : ''}`;
-            btn.innerHTML = `<span class="icon">${cleared ? '🚩' : (locked ? '🔒' : '⚔️')}</span><span class="label">${t.name}</span>`;
+
+            // Added Description to Title logic if needed, but here simple layout
+            btn.innerHTML = `<span class="icon">${cleared ? '🚩' : (locked ? '🔒' : '⚔️')}</span>
+                             <div class="map-text">
+                                <span class="label">${t.name}</span>
+                                <span class="desc">${t.desc}</span>
+                             </div>`;
+
             if (!locked) btn.onclick = () => { this.game.themeIdx = i; this.startGame(); };
             container.appendChild(btn);
         });
@@ -257,9 +271,7 @@ class UIController {
         this.showScreen('game');
         this.playMusic(this.game.getTheme().music);
 
-        // Update Action Button
         this.els.game.btn.textContent = this.game.playerClass.action;
-        // Placeholder for Input
         this.els.game.input.placeholder = `${this.game.playerClass.action}을(를) 위해 문장을 입력하세요...`;
 
         this.loadStage();
@@ -282,7 +294,10 @@ class UIController {
         this.els.game.mImg.classList.remove('hidden', 'slashed');
         this.els.game.mName.textContent = mob.name;
 
+        // Update Fairy Image + Text in V8
+        this.els.game.fairyArea.innerHTML = `<img src="${this.game.fairy.img}" class="fairy-img-anim">`;
         this.els.game.fairyName.textContent = this.game.fairy.name;
+
         this.updateScaffolding();
         this.updateRoundUI();
         this.renderMap();
@@ -325,11 +340,9 @@ class UIController {
             node.className = `map-node ${i === this.game.stage ? 'current' : ''} ${i < this.game.stage ? 'cleared' : ''}`;
             node.innerHTML = `<span>${i === this.game.stage ? '⚔️' : (i < this.game.stage ? '🚩' : '🔒')}</span>`;
 
-            // Tooltip (Hover Goal)
             node.dataset.goal = i === 6 ? "최종 보스 처치" : "문법 퀴즈 해결";
             if (i === this.game.stage) node.dataset.goal = "현재 목표: 몬스터 제압";
 
-            // Label next to node
             const txt = document.createElement('span');
             txt.className = "map-label";
             txt.textContent = label;
@@ -387,7 +400,7 @@ class UIController {
 
     addChat(sender, text) {
         const div = document.createElement('div');
-        div.className = `msg ${sender} glow`;
+        div.className = `msg ${sender}`;
         div.textContent = text;
         if (this.els.game.chat.children.length > 5) this.els.game.chat.firstChild.remove();
         this.els.game.chat.appendChild(div);

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy: Roguelike V7</title>
+    <title>Wiz Academy: Roguelike V8</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,79 +12,84 @@
 <body>
     <div id="app" class="app-container">
 
-        <!-- Screen 0: Intro (Goal Explanation) -->
+        <!-- Screen 0: Intro -->
         <div id="screen-intro" class="screen full-center">
-            <div class="intro-box glass">
-                <h1>🧙‍♂️ Wizard World: Grammar Quest</h1>
+            <div class="intro-box glass-panel">
+                <h1>🧙‍♂️ Wizard World</h1>
+                <h2>Grammar Quest</h2>
                 <div class="intro-content">
                     <h3>🎯 교육 목표</h3>
-                    <p>이 게임은 영문법을 자연스럽게 익히고 활용하는 것을 목표로 합니다.</p>
-                    <p>몬스터와의 대화 상황에서 적절한 문장을 완성하여 문제를 해결하세요.</p>
+                    <p>상황에 맞는 영단어를 선택하고 문장을 완성하여 문제를 해결합니다.</p>
 
                     <h3>⚔️ 게임 목표</h3>
-                    <p>3가지 테마의 보스를 물리치고 마법 세계의 평화를 되찾으세요.</p>
-                    <p>오답 시에는 데미지를 입으니 신중하게 주문을 외워야 합니다.</p>
+                    <p>각기 다른 테마의 보스를 물리치고 최고 층에 도전하세요.</p>
                 </div>
-                <button id="btn-intro-start" class="btn-start">도전 시작 (동의)</button>
+                <button id="btn-intro-start" class="btn-primary">Start Adventure</button>
             </div>
         </div>
 
         <!-- Screen 1: Class -->
         <div id="screen-class" class="screen full-center hidden">
-            <h1>영웅을 선택하세요</h1>
+            <h1>Select Your Hero</h1>
             <div class="cards">
-                <button class="btn-class" data-id="WARRIOR">
+                <button class="btn-card btn-class" data-id="WARRIOR">
                     <div class="icon">⚔️</div>
-                    <h2>전사</h2>
-                    <p class="diff">Easy (초급)</p>
-                    <p class="desc">강인한 체력</p>
+                    <h2>Warrior</h2>
+                    <p class="sub">Easy (초급)</p>
+                    <p class="desc">Health Points ++</p>
                 </button>
-                <button class="btn-class" data-id="ROGUE">
+                <button class="btn-card btn-class" data-id="ROGUE">
                     <div class="icon">🗡️</div>
-                    <h2>도적</h2>
-                    <p class="diff">Normal (중급)</p>
-                    <p class="desc">균형 잡힌 능력</p>
+                    <h2>Rogue</h2>
+                    <p class="sub">Normal (중급)</p>
+                    <p class="desc">Balanced Stats</p>
                 </button>
-                <button class="btn-class" data-id="MAGE">
+                <button class="btn-card btn-class" data-id="MAGE">
                     <div class="icon">🔮</div>
-                    <h2>마법사</h2>
-                    <p class="diff">Hard (상급)</p>
-                    <p class="desc">강력한 마법</p>
+                    <h2>Mage</h2>
+                    <p class="sub">Hard (상급)</p>
+                    <p class="desc">Mana Points ++</p>
                 </button>
             </div>
         </div>
 
         <div id="screen-fairy" class="screen full-center hidden">
-            <h1>파트너를 선택하세요</h1>
+            <h1>Choose Your Partner</h1>
             <div class="cards">
-                <button class="btn-fairy" data-id="FIRE">
+                <button class="btn-card btn-fairy" data-id="FIRE">
                     <div class="icon">🔥</div>
-                    <h2>이그니스</h2>
+                    <h2>Ignis</h2>
+                    <p class="sub">Passion</p>
                 </button>
-                <button class="btn-fairy" data-id="WATER">
+                <button class="btn-card btn-fairy" data-id="WATER">
                     <div class="icon">💧</div>
-                    <h2>아쿠아</h2>
+                    <h2>Aqua</h2>
+                    <p class="sub">Wisdom</p>
                 </button>
-                <button class="btn-fairy" data-id="WIND">
+                <button class="btn-card btn-fairy" data-id="WIND">
                     <div class="icon">🍃</div>
-                    <h2>실피드</h2>
+                    <h2>Sylphid</h2>
+                    <p class="sub">Freedom</p>
                 </button>
-                <button class="btn-fairy" data-id="GROUND">
+                <button class="btn-card btn-fairy" data-id="GROUND">
                     <div class="icon">🪨</div>
-                    <h2>테라</h2>
+                    <h2>Terra</h2>
+                    <p class="sub">Stability</p>
                 </button>
             </div>
+            <!-- Info Text Area -->
+            <div class="info-area">마우스를 올려 상세 정보를 확인하세요.</div>
         </div>
 
         <div id="screen-worldmap" class="screen full-center hidden">
-            <h1>탐험할 지역을 선택하세요</h1>
+            <h1>Select Region</h1>
             <div id="world-points" class="map-grid"></div>
         </div>
 
         <div id="screen-game" class="screen main-grid hidden">
             <!-- Left Panel -->
-            <div class="panel-left">
-                <h3>TOWER</h3>
+            <div class="panel-left glass-panel">
+                <h3>Tower</h3>
                 <div id="map-container"></div>
             </div>
 
@@ -94,7 +99,8 @@
                     <div id="theme-badges" class="badges"></div>
                 </div>
                 <div class="stage-info">
-                    <span id="display-theme">THEME</span> | <span id="display-stage">STAGE</span>
+                    <span id="display-theme">THEME</span> <span class="divider">|</span> <span
+                        id="display-stage">STAGE</span>
                 </div>
 
                 <div class="monster-zone">
@@ -103,39 +109,35 @@
                         <span id="monster-hp-text">100/100</span>
                     </div>
 
-                    <!-- Monster Image (Card Style) -->
+                    <!-- Monster Image (Floating, No Card Border) -->
                     <img id="monster-img" class="monster-img" src="" alt="Monster">
-
-                    <!-- Hero Back View (New) -->
-                    <img id="hero-img" class="hero-back" src="assets/hero_back.png" alt="Hero">
 
                     <div id="monster-name">Monster Name</div>
                     <div id="monster-situation">Situation Text...</div>
                 </div>
 
-                <!-- Chat Overlay (Dark Background) -->
-                <div id="chat-list" class="chat-overlay"></div>
+                <!-- Chat Overlay (Glass) -->
+                <div id="chat-list" class="chat-overlay glass-panel"></div>
 
                 <div class="control-zone">
-                    <input type="text" id="inp-spell" placeholder="주문을 입력하세요...">
-                    <button id="btn-cast">CAST</button>
+                    <input type="text" id="inp-spell" placeholder="Casting Spell..." class="glass-input">
+                    <button id="btn-cast" class="btn-primary">CAST</button>
                 </div>
             </div>
 
             <!-- Right Panel -->
-            <div class="panel-right">
-                <h3>PARTNER</h3>
+            <div class="panel-right glass-panel">
+                <h3>Partner</h3>
                 <div id="fairy-area" class="fairy-area">
-                    <div class="fairy-char">🧚</div>
+                    <!-- Image injected by JS -->
                 </div>
                 <div class="fairy-info-box">
-                    <div id="fairy-name">FAIRY</div>
-                    <div id="fairy-scaffold" class="scaffold-msg">"You can do it!"</div>
+                    <div id="fairy-name">NAME</div>
+                    <div id="fairy-scaffold" class="scaffold-msg">"Cheer up!"</div>
                 </div>
 
-                <button class="hint-btn">💡 힌트 사용 (-10 MP)</button>
+                <button class="hint-btn glass-btn">💡 Hint (-10 MP)</button>
 
-                <!-- HUD Moved Here (Bottom Center of Panel) -->
                 <div class="hud-center">
                     <div class="v-bar-container">
                         <div class="v-bar red">
