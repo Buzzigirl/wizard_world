@@ -18,7 +18,11 @@ body {
     color: white;
     height: 100vh;
     overflow: hidden;
-    background: #000;
+    background-color: #000;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease-in-out;
     -webkit-font-smoothing: antialiased;
 }
 
