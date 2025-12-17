@@ -4,118 +4,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy: Roguelike V2</title>
+    <title>Wiz Academy: Roguelike V3</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="app" class="app-container">
-        <!-- 1. Class Selection -->
-        <div id="screen-select-class" class="screen full-center">
-            <h1>Choose Your Class</h1>
+
+        <!-- ==================== SCREEN 1: Class Selection ==================== -->
+        <div id="screen-class" class="screen full-center">
+            <h1>Choose Your Hero</h1>
             <div class="cards">
-                <div class="class-card" data-class="WARRIOR">
+                <button class="btn-class" data-id="WARRIOR">
                     <div class="icon">⚔️</div>
-                    <h2>Warrior (Easy)</h2>
-                    <p>High HP, Low Mana</p>
-                </div>
-                <div class="class-card" data-class="ROGUE">
+                    <h2>Warrior</h2>
+                    <p>High HP, Strong Attack</p>
+                </button>
+                <button class="btn-class" data-id="ROGUE">
                     <div class="icon">🗡️</div>
-                    <h2>Rogue (Normal)</h2>
+                    <h2>Rogue</h2>
                     <p>Balanced Stats</p>
-                </div>
-                <div class="class-card" data-class="MAGE">
+                </button>
+                <button class="btn-class" data-id="MAGE">
                     <div class="icon">🔮</div>
-                    <h2>Mage (Hard)</h2>
-                    <p>Low HP, High Mana</p>
-                </div>
+                    <h2>Mage</h2>
+                    <p>High Mana, Spell Power</p>
+                </button>
             </div>
         </div>
 
-        <!-- 2. Fairy Selection -->
-        <div id="screen-select-fairy" class="screen full-center hidden">
-            <h1>Select Fairy Companion</h1>
+        <!-- ==================== SCREEN 2: Fairy Selection ==================== -->
+        <div id="screen-fairy" class="screen full-center hidden">
+            <h1>Choose Your Partner</h1>
             <div class="cards">
-                <div class="fairy-card" data-fairy="FIRE">
+                <button class="btn-fairy" data-id="FIRE">
                     <div class="icon">🔥</div>
                     <h2>Ignis</h2>
-                    <p>Hot-tempered</p>
-                </div>
-                <div class="fairy-card" data-fairy="WATER">
+                    <p>Passionate</p>
+                </button>
+                <button class="btn-fairy" data-id="WATER">
                     <div class="icon">💧</div>
                     <h2>Aqua</h2>
-                    <p>Calm & Kind</p>
-                </div>
-                <div class="fairy-card" data-fairy="WIND">
+                    <p>Calm</p>
+                </button>
+                <button class="btn-fairy" data-id="WIND">
                     <div class="icon">🍃</div>
                     <h2>Sylphid</h2>
                     <p>Playful</p>
-                </div>
-                <div class="fairy-card" data-fairy="GROUND">
+                </button>
+                <button class="btn-fairy" data-id="GROUND">
                     <div class="icon">🪨</div>
                     <h2>Terra</h2>
                     <p>Serious</p>
-                </div>
+                </button>
             </div>
         </div>
 
-        <!-- 3. Main Game -->
+        <!-- ==================== SCREEN 3: Main Game ==================== -->
         <div id="screen-game" class="screen main-grid hidden">
-            <!-- Left Map -->
+            <!-- Left: Tower Map -->
             <div class="panel-left">
-                <h3>MAP</h3>
-                <div id="minimap-container"></div>
+                <h3>TOWER</h3>
+                <div id="map-container">
+                    <!-- Nodes injected bottom-up -->
+                </div>
             </div>
 
-            <!-- Center Stage -->
+            <!-- Center: Stage -->
             <div class="panel-center">
-                <div class="top-bar">
-                    <span id="theme-display">Forest</span> | <span id="stage-display">Stage 1</span>
+                <!-- Top HUD: Theme Badges & Info -->
+                <div class="top-hud">
+                    <div id="theme-badges" class="badges">
+                        <!-- 1 2 3 4 5 -->
+                    </div>
+                </div>
+                <div class="stage-info">
+                    <span id="display-theme">Forest</span> | <span id="display-stage">Stage 1</span>
                 </div>
 
+                <!-- Monster Area -->
                 <div class="monster-zone">
                     <div class="hp-bar-bg">
-                        <div id="monster-hp-fill" style="width:100%"></div>
+                        <div id="monster-hp-bar" style="width:100%"></div>
                     </div>
-                    <div id="monster-icon">🦁</div>
-                    <div id="monster-name">Monster</div>
+                    <div id="monster-icon" class="bounce">🦁</div>
+                    <div id="monster-name">Wild Beast</div>
                 </div>
 
-                <div id="guide-text" class="guide-text">Hint here</div>
+                <!-- Guide & Chat -->
+                <div id="guide-msg" class="guide-box">Hint Message</div>
+                <div id="chat-list" class="chat-list"></div>
 
-                <div id="chat-box"></div>
-
+                <!-- Controls -->
                 <div class="control-zone">
-                    <input type="text" id="user-input" placeholder="Cast spell...">
-                    <button id="send-btn">CAST</button>
+                    <input type="text" id="inp-spell" placeholder="Cast spell...">
+                    <button id="btn-cast">CAST</button>
                 </div>
             </div>
 
-            <!-- Right Fairy -->
+            <!-- Right: Fairy -->
             <div class="panel-right">
                 <h3>PARTNER</h3>
-                <div id="fairy-companion">🧚</div>
-                <p>Click for Hint (-10 MP)</p>
+                <div class="fairy-area">
+                    <div id="fairy-bubble" class="speech-bubble hidden">Hint!</div>
+                    <div id="fairy-char" class="float">🧚</div>
+                </div>
+                <p class="hint-cost">Click for Hint (-10 MP)</p>
             </div>
 
-            <!-- Bottom HUD -->
-            <div class="hud-bottles">
+            <!-- Bottom HUD: Status -->
+            <div class="status-hud">
+                <div class="stat-group">
+                    <div class="stat-icon">⚔️</div>
+                    <span id="val-atk">10</span>
+                </div>
                 <div class="bottle hp">
-                    <div id="hp-fill" class="liquid red"></div>
-                    <span id="hp-text">100</span>
+                    <div id="bar-hp" class="liquid red"></div>
+                    <span id="val-hp">100</span>
                 </div>
                 <div class="bottle mp">
-                    <div id="mp-fill" class="liquid blue"></div>
-                    <span id="mp-text">50</span>
+                    <div id="bar-mp" class="liquid blue"></div>
+                    <span id="val-mp">50</span>
                 </div>
             </div>
         </div>
 
-        <!-- 4. Game Over -->
+        <!-- ==================== SCREEN 4: Event Modal ==================== -->
+        <div id="screen-event" class="screen full-center hidden overlay">
+            <div class="modal-box">
+                <h1 id="event-title">Event Title</h1>
+                <p id="event-desc">Event Description</p>
+                <div id="event-options" class="options-list">
+                    <!-- Buttons injected -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SCREEN 5: Game Over (Perks) ==================== -->
         <div id="screen-gameover" class="screen full-center hidden">
             <h1>GAME OVER</h1>
-            <button id="retry-btn">Retry</button>
+            <p>Select a Perk for your next life:</p>
+            <div id="perk-list" class="cards">
+                <!-- Perk buttons -->
+            </div>
         </div>
+
     </div>
     <script src="game.js"></script>
 </body>
