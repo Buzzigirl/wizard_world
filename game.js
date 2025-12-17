@@ -245,7 +245,8 @@ class UIController {
         this.els.screens[id].classList.remove('hidden');
 
         // Background Logic
-        const LOBBY_BG = 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2672';
+        // Magical Tower Interior for Lobby
+        const LOBBY_BG = 'https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?q=80&w=2574';
 
         if (id === 'game') {
             const theme = this.game.getTheme();
@@ -305,10 +306,8 @@ class UIController {
         this.game.currentMonster = mob;
 
         const theme = this.game.getTheme();
-        // Background is handled by setBackground/showScreen now, but ensure update if theme changes in game
-        if (document.body.style.backgroundImage.indexOf(theme.bg) === -1) {
-            this.setBackground(theme.bg);
-        }
+        // Force update background for the theme to guarantee visibility
+        this.setBackground(theme.bg);
 
         this.els.hud.displayTheme.textContent = theme.name;
         this.els.hud.displayStage.textContent = mob.isBoss ? "BOSS" : `Stage ${this.game.stage}`;
