@@ -94,10 +94,14 @@ export class UIManager {
     }
 
     setBackground(url) {
+        this.currentBgUrl = url; // Track latest request
         const img = new Image();
         img.src = url;
         img.onload = () => {
-            document.body.style.backgroundImage = `url('${url}')`;
+            // Only apply if this is still the requested URL
+            if (this.currentBgUrl === url) {
+                document.body.style.backgroundImage = `url('${url}')`;
+            }
         };
     }
 

@@ -1,53 +1,14 @@
 // Game Configuration & Data
 export const CONFIG = { API_KEY: "" };
-export const LOBBY_BG = 'https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?q=80&w=2574';
+export const LOBBY_BG = 'assets/bg_lobby.png';
 
-export const CLASSES = {
-    WARRIOR: {
-        id: 'WARRIOR', name: '전사 (Warrior)',
-        hp: 150, mana: 30, atk: 25,
-        desc: '강인한 체력', difficulty: 'Easy (초급)', action: '공격 (Attack)'
-    },
-    ROGUE: {
-        id: 'ROGUE', name: '도적 (Rogue)',
-        hp: 100, mana: 50, atk: 20,
-        desc: '균형 잡힌 능력', difficulty: 'Normal (중급)', action: '단검 던지기 (Throw)'
-    },
-    MAGE: {
-        id: 'MAGE', name: '마법사 (Mage)',
-        hp: 70, mana: 100, atk: 15,
-        desc: '강력한 마법', difficulty: 'Hard (상급)', action: '캐스팅 (Cast)'
-    }
-};
-
-export const FAIRIES = {
-    FIRE: {
-        id: 'FIRE', name: '이그니스', type: '불', img: 'assets/fairy_fire.png', icon: '🔥',
-        desc: '뜨거운 열정으로 당신을 응원합니다. (공격적 성향)',
-        scaffold: ["포기하지 마!", "강하게 밀어붙여!", "넌 할 수 있어!"]
-    },
-    WATER: {
-        id: 'WATER', name: '아쿠아', type: '물', img: 'assets/fairy_water.png', icon: '💧',
-        desc: '차분한 지혜로 상황을 분석합니다. (방어적 성향)',
-        scaffold: ["차분하게 생각해봐.", "물처럼 유연하게.", "심호흡을 해봐."]
-    },
-    WIND: {
-        id: 'WIND', name: '실피드', type: '바람', img: 'assets/fairy_wind.png', icon: '🍃',
-        desc: '자유로운 발상으로 힌트를 줍니다. (속도 중시)',
-        scaffold: ["바람을 타고 가자!", "답이 스쳐 지나가?", "자유롭게 상상해!"]
-    },
-    GROUND: {
-        id: 'GROUND', name: '테라', type: '땅', img: 'assets/fairy_ground.png', icon: '🪨',
-        desc: '묵묵히 곁을 지켜주는 든든한 파트너. (안정 중시)',
-        scaffold: ["기반을 다져야 해.", "단단한 마음가짐.", "묵직한 한 방."]
-    }
-};
+// ... (CLASSES omitted)
 
 export const THEMES = [
     {
         id: 'FOREST', name: '신비한 숲',
         desc: '초급 모험가를 위한 숲입니다. 멧돼지와 엔트가 출현합니다.',
-        bg: 'https://images.unsplash.com/photo-1448375240586-dfd8f3793371?q=80&w=2670',
+        bg: 'assets/bg_forest.png',
         music: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
         mobImg: 'assets/boar.png', bossImg: 'assets/treant.png',
         monsters: [
@@ -69,7 +30,7 @@ export const THEMES = [
     {
         id: 'DESERT', name: '작열하는 사막',
         desc: '중급 모험가를 위한 사막입니다. 전갈과 샌드웜을 조심하세요.',
-        bg: 'https://images.unsplash.com/photo-1545648839-772922756f4d?q=80&w=2574',
+        bg: 'assets/bg_desert.png',
         music: 'https://cdn.pixabay.com/audio/2021/11/01/audio_00fa556557.mp3',
         mobImg: 'assets/scorpion.png', bossImg: 'assets/sandworm.png',
         monsters: [
@@ -91,7 +52,7 @@ export const THEMES = [
     {
         id: 'CASTLE', name: '마왕성',
         desc: '최상급 난이도. 마왕과의 최종 결전이 기다립니다.',
-        bg: 'https://images.unsplash.com/photo-1599596549216-b186b864a75e?q=80',
+        bg: 'assets/bg_castle.png',
         music: 'https://cdn.pixabay.com/audio/2022/03/15/audio_201de9832c.mp3',
         mobImg: 'assets/demon_soldier.png', bossImg: 'assets/demon_king.png',
         monsters: [
