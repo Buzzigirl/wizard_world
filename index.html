@@ -4,40 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy: Roguelike V5</title>
+    <title>Wiz Academy: Roguelike V6</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
     <div id="app" class="app-container">
-
-        <!-- Screen 1: Class -->
+        <!-- Screens -->
         <div id="screen-class" class="screen full-center">
             <h1>영웅을 선택하세요</h1>
             <div class="cards">
                 <button class="btn-class" data-id="WARRIOR">
                     <div class="icon">⚔️</div>
                     <h2>전사</h2>
-                    <p>강인한 체력</p>
                 </button>
                 <button class="btn-class" data-id="ROGUE">
                     <div class="icon">🗡️</div>
                     <h2>도적</h2>
-                    <p>균형 잡힌 능력</p>
                 </button>
                 <button class="btn-class" data-id="MAGE">
                     <div class="icon">🔮</div>
                     <h2>마법사</h2>
-                    <p>강력한 마법</p>
                 </button>
             </div>
         </div>
 
-        <!-- Screen 2: Fairy -->
         <div id="screen-fairy" class="screen full-center hidden">
-            <h1>파트너 요정을 선택하세요</h1>
+            <h1>파트너를 선택하세요</h1>
             <div class="cards">
                 <button class="btn-fairy" data-id="FIRE">
                     <div class="icon">🔥</div>
@@ -58,105 +52,86 @@
             </div>
         </div>
 
-        <!-- Screen 3: World Map -->
         <div id="screen-worldmap" class="screen full-center hidden">
             <h1>탐험할 지역을 선택하세요</h1>
             <div id="world-points" class="map-grid"></div>
         </div>
 
-        <!-- Screen 4: Main Game -->
         <div id="screen-game" class="screen main-grid hidden">
-            <!-- Left: Tower Map -->
+            <!-- Left Panel -->
             <div class="panel-left">
                 <h3>TOWER</h3>
                 <div id="map-container"></div>
             </div>
 
-            <!-- Center: Stage -->
+            <!-- Center Panel -->
             <div class="panel-center">
                 <div class="top-hud">
                     <div id="theme-badges" class="badges"></div>
                 </div>
                 <div class="stage-info">
-                    <span id="display-theme">Theme</span> | <span id="display-stage">Stage</span>
+                    <span id="display-theme">THEME</span> | <span id="display-stage">STAGE</span>
                 </div>
 
-                <!-- Monster Zone -->
                 <div class="monster-zone">
                     <div class="hp-bar-bg">
                         <div id="monster-hp-bar" style="width:100%"></div>
-                        <span id="monster-hp-text">100 / 100</span>
+                        <span id="monster-hp-text">100/100</span>
                     </div>
-                    <!-- Icon or Image -->
-                    <div id="monster-icon" class="bounce hidden">🦁</div>
-                    <img id="monster-img" class="monster-img hidden" src="" alt="Monster">
 
-                    <div id="monster-name">Monster</div>
-                    <div id="monster-situation" class="situation-text">Situation</div>
+                    <!-- Image always present, toggled via src/class -->
+                    <img id="monster-img" class="monster-img" src="" alt="Monster">
 
-                    <!-- Slash FX Container -->
-                    <div id="slash-fx" class="slash-fx hidden"></div>
+                    <div id="monster-name">Monster Name</div>
+                    <div id="monster-situation">Situation Text...</div>
                 </div>
 
-                <!-- Chat Overlay -->
-                <!-- Center aligned, fills middle -->
+                <!-- Chat Overlay (Reduced Size, Glass) -->
                 <div id="chat-list" class="chat-overlay"></div>
 
-                <!-- Guide -->
-                <div id="guide-msg" class="guide-box">Hint</div>
-
-                <!-- Controls -->
                 <div class="control-zone">
-                    <input type="text" id="inp-spell" placeholder="주문을 입력하세요 (Enter)">
+                    <input type="text" id="inp-spell" placeholder="주문을 입력하세요...">
                     <button id="btn-cast">CAST</button>
                 </div>
             </div>
 
-            <!-- Right: Fairy -->
+            <!-- Right Panel -->
             <div class="panel-right">
                 <h3>PARTNER</h3>
-                <div class="fairy-area">
-                    <div id="fairy-bubble" class="speech-bubble hidden">Hint!</div>
-                    <div id="fairy-char" class="float">🧚</div>
+                <div id="fairy-area" class="fairy-area">
+                    <!-- Placeholder or Image -->
+                    <div class="fairy-char">🧚</div>
                 </div>
-                <button class="hint-btn">힌트 사용 (-10 MP)</button>
+                <!-- Fairy Info & Scaffolding -->
+                <div class="fairy-info-box">
+                    <div id="fairy-name">FAIRY</div>
+                    <div id="fairy-scaffold" class="scaffold-msg">"You can do it!"</div>
+                </div>
+
+                <button class="hint-btn">💡 힌트 사용 (-10 MP)</button>
             </div>
 
-            <!-- Vertical HUD (Left/Right Splitted or Bottom Right Stacked) -->
-            <!-- User asked: "Upwards stick" style -->
+            <!-- Vertical HUD -->
             <div class="vertical-hud">
                 <div class="v-bar-container">
                     <div class="v-bar red">
-                        <div id="bar-hp" class="v-fill" style="height: 100%"></div>
+                        <div id="bar-hp" class="v-fill" style="height:100%"></div>
                     </div>
-                    <span id="val-hp">100</span>
-                    <i class="fas fa-heart icon-hud"></i>
+                    <span id="val-hp">100</span><i class="fas fa-heart icon-hud"></i>
                 </div>
                 <div class="v-bar-container">
                     <div class="v-bar blue">
-                        <div id="bar-mp" class="v-fill" style="height: 100%"></div>
+                        <div id="bar-mp" class="v-fill" style="height:100%"></div>
                     </div>
-                    <span id="val-mp">50</span>
-                    <i class="fas fa-bolt icon-hud"></i>
+                    <span id="val-mp">50</span><i class="fas fa-bolt icon-hud"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Event Modal -->
-        <div id="screen-event" class="screen full-center hidden overlay">
-            <div class="modal-box glass">
-                <h1 id="event-title">Event</h1>
-                <p id="event-desc">Desc</p>
-                <div id="event-options" class="options-list"></div>
-            </div>
-        </div>
-
-        <!-- Game Over -->
         <div id="screen-gameover" class="screen full-center hidden">
             <h1>GAME OVER</h1>
-            <div id="perk-list" class="cards"></div>
+            <div id="perk-list"></div>
         </div>
-
     </div>
     <script src="game.js"></script>
 </body>
