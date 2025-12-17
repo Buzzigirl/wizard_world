@@ -1,184 +1,160 @@
 // ==========================================
-// Class 2: Roguelike Grammar Quest
+// Class 2: Roguelike Grammar Quest V2
+// Features: 4C/ID Stages, RPG Classes, Fairy Companion
 // ==========================================
 
 const CONFIG = {
-    API_KEY: "", // Gemini API 키 (환경변수로 관리 권장)
+    // API 키는 Railway 환경 변수 등에서 주입 권장
+    API_KEY: "",
     API_URL: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 };
 
 // ==========================================
-// Game Data
+// Data: Game Content & Systems
 // ==========================================
-const MONSTERS = [
+
+// 1. Character Classes
+const CLASSES = {
+    WARRIOR: { id: 'WARRIOR', name: '전사', hp: 150, mana: 30, desc: '체력이 높고 튼튼합니다. (Easy)' },
+    ROGUE: { id: 'ROGUE', name: '도적', hp: 100, mana: 50, desc: '균형 잡힌 능력치를 가집니다. (Normal)' },
+    MAGE: { id: 'MAGE', name: '마법사', hp: 70, mana: 100, desc: '체력은 낮지만 마나가 많습니다. (Hard)' }
+};
+
+// 2. Fairy Companions
+const FAIRIES = {
+    FIRE: {
+        id: 'FIRE', name: '이그니스', type: '불', color: 'text-red-500',
+        personality: '열정적이고 다혈질. "빨리 해! 시간 없어!"', icon: '🔥'
+    },
+    WATER: {
+        id: 'WATER', name: '아쿠아', type: '물', color: 'text-blue-500',
+        personality: '차분하고 친절함. "천천히 생각해보세요~"', icon: '💧'
+    },
+    WIND: {
+        id: 'WIND', name: '실피드', type: '바람', color: 'text-green-500',
+        personality: '장난끼 많고 자유분방. "히히, 이건 어때?"', icon: '🍃'
+    },
+    GROUND: {
+        id: 'GROUND', name: '테라', type: '땅', color: 'text-yellow-600',
+        personality: '무뚝뚝하고 직설적. "집중해라. 답은..."', icon: '🪨'
+    }
+};
+
+// 3. Scenarios & Monsters
+const THEMES = [
     {
-        id: 'm1', name: "Fire Spirit", type: "FIRE", weakness: ["cold", "cool", "icy", "wet"],
-        hp: 150, icon: "🔥", desc: "불타는 정령입니다. 차가운(Cold) 공격이 필요합니다.", category: 'MONSTER'
+        id: 'FOREST', name: 'The Cursed Forest', bg: 'https://images.unsplash.com/photo-1448375240586-dfd8f3793371?q=80&w=2670&auto=format&fit=crop',
+        monsters: [
+            { id: 'm1', name: "Wild Boar", type: "ANGRY", weakness: ["calm", "gentle"], hp: 80, icon: "🐗", targetSentence: "I make you calm" },
+            { id: 'm2', name: "Poison Vine", type: "POISON", weakness: ["clean", "pure"], hp: 90, icon: "🌿", targetSentence: "I make it clean" },
+            { id: 'm3', name: "Shadow Wolf", type: "DARK", weakness: ["bright", "light"], hp: 100, icon: "🐺", targetSentence: "I make light" }
+        ]
     },
     {
-        id: 'm2', name: "Water Slime", type: "WATER", weakness: ["hot", "warm", "dry", "electric"],
-        hp: 120, icon: "💧", desc: "축축한 슬라임입니다. 뜨거운(Hot) 공격에 약합니다.", category: 'MONSTER'
-    },
-    {
-        id: 'm3', name: "Iron Golem", type: "METAL", weakness: ["strong", "heavy", "hard", "hot"],
-        hp: 200, icon: "⚙️", desc: "단단한 강철 골렘입니다. 강한(Strong) 충격이나 녹이는 열이 필요합니다.", category: 'MONSTER'
-    },
-    {
-        id: 'm4', name: "Wind Bat", type: "WIND", weakness: ["heavy", "fast", "quick"],
-        hp: 100, icon: "💨", desc: "재빠른 박쥐입니다. 무거운(Heavy) 바람으로 누르거나 더 빨라야(Fast) 합니다.", category: 'MONSTER'
-    },
-    {
-        id: 'm5', name: "Dark Shadow", type: "DARK", weakness: ["bright", "shiny", "light"],
-        hp: 130, icon: "🌑", desc: "어둠의 그림자입니다. 밝은(Bright) 빛이 약점입니다.", category: 'MONSTER'
+        id: 'CASTLE', name: 'Demon King\'s Castle', bg: 'https://images.unsplash.com/photo-1599596549216-b186b864a75e?q=80&w=2574&auto=format&fit=crop',
+        monsters: [
+            { id: 'm4', name: "Skeleton Guard", type: "UNDEAD", weakness: ["holy", "alive"], hp: 120, icon: "💀", targetSentence: "I use holy magic" },
+            { id: 'm5', name: "Fire Dragon", type: "FIRE", weakness: ["cold", "ice"], hp: 150, icon: "🐉", targetSentence: "I cast cold ice" },
+            { id: 'm6', name: "Demon King", type: "CHAOS", weakness: ["order", "peace"], hp: 200, icon: "😈", targetSentence: "I bring peace now" }
+        ]
     }
 ];
 
-const REAL_LIFE_SCENARIOS = [
-    {
-        id: 'r1', name: "Too Hot Coffee", type: "TOO HOT", weakness: ["cold", "cool", "iced"],
-        hp: 80, icon: "☕", desc: "커피가 너무 뜨거워서 마실 수 없습니다! 식혀주세요.", category: 'REAL_LIFE'
-    },
-    {
-        id: 'r2', name: "Heavy Luggage", type: "HEAVY", weakness: ["light", "strong"],
-        hp: 100, icon: "💼", desc: "짐이 너무 무거워서 들 수 없습니다. 가볍게 만들거나(Light) 힘을 쓰세요(Strong).", category: 'REAL_LIFE'
-    },
-    {
-        id: 'r3', name: "Dark Room", type: "DARKNESS", weakness: ["bright", "light"],
-        hp: 60, icon: "🌞", desc: "방이 너무 어둡습니다. 불을 켜거나 밝게 만들어주세요.", category: 'REAL_LIFE'
-    }
-];
-
-const ARTIFACTS = [
-    { id: 'Potion', name: 'Health Potion', icon: '❤️', desc: '즉시 HP 50 회복 (1회용)', type: 'CONSUMABLE' },
-    { id: 'ManaCrystal', name: 'Mana Crystal', icon: '🔋', desc: '최대 마나 +20 (지속)', type: 'PASSIVE' },
-    { id: 'GrimoirePage', name: 'Secret Page', icon: '📖', desc: '몬스터 약점 자동 분석 (지속)', type: 'PASSIVE' }
-];
-
-const VOCAB_QUIZZES = [
-    { q: "차가운", a: "cold" }, { q: "뜨거운", a: "hot" },
-    { q: "빠른", a: "fast" }, { q: "무거운", a: "heavy" },
-    { q: "밝은", a: "bright" }, { q: "강한", a: "strong" },
-    { q: "날카로운", a: "sharp" }, { q: "젖은", a: "wet" }
-];
-
 // ==========================================
-// Game State
+// Logic: Game State & Rules
 // ==========================================
 class GameState {
     constructor() {
-        this.phase = 'INTRO'; // INTRO, COMBAT, REWARD, GAME_OVER
-        this.playerHp = 100;
-        this.maxHp = 100;
-        this.mana = 50;
-        this.maxMana = 50;
-        this.inventory = [];
-        this.messages = [];
-        this.currentMonster = null;
-        this.stageCount = 1;
-        this.monsterHp = 100;
-        this.isLoading = false;
-        this.quizIndex = 0;
+        this.reset();
     }
 
     reset() {
-        this.phase = 'INTRO';
-        this.playerHp = 100;
+        this.mode = 'SELECT_CLASS'; // SELECT_CLASS, SELECT_FAIRY, GAME, GAME_OVER, VICTORY
+        this.playerClass = null;
+        this.fairy = null;
+        this.stage = 1;
+        this.maxStage = 6;
+        this.hp = 100;
         this.maxHp = 100;
         this.mana = 50;
         this.maxMana = 50;
-        this.inventory = [];
-        this.messages = [];
+        this.currentThemeIdx = 0;
         this.currentMonster = null;
-        this.stageCount = 1;
-        this.monsterHp = 100;
+        this.messages = [];
+        this.isLoading = false;
+    }
+
+    initPlayer(classId) {
+        this.playerClass = CLASSES[classId];
+        this.hp = this.playerClass.hp;
+        this.maxHp = this.playerClass.hp;
+        this.mana = this.playerClass.mana;
+        this.maxMana = this.playerClass.mana;
+    }
+
+    setFairy(fairyId) {
+        this.fairy = FAIRIES[fairyId];
+    }
+
+    // 4C/ID Difficulty Logic
+    getStageDifficulty(stage) {
+        if (stage <= 1) return 'WORKED';     // Stage 1: Full Example provided
+        if (stage <= 3) return 'COMPLETION'; // Stage 2-3: Key blanks
+        if (stage <= 5) return 'FADING';     // Stage 4-5: First letters only
+        return 'FREE';                       // Stage 6+: No hints
+    }
+
+    getHintText(target, stage) {
+        const difficulty = this.getStageDifficulty(stage);
+
+        if (difficulty === 'WORKED') return `따라 쓰세요: "${target}"`;
+
+        if (difficulty === 'COMPLETION') {
+            const words = target.split(' ');
+            // Hide the key adjective/verb (usually the 3rd or last word)
+            const masked = words.map((w, i) => (i === 2 || i === words.length - 1) ? "_____" : w).join(' ');
+            return `빈칸 채우기: "${masked}"`;
+        }
+
+        if (difficulty === 'FADING') {
+            return `힌트: ${target.split(' ').map(w => w[0] + '_'.repeat(w.length - 1)).join(' ')}`;
+        }
+
+        return "스스로 영작하세요! (No Hint)";
     }
 }
 
 // ==========================================
-// AI Service
+// Logic: AI Service
 // ==========================================
 class AIService {
-    static async getWizFeedback(userText, currentMonster) {
-        if (!CONFIG.API_KEY) {
-            return this.localEvaluation(userText, currentMonster);
-        }
+    static async evaluate(userText, target, monster) {
+        if (!CONFIG.API_KEY) return this.localEvaluate(userText, target);
 
-        try {
-            const isRealLife = currentMonster.category === 'REAL_LIFE';
-            const systemPrompt = `
-당신은 AI 튜터 '위즈'입니다. 로그라이크 게임의 심판입니다.
-
-[현재 상황: ${isRealLife ? "실생활 문제 해결" : "몬스터 전투"}]
-- 대상: ${currentMonster.name} (속성/상태: ${currentMonster.type})
-- 유효 해결 단어(반의어 등): ${currentMonster.weakness.join(', ')}
-- 목표 구문: S + V + Adjective + O (예: I make it cool, I cast cold ice)
-
-[판정 기준]
-1. 문법(어순)이 대략적으로 맞아야 함.
-2. **형용사(Adjective)**가 대상의 상태를 해결하거나 반대되는 개념(반의어)이면 "Critical Hit".
-3. 형용사가 없거나 관련 없으면 "Normal Hit" (데미지 낮음).
-4. 문맥상 완전히 틀리면 "Miss".
-
-[Output JSON]
-{
-  "isCorrect": boolean,
-  "damage": number (0=Miss, 20=Normal, 60=Critical),
-  "message": "위즈의 피드백 (한국어, 이모지 포함, ${isRealLife ? "실생활 조언 톤으로" : "전투 톤으로"})",
-  "scaffoldingType": "Conceptual" | "Strategic" | "Motivational" | "Success"
-}
-            `;
-
-            const response = await fetch(
-                `${CONFIG.API_URL}?key=${CONFIG.API_KEY}`,
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Check this input against target '${currentMonster.name}': ${userText}` }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
-                        generationConfig: { responseMimeType: "application/json" }
-                    }),
-                }
-            );
-
-            if (!response.ok) throw new Error("API Error");
-            const data = await response.json();
-            return JSON.parse(data.candidates[0].content.parts[0].text);
-
-        } catch (error) {
-            console.error("AI Service Error:", error);
-            return this.localEvaluation(userText, currentMonster);
-        }
+        // API Call implementation would go here...
+        // For efficiency in this demo, we'll primarily use local logic but structure it for AI
+        return this.localEvaluate(userText, monster.targetSentence);
     }
 
-    static localEvaluation(userText, currentMonster) {
-        const userLower = userText.toLowerCase().trim();
+    static localEvaluate(userText, target) {
+        const userClean = userText.toLowerCase().replace(/[.,!?]/g, '').trim();
+        const targetClean = target.toLowerCase().replace(/[.,!?]/g, '').trim();
 
-        // Check if any weakness keyword is in the input
-        const hasWeakness = currentMonster.weakness.some(w => userLower.includes(w));
-
-        if (hasWeakness) {
-            return {
-                isCorrect: true,
-                damage: 60,
-                message: "🔥 Critical Hit! 완벽한 해결책입니다!",
-                scaffoldingType: "Success"
-            };
-        } else if (userLower.length > 5) {
-            return {
-                isCorrect: true,
-                damage: 20,
-                message: "👍 괜찮아요! 하지만 더 효과적인 형용사를 사용해보세요.",
-                scaffoldingType: "Strategic"
-            };
-        } else {
-            return {
-                isCorrect: false,
-                damage: 0,
-                message: "❌ 주문 실패! 반대되는 형용사를 사용해보세요.",
-                scaffoldingType: "Conceptual"
-            };
+        // Exact match
+        if (userClean === targetClean) {
+            return { isCorrect: true, dmg: 50, msg: "Chrispy! 완벽합니다!" };
         }
+
+        // Key word check (simple implementation)
+        const targetWords = targetClean.split(' ');
+        const userWords = userClean.split(' ');
+        const matchCount = targetWords.filter(w => userWords.includes(w)).length;
+
+        if (matchCount >= targetWords.length - 1) {
+            return { isCorrect: true, dmg: 30, msg: "좋아요! 하지만 조금 더 정확하게..." };
+        }
+
+        return { isCorrect: false, dmg: 0, msg: "다시 시도해보세요." };
     }
 }
 
@@ -186,70 +162,64 @@ class AIService {
 // UI Controller
 // ==========================================
 class UIController {
-    constructor(gameState) {
-        this.state = gameState;
-        this.initElements();
-        this.bindEvents();
+    constructor() {
+        this.game = new GameState();
+        this.els = {
+            app: document.getElementById('app'),
+            screens: {
+                selectClass: document.getElementById('screen-select-class'),
+                selectFairy: document.getElementById('screen-select-fairy'),
+                game: document.getElementById('screen-game'),
+                gameover: document.getElementById('screen-gameover')
+            },
+            hud: {
+                hpFill: document.getElementById('hp-fill'),
+                hpText: document.getElementById('hp-text'),
+                mpFill: document.getElementById('mp-fill'),
+                mpText: document.getElementById('mp-text'),
+                stage: document.getElementById('stage-display'),
+                theme: document.getElementById('theme-display'),
+                map: document.getElementById('minimap-container')
+            },
+            game: {
+                monsterIcon: document.getElementById('monster-icon'),
+                monsterName: document.getElementById('monster-name'),
+                monsterHp: document.getElementById('monster-hp-fill'),
+                chat: document.getElementById('chat-box'),
+                input: document.getElementById('user-input'),
+                sendBtn: document.getElementById('send-btn'),
+                guide: document.getElementById('guide-text'),
+                fairy: document.getElementById('fairy-companion')
+            }
+        };
+
+        this.initEvents();
+        this.showScreen('selectClass');
     }
 
-    initElements() {
-        // Screens
-        this.introScreen = document.getElementById('intro-screen');
-        this.gameScreen = document.getElementById('game-screen');
-        this.gameoverScreen = document.getElementById('gameover-screen');
-
-        // Game elements
-        this.stageDisplay = document.getElementById('stage-count');
-        this.hpDisplay = document.getElementById('hp-display');
-        this.manaDisplay = document.getElementById('mana-display');
-        this.inventory = document.getElementById('inventory');
-        this.chatArea = document.getElementById('chat-area');
-        this.userInput = document.getElementById('user-input');
-        this.sendBtn = document.getElementById('send-btn');
-        this.sendIcon = document.getElementById('send-icon');
-
-        // Entity display
-        this.stage = document.getElementById('stage');
-        this.entityIcon = document.getElementById('entity-icon');
-        this.entityHpFill = document.getElementById('entity-hp-fill');
-        this.entityName = document.getElementById('entity-name');
-        this.weaknessHint = document.getElementById('weakness-hint');
-        this.taskGuide = document.getElementById('task-guide');
-
-        // Reward
-        this.rewardScreen = document.getElementById('reward-screen');
-        this.artifactChoices = document.getElementById('artifact-choices');
-
-        // Modals
-        this.grimoireModal = document.getElementById('grimoire-modal');
-        this.manaModal = document.getElementById('mana-modal');
-        this.quizWord = document.getElementById('quiz-word');
-        this.quizOptions = document.getElementById('quiz-options');
-        this.quizFeedback = document.getElementById('quiz-feedback');
-    }
-
-    bindEvents() {
-        // Start game
-        document.getElementById('start-game-btn').addEventListener('click', () => this.startGame());
-
-        // Send message
-        this.sendBtn.addEventListener('click', () => this.handleSend());
-        this.userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.handleSend();
+    initEvents() {
+        // Class Selection
+        document.querySelectorAll('.class-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const cls = card.dataset.class;
+                this.game.initPlayer(cls);
+                this.showScreen('selectFairy');
+            });
         });
 
-        // Modals
-        document.getElementById('grimoire-btn').addEventListener('click', () => {
-            this.grimoireModal.classList.remove('hidden');
+        // Fairy Selection
+        document.querySelectorAll('.fairy-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const fairy = card.dataset.fairy;
+                this.game.setFairy(fairy);
+                this.startGame();
+            });
         });
-        document.getElementById('grimoire-close').addEventListener('click', () => {
-            this.grimoireModal.classList.add('hidden');
-        });
-        document.getElementById('mana-btn').addEventListener('click', () => {
-            this.showManaQuiz();
-        });
-        document.getElementById('mana-close').addEventListener('click', () => {
-            this.manaModal.classList.add('hidden');
+
+        // Game Input
+        this.els.game.sendBtn.addEventListener('click', () => this.handleInput());
+        this.els.game.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleInput();
         });
 
         // Retry
@@ -257,334 +227,161 @@ class UIController {
             location.reload();
         });
 
-        // Close modals on background click
-        this.grimoireModal.addEventListener('click', (e) => {
-            if (e.target === this.grimoireModal) this.grimoireModal.classList.add('hidden');
-        });
-        this.manaModal.addEventListener('click', (e) => {
-            if (e.target === this.manaModal) this.manaModal.classList.add('hidden');
-        });
+        // Fairy Hint Click
+        this.els.game.fairy.addEventListener('click', () => this.handleFairyHint());
+    }
+
+    showScreen(screenName) {
+        Object.values(this.els.screens).forEach(el => el.classList.add('hidden'));
+        this.els.screens[screenName].classList.remove('hidden');
     }
 
     startGame() {
-        this.state.phase = 'COMBAT';
-        this.introScreen.classList.add('hidden');
-        this.gameScreen.classList.remove('hidden');
+        this.game.mode = 'GAME';
+        this.showScreen('game');
+        this.updateHUD();
+        this.loadStage();
 
-        this.addMessage('wiz', "좋아, 숲으로 들어가자! 상황에 맞는 '반의어 형용사'를 사용해서 문제를 해결해야 해.");
-        this.startStage();
+        // Initial Chat
+        this.addMessage('system', "던전에 입장했습니다...");
+        this.addMessage('fairy', `${this.game.fairy.name}: "준비됐어? 가자!"`);
     }
 
-    startStage() {
-        let targetEntity;
-        let introMsg;
+    loadStage() {
+        // Theme Management
+        if (this.game.stage > 3) this.game.currentThemeIdx = 1;
+        const theme = THEMES[this.game.currentThemeIdx];
 
-        // Every 3rd stage is a real-life scenario
-        if (this.state.stageCount % 3 === 0) {
-            targetEntity = REAL_LIFE_SCENARIOS[Math.floor(Math.random() * REAL_LIFE_SCENARIOS.length)];
-            introMsg = `🏙️ 실생활 미션 발생! ${targetEntity.name} 상황을 해결하세요!`;
+        // Monster Management (Cycle through monsters)
+        const mIdx = (this.game.stage - 1) % theme.monsters.length;
+        this.game.currentMonster = { ...theme.monsters[mIdx], maxHp: theme.monsters[mIdx].hp };
+
+        // UI Updates
+        this.els.game.monsterIcon.textContent = this.game.currentMonster.icon;
+        this.els.game.monsterName.textContent = `Lv.${this.game.stage} ${this.game.currentMonster.name}`;
+        this.els.hud.theme.textContent = theme.name;
+        this.els.app.style.backgroundImage = `url('${theme.bg}')`;
+
+        // 4C/ID Guide update
+        const hintText = this.game.getHintText(this.game.currentMonster.targetSentence, this.game.stage);
+        this.els.game.guide.textContent = hintText;
+        this.els.game.guide.className = `guide-box difficulty-${this.game.getStageDifficulty(this.game.stage).toLowerCase()}`;
+
+        this.updateMinimap();
+        this.updateMonsterHp();
+    }
+
+    async handleInput() {
+        const text = this.els.game.input.value.trim();
+        if (!text) return;
+
+        this.addMessage('user', text);
+        this.els.game.input.value = '';
+
+        const result = await AIService.evaluate(text, this.game.currentMonster.targetSentence, this.game.currentMonster);
+
+        if (result.isCorrect) {
+            this.game.currentMonster.hp -= result.dmg;
+            this.updateMonsterHp();
+            this.addMessage('system', `⚔️ ${result.dmg} 데미지!`);
+
+            if (this.game.currentMonster.hp <= 0) {
+                this.stageClear();
+            } else {
+                this.monsterAttack();
+            }
         } else {
-            targetEntity = MONSTERS[Math.floor(Math.random() * MONSTERS.length)];
-            introMsg = `⚠️ 야생의 ${targetEntity.name}(이)가 나타났다!`;
+            this.monsterAttack();
+            this.addMessage('fairy', `${this.game.fairy.name}: "틀렸어! 집중해!"`);
         }
-
-        this.state.currentMonster = { ...targetEntity, maxHp: targetEntity.hp };
-        this.state.monsterHp = targetEntity.hp;
-        this.state.phase = 'COMBAT';
-
-        this.addMessage('system', introMsg);
-        this.updateEntityDisplay();
-        this.updateTaskGuide();
-        this.updateBackground();
     }
 
-    async handleSend() {
-        const text = this.userInput.value.trim();
-        if (!text || this.state.isLoading || this.state.phase !== 'COMBAT') return;
+    monsterAttack() {
+        const dmg = 10 + (this.game.stage * 2);
+        this.game.hp = Math.max(0, this.game.hp - dmg);
+        this.updateHUD();
+        this.addMessage('monster', `${this.game.currentMonster.name}의 공격! (HP -${dmg})`);
 
-        if (this.state.mana < 5) {
-            this.addMessage('system', "⚠️ 마나가 부족합니다! '마나 훈련소'에서 충전하세요.");
+        if (this.game.hp <= 0) {
+            this.showScreen('gameover');
+        }
+    }
+
+    stageClear() {
+        this.addMessage('system', "VICTORY! 몬스터를 처치했습니다.");
+        this.game.stage++;
+        this.game.hp = Math.min(this.game.maxHp, this.game.hp + 20); // Heal
+        this.updateHUD();
+
+        setTimeout(() => {
+            if (this.game.stage > 6) {
+                alert("축하합니다! 모든 스테이지를 클리어했습니다!");
+                location.reload();
+            } else {
+                this.loadStage();
+            }
+        }, 1500);
+    }
+
+    handleFairyHint() {
+        if (this.game.mana < 10) {
+            this.addMessage('system', "마나가 부족합니다!");
             return;
         }
 
-        this.addMessage('user', text);
-        this.userInput.value = '';
-        this.setLoading(true);
-        this.state.mana = Math.max(0, this.state.mana - 5);
-        this.updateMana();
+        this.game.mana -= 10;
+        this.updateHUD();
 
-        const result = await AIService.getWizFeedback(text, this.state.currentMonster);
-        this.setLoading(false);
+        // Personality-based hints
+        const target = this.game.currentMonster.targetSentence;
+        let hintMsg = "";
 
-        this.addMessage('wiz', result.message, result.scaffoldingType);
+        switch (this.game.fairy.id) {
+            case 'FIRE': hintMsg = `"답은 이거야! [ ${target} ] 빨리 입력해!"`; break;
+            case 'WATER': hintMsg = `"천천히... 정답은 [ ${target} ] 같아요."`; break;
+            case 'WIND': hintMsg = `"힝~ 정답 가르쳐줄게! [ ${target} ]`; break;
+            case 'GROUND': hintMsg = `"...[ ${target} ]. 더 묻지 마라."`; break;
+        }
 
-        if (result.isCorrect) {
-            const dmg = result.damage || 20;
-            const newHp = Math.max(0, this.state.monsterHp - dmg);
-            this.state.monsterHp = newHp;
-            this.updateEntityDisplay();
+        this.addMessage('fairy', `${this.game.fairy.name}: ${hintMsg}`);
+    }
 
-            if (dmg >= 60) {
-                this.addMessage('system', "🔥 Critical Hit! 완벽한 해결책입니다!");
-            }
+    updateHUD() {
+        this.els.hud.hpText.textContent = `${this.game.hp}/${this.game.maxHp}`;
+        this.els.hud.hpFill.style.height = `${(this.game.hp / this.game.maxHp) * 100}%`;
 
-            if (newHp <= 0) {
-                this.handleStageCleared();
-            } else {
-                this.handleCounterAttack();
-            }
-        } else {
-            this.handleFailedAttack();
+        this.els.hud.mpText.textContent = `${this.game.mana}/${this.game.maxMana}`;
+        this.els.hud.mpFill.style.height = `${(this.game.mana / this.game.maxMana) * 100}%`;
+
+        this.els.hud.stage.textContent = `Stage ${this.game.stage}`;
+
+        this.els.game.fairy.textContent = this.game.fairy ? this.game.fairy.icon : '';
+        this.els.game.fairy.className = `fairy-companion ${this.game.fairy ? 'animate-float' : ''}`;
+    }
+
+    updateMonsterHp() {
+        const pct = Math.max(0, (this.game.currentMonster.hp / this.game.currentMonster.maxHp) * 100);
+        this.els.game.monsterHp.style.width = `${pct}%`;
+    }
+
+    updateMinimap() {
+        this.els.hud.map.innerHTML = '';
+        for (let i = 1; i <= 6; i++) {
+            const node = document.createElement('div');
+            node.className = `map-node ${i === this.game.stage ? 'current' : ''} ${i < this.game.stage ? 'cleared' : ''}`;
+            node.textContent = i;
+            this.els.hud.map.appendChild(node);
         }
     }
 
-    handleStageCleared() {
-        this.state.stageCount++;
-        this.state.phase = 'REWARD';
-
-        const clearMsg = this.state.currentMonster.category === 'REAL_LIFE'
-            ? `✅ 문제 해결 완료! ${this.state.currentMonster.name} 상황을 극복했습니다.`
-            : `🏆 ${this.state.currentMonster.name} 처치! 보상을 선택하세요.`;
-
-        this.addMessage('system', clearMsg);
-        this.showRewardScreen();
-    }
-
-    handleCounterAttack() {
-        const damageAmount = Math.floor(Math.random() * 10) + 5;
-        this.state.playerHp = Math.max(0, this.state.playerHp - damageAmount);
-        this.updateHp();
-
-        const attackMsg = this.state.currentMonster.category === 'REAL_LIFE'
-            ? `💦 상황이 악화되었습니다. 스트레스를 받습니다. (HP -${damageAmount})`
-            : `💥 몬스터가 반격합니다! (HP -${damageAmount})`;
-
-        this.addMessage('system', attackMsg);
-
-        if (this.state.playerHp <= 0) {
-            this.showGameOver();
-        }
-    }
-
-    handleFailedAttack() {
-        const damageAmount = 15;
-        this.state.playerHp = Math.max(0, this.state.playerHp - damageAmount);
-        this.updateHp();
-
-        const failMsg = this.state.currentMonster.category === 'REAL_LIFE'
-            ? `❌ 해결 실패! 상황이 더 꼬였습니다. (HP -${damageAmount})`
-            : `❌ 주문 실패! 몬스터에게 강하게 맞았습니다. (HP -${damageAmount})`;
-
-        this.addMessage('system', failMsg);
-
-        if (this.state.playerHp <= 0) {
-            this.showGameOver();
-        }
-    }
-
-    showRewardScreen() {
-        this.rewardScreen.classList.remove('hidden');
-        this.artifactChoices.innerHTML = '';
-
-        ARTIFACTS.forEach(art => {
-            const btn = document.createElement('button');
-            btn.className = 'artifact-card';
-            btn.innerHTML = `
-                <div class="artifact-icon">${art.icon}</div>
-                <div class="artifact-name">${art.name}</div>
-                <div class="artifact-desc">${art.desc}</div>
-            `;
-            btn.addEventListener('click', () => this.selectArtifact(art));
-            this.artifactChoices.appendChild(btn);
-        });
-    }
-
-    selectArtifact(artifact) {
-        if (artifact.type === 'CONSUMABLE') {
-            if (artifact.id === 'Potion') {
-                this.state.playerHp = Math.min(this.state.maxHp, this.state.playerHp + 50);
-                this.updateHp();
-            }
-        } else {
-            this.state.inventory.push(artifact);
-            this.updateInventory();
-
-            if (artifact.id === 'ManaCrystal') {
-                this.state.maxMana += 20;
-                this.state.mana += 20;
-                this.updateMana();
-            }
-        }
-
-        this.addMessage('system', `🎁 ${artifact.name} 획득! 다음 스테이지로 이동합니다...`);
-        this.rewardScreen.classList.add('hidden');
-
-        setTimeout(() => {
-            this.startStage();
-        }, 1000);
-    }
-
-    showGameOver() {
-        this.gameScreen.classList.add('hidden');
-        this.gameoverScreen.classList.remove('hidden');
-    }
-
-    addMessage(sender, text, scaffoldingType = null) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}`;
-
-        if (sender === 'wiz' && scaffoldingType) {
-            const header = document.createElement('div');
-            header.className = 'wiz-header';
-            header.innerHTML = `
-                <span class="wiz-name">🪄 Wiz</span>
-                <span class="scaffolding-badge">${scaffoldingType} Support</span>
-            `;
-            messageDiv.appendChild(header);
-        }
-
-        const textNode = document.createElement('div');
-        textNode.textContent = text;
-        messageDiv.appendChild(textNode);
-
-        this.chatArea.appendChild(messageDiv);
-        this.chatArea.scrollTop = this.chatArea.scrollHeight;
-
-        this.state.messages.push({ sender, text, scaffoldingType });
-    }
-
-    setLoading(isLoading) {
-        this.state.isLoading = isLoading;
-        this.sendBtn.disabled = isLoading;
-        this.userInput.disabled = isLoading;
-
-        this.sendIcon.textContent = isLoading ? '⟳' : '➤';
-        if (isLoading) {
-            this.sendIcon.classList.add('loading');
-        } else {
-            this.sendIcon.classList.remove('loading');
-        }
-    }
-
-    updateEntityDisplay() {
-        if (!this.state.currentMonster) return;
-
-        this.entityIcon.textContent = this.state.currentMonster.icon;
-        this.entityIcon.style.fontSize = '80px';
-
-        const hpPercent = (this.state.monsterHp / this.state.currentMonster.maxHp) * 100;
-        this.entityHpFill.style.width = `${hpPercent}%`;
-
-        const prefix = this.state.currentMonster.category === 'REAL_LIFE' ? '🏙️ Mission: ' : `Lv.${this.state.stageCount} `;
-        this.entityName.textContent = prefix + this.state.currentMonster.name;
-
-        // Show weakness hint if artifact exists
-        const hasGrimoire = this.state.inventory.some(i => i.id === 'GrimoirePage');
-        if (hasGrimoire) {
-            this.weaknessHint.textContent = `👁️ Key Word: ${this.state.currentMonster.weakness[0]}`;
-            this.weaknessHint.classList.remove('hidden');
-        } else {
-            this.weaknessHint.classList.add('hidden');
-        }
-    }
-
-    updateTaskGuide() {
-        if (!this.state.currentMonster) return;
-
-        const isRealLife = this.state.currentMonster.category === 'REAL_LIFE';
-        this.taskGuide.className = `task-guide ${isRealLife ? 'real-life' : 'monster'}`;
-        this.taskGuide.innerHTML = `
-            <div class="task-header">
-                <span>${isRealLife ? 'Real Life Mission' : 'Survival Mode'}</span>
-                <span>Target: ${this.state.currentMonster.type}</span>
-            </div>
-            <div class="task-desc">${this.state.currentMonster.desc}</div>
-        `;
-        this.taskGuide.classList.remove('hidden');
-    }
-
-    updateBackground() {
-        if (this.state.currentMonster?.category === 'REAL_LIFE') {
-            this.stage.classList.add('real-life-bg');
-        } else {
-            this.stage.classList.remove('real-life-bg');
-        }
-    }
-
-    updateHp() {
-        this.hpDisplay.textContent = `${this.state.playerHp}/${this.state.maxHp}`;
-    }
-
-    updateMana() {
-        this.manaDisplay.textContent = `${this.state.mana}/${this.state.maxMana}`;
-    }
-
-    updateInventory() {
-        this.inventory.innerHTML = '';
-        this.state.inventory.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'inventory-item';
-            div.title = item.name;
-            div.textContent = item.icon;
-            this.inventory.appendChild(div);
-        });
-    }
-
-    // Mana Quiz
-    showManaQuiz() {
-        this.manaModal.classList.remove('hidden');
-        this.renderQuiz();
-    }
-
-    renderQuiz() {
-        const quiz = VOCAB_QUIZZES[this.state.quizIndex];
-        this.quizWord.textContent = quiz.q;
-        this.quizFeedback.textContent = '';
-
-        const options = this.generateQuizOptions(quiz.a);
-        this.quizOptions.innerHTML = '';
-
-        options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'quiz-option';
-            btn.textContent = opt;
-            btn.addEventListener('click', () => this.checkQuizAnswer(opt, quiz.a));
-            this.quizOptions.appendChild(btn);
-        });
-    }
-
-    generateQuizOptions(correctAnswer) {
-        const allAnswers = VOCAB_QUIZZES.map(q => q.a);
-        const wrongAnswers = allAnswers.filter(a => a !== correctAnswer);
-        const shuffled = wrongAnswers.sort(() => Math.random() - 0.5).slice(0, 3);
-        return [...shuffled, correctAnswer].sort(() => Math.random() - 0.5);
-    }
-
-    checkQuizAnswer(selected, correct) {
-        if (selected === correct) {
-            this.state.mana = Math.min(this.state.maxMana, this.state.mana + 10);
-            this.updateMana();
-            this.quizFeedback.textContent = 'Correct! (+10 Mana)';
-            this.quizFeedback.className = 'quiz-feedback correct';
-
-            setTimeout(() => {
-                this.state.quizIndex = (this.state.quizIndex + 1) % VOCAB_QUIZZES.length;
-                this.renderQuiz();
-            }, 1000);
-        } else {
-            this.quizFeedback.textContent = 'Wrong! Try again.';
-            this.quizFeedback.className = 'quiz-feedback wrong';
-        }
+    addMessage(sender, text) {
+        const div = document.createElement('div');
+        div.className = `msg ${sender}`;
+        div.textContent = text;
+        this.els.game.chat.appendChild(div);
+        this.els.game.chat.scrollTop = this.els.game.chat.scrollHeight;
     }
 }
 
-// ==========================================
-// Initialize
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    const gameState = new GameState();
-    const ui = new UIController(gameState);
-
-    console.log('🎮 Wiz Academy - Roguelike Quest loaded!');
-    console.log('📝 API 키를 설정하려면 CONFIG.API_KEY에 Gemini API 키를 입력하세요.');
-});
+// Init
+window.onload = () => new UIController();

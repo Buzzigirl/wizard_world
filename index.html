@@ -4,188 +4,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy - Roguelike Quest</title>
+    <title>Wiz Academy: Roguelike V2</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div id="app" class="app-container">
-        <!-- Intro Screen -->
-        <div id="intro-screen" class="intro-screen">
-            <div class="intro-overlay"></div>
-            <div class="intro-content">
-                <h1 class="intro-title">
-                    <span class="wand-icon">🪄</span>
-                    Class 2: The Forbidden Forest
-                </h1>
-                <div class="intro-sections">
-                    <section class="intro-section">
-                        <h2 class="section-title objective">🎯 학습 목표</h2>
-                        <div class="section-content">
-                            <ul>
-                                <li><strong>반의어(Antonyms) 학습:</strong> Hot ↔ Cold, Heavy ↔ Light 등의 반대 개념을 익힙니다.</li>
-                                <li><strong>상황 해결 능력:</strong> 몬스터 전투 뿐만 아니라, <strong>실생활 문제</strong> 상황에 맞는 형용사를 사용해
-                                    봅니다.</li>
-                            </ul>
-                        </div>
-                    </section>
-                    <section class="intro-section">
-                        <h2 class="section-title rules">🧠 게임 규칙</h2>
-                        <ul class="rules-list">
-                            <li>몬스터의 <strong>속성</strong>을 보고 <strong>반대되는 형용사</strong>로 공격하세요.</li>
-                            <li>(예: 불 몬스터 → Cold Magic)</li>
-                            <li>3스테이지마다 <strong>실생활 미션</strong>이 등장합니다!</li>
-                        </ul>
-                    </section>
-                    <button id="start-game-btn" class="start-button">학습 시작하기</button>
+        <!-- 1. Class Selection -->
+        <div id="screen-select-class" class="screen full-center">
+            <h1>Choose Your Class</h1>
+            <div class="cards">
+                <div class="class-card" data-class="WARRIOR">
+                    <div class="icon">⚔️</div>
+                    <h2>Warrior (Easy)</h2>
+                    <p>High HP, Low Mana</p>
+                </div>
+                <div class="class-card" data-class="ROGUE">
+                    <div class="icon">🗡️</div>
+                    <h2>Rogue (Normal)</h2>
+                    <p>Balanced Stats</p>
+                </div>
+                <div class="class-card" data-class="MAGE">
+                    <div class="icon">🔮</div>
+                    <h2>Mage (Hard)</h2>
+                    <p>Low HP, High Mana</p>
                 </div>
             </div>
         </div>
 
-        <!-- Game Screen -->
-        <div id="game-screen" class="game-screen hidden">
-            <!-- Header -->
-            <header class="header">
-                <div class="header-left">
-                    <div class="logo-icon">🪄</div>
-                    <div class="header-info">
-                        <h1 class="title">Wiz Academy: Roguelike</h1>
-                        <div class="stage-display">Stage <span id="stage-count">1</span></div>
-                    </div>
+        <!-- 2. Fairy Selection -->
+        <div id="screen-select-fairy" class="screen full-center hidden">
+            <h1>Select Fairy Companion</h1>
+            <div class="cards">
+                <div class="fairy-card" data-fairy="FIRE">
+                    <div class="icon">🔥</div>
+                    <h2>Ignis</h2>
+                    <p>Hot-tempered</p>
                 </div>
-
-                <!-- Inventory -->
-                <div id="inventory" class="inventory"></div>
-
-                <!-- Status Bars -->
-                <div class="status-bars">
-                    <div class="hp-status">
-                        <span class="status-icon">❤️</span>
-                        <span id="hp-display" class="status-value">100/100</span>
-                    </div>
-                    <button id="mana-btn" class="mana-status">
-                        <span class="status-icon">🔋</span>
-                        <span id="mana-display" class="status-value">50/50</span>
-                    </button>
-                    <button id="grimoire-btn" class="grimoire-btn">
-                        <span class="status-icon">📖</span>
-                        <span class="btn-text">Guide</span>
-                    </button>
+                <div class="fairy-card" data-fairy="WATER">
+                    <div class="icon">💧</div>
+                    <h2>Aqua</h2>
+                    <p>Calm & Kind</p>
                 </div>
-            </header>
-
-            <!-- Main Stage -->
-            <main class="stage" id="stage">
-                <div class="stage-overlay"></div>
-
-                <!-- Monster/Scenario Display -->
-                <div class="entity-container" id="entity-container">
-                    <div id="weakness-hint" class="weakness-hint hidden"></div>
-                    <div id="entity-icon" class="entity-icon"></div>
-                    <div class="entity-hp-bar">
-                        <div id="entity-hp-fill" class="hp-fill"></div>
-                    </div>
-                    <div id="entity-name" class="entity-name"></div>
+                <div class="fairy-card" data-fairy="WIND">
+                    <div class="icon">🍃</div>
+                    <h2>Sylphid</h2>
+                    <p>Playful</p>
                 </div>
-
-                <!-- Chat Area -->
-                <div class="chat-area" id="chat-area"></div>
-
-                <!-- Reward Screen -->
-                <div id="reward-screen" class="reward-screen hidden">
-                    <h2 class="reward-title">Stage Cleared!</h2>
-                    <p class="reward-subtitle">멋진 해결 능력이군요! 보상을 선택하세요.</p>
-                    <div id="artifact-choices" class="artifact-choices"></div>
+                <div class="fairy-card" data-fairy="GROUND">
+                    <div class="icon">🪨</div>
+                    <h2>Terra</h2>
+                    <p>Serious</p>
                 </div>
-            </main>
-
-            <!-- Footer / Input Area -->
-            <footer class="footer">
-                <div class="footer-content">
-                    <div id="task-guide" class="task-guide hidden"></div>
-                    <div class="input-area">
-                        <input type="text" id="user-input" class="message-input"
-                            placeholder="해결책을 입력하세요 (예: I make it cold)">
-                        <button id="send-btn" class="send-button">
-                            <span id="send-icon">➤</span>
-                        </button>
-                    </div>
-                </div>
-            </footer>
+            </div>
         </div>
 
-        <!-- Game Over Screen -->
-        <div id="gameover-screen" class="gameover-screen hidden">
-            <div class="gameover-icon">💀</div>
-            <h1 class="gameover-title">GAME OVER</h1>
-            <p class="gameover-subtitle">체력이 모두 소진되었습니다.</p>
-            <button id="retry-btn" class="retry-button">다시 도전</button>
+        <!-- 3. Main Game -->
+        <div id="screen-game" class="screen main-grid hidden">
+            <!-- Left Map -->
+            <div class="panel-left">
+                <h3>MAP</h3>
+                <div id="minimap-container"></div>
+            </div>
+
+            <!-- Center Stage -->
+            <div class="panel-center">
+                <div class="top-bar">
+                    <span id="theme-display">Forest</span> | <span id="stage-display">Stage 1</span>
+                </div>
+
+                <div class="monster-zone">
+                    <div class="hp-bar-bg">
+                        <div id="monster-hp-fill" style="width:100%"></div>
+                    </div>
+                    <div id="monster-icon">🦁</div>
+                    <div id="monster-name">Monster</div>
+                </div>
+
+                <div id="guide-text" class="guide-text">Hint here</div>
+
+                <div id="chat-box"></div>
+
+                <div class="control-zone">
+                    <input type="text" id="user-input" placeholder="Cast spell...">
+                    <button id="send-btn">CAST</button>
+                </div>
+            </div>
+
+            <!-- Right Fairy -->
+            <div class="panel-right">
+                <h3>PARTNER</h3>
+                <div id="fairy-companion">🧚</div>
+                <p>Click for Hint (-10 MP)</p>
+            </div>
+
+            <!-- Bottom HUD -->
+            <div class="hud-bottles">
+                <div class="bottle hp">
+                    <div id="hp-fill" class="liquid red"></div>
+                    <span id="hp-text">100</span>
+                </div>
+                <div class="bottle mp">
+                    <div id="mp-fill" class="liquid blue"></div>
+                    <span id="mp-text">50</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Game Over -->
+        <div id="screen-gameover" class="screen full-center hidden">
+            <h1>GAME OVER</h1>
+            <button id="retry-btn">Retry</button>
         </div>
     </div>
-
-    <!-- Grimoire Modal -->
-    <div id="grimoire-modal" class="modal hidden">
-        <div class="modal-content grimoire-content">
-            <button class="modal-close" id="grimoire-close">✕</button>
-            <h2 class="modal-title">📖 속성 반의어 가이드</h2>
-            <div class="grimoire-grid">
-                <div class="grimoire-card fire">
-                    <h3>🔥 불 (Hot/Fire)</h3>
-                    <p>반대 속성 (해결책):</p>
-                    <div class="weakness-tags">
-                        <span class="tag">Cold</span>
-                        <span class="tag">Cool</span>
-                    </div>
-                </div>
-                <div class="grimoire-card water">
-                    <h3>💧 물/추위 (Cold/Water)</h3>
-                    <p>반대 속성 (해결책):</p>
-                    <div class="weakness-tags">
-                        <span class="tag">Hot</span>
-                        <span class="tag">Warm</span>
-                        <span class="tag">Dry</span>
-                    </div>
-                </div>
-                <div class="grimoire-card metal">
-                    <h3>⚙️ 강철/무거움 (Heavy)</h3>
-                    <p>반대 속성 (해결책):</p>
-                    <div class="weakness-tags">
-                        <span class="tag">Light (가벼운)</span>
-                        <span class="tag">Strong (강한)</span>
-                    </div>
-                </div>
-                <div class="grimoire-card dark">
-                    <h3>🌑 어둠 (Dark)</h3>
-                    <p>반대 속성 (해결책):</p>
-                    <div class="weakness-tags">
-                        <span class="tag">Bright</span>
-                        <span class="tag">Shiny</span>
-                    </div>
-                </div>
-            </div>
-            <div class="grimoire-tip">
-                💡 Tip: "Make it <strong>[Adjective]</strong>" 또는 "I use <strong>[Adjective]</strong> magic" 형태로 문장을
-                만들어보세요.
-            </div>
-        </div>
-    </div>
-
-    <!-- Mana Station Modal -->
-    <div id="mana-modal" class="modal hidden">
-        <div class="modal-content mana-content">
-            <button class="modal-close" id="mana-close">✕</button>
-            <h2 class="modal-title">🔋 마나 훈련소</h2>
-            <p class="mana-subtitle">형용사를 맞춰 마나를 충전하세요!</p>
-            <div class="quiz-display">
-                <div id="quiz-word" class="quiz-word"></div>
-                <div class="quiz-hint">영어로 무엇일까요?</div>
-                <div id="quiz-feedback" class="quiz-feedback"></div>
-            </div>
-            <div id="quiz-options" class="quiz-options"></div>
-        </div>
-    </div>
-
     <script src="game.js"></script>
 </body>
 
