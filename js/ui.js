@@ -262,23 +262,48 @@ export class UIManager {
         }
     }
 
-    addChat(type, msg) {
+    addChat(type, msg, scaffoldType = null) {
         // Special routing for Guide messages
         if (type === 'guide') {
             if (this.els.game.guideBox) {
                 this.els.game.guideBox.innerHTML = msg.replace(/\n/g, '<br>');
                 this.els.game.guideBox.classList.remove('hidden');
-
                 // Visual Pulse
                 this.els.game.guideBox.style.transform = "scale(1.05)";
                 setTimeout(() => this.els.game.guideBox.style.transform = "scale(1)", 200);
             }
-            return; // Do NOT add to chat log
+            return;
         }
 
         const div = document.createElement('div');
         div.className = `msg ${type}`;
-        div.textContent = msg;
+
+        // Scaffold Feedback Styling
+        if (type === 'scaffold' && scaffoldType) {
+            div.classList.add(scaffoldType.toLowerCase()); // e.g. 'scaffold strategic'
+
+            // Add Icon based on Scaffold Type
+            let icon = '';
+            let label = '';
+            switch (scaffoldType) {
+                case 'Perfect': icon = '✨'; label = 'Perfect!'; break;
+                case 'Metacognitive': icon = '💡'; label = 'Check!'; break;
+                case 'Strategic': icon = '🎯'; label = 'Order?'; break;
+                case 'Conceptual': icon = '🧠'; label = 'Missing?'; break;
+                case 'Motivational': icon = '💪'; label = 'Hint'; break;
+            }
+            // Prepend Label
+            if (label) {
+                const badge = document.createElement('span');
+                badge.className = 'scaffold-badge';
+                badge.textContent = `${icon} ${label}`;
+                div.appendChild(badge);
+                div.appendChild(document.createTextNode(' ')); // Spacer
+            }
+        }
+
+        div.appendChild(document.createTextNode(msg)); // Append text safely
+
         this.els.game.chat.appendChild(div);
 
         // Auto scroll

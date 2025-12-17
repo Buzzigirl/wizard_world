@@ -94,42 +94,81 @@ export class GameState {
 
     // --- Controller Logic moved from UIController ---
 
+    // --- Scaffolding Logic ---
+    analyzeInput(input, dialogue) {
+        const lowerInput = input.toLowerCase().trim();
+        const cleanInput = lowerInput.replace(/[^\w\s']/g, ''); // Remove punctuation
+        const perfectAnswers = dialogue.perfect.map(ans => ans.toLowerCase().replace(/[^\w\s']/g, ''));
+
+        // 1. Perfect Match
+        if (perfectAnswers.includes(cleanInput)) return { type: 'Perfect', msg: null };
+
+        // 2. Metacognitive (Near Miss - Typos, Articles)
+        // Check Levenshtein distance or simple inclusion for "very close" answers
+        for (let ans of perfectAnswers) {
+            if (this.getLevenshteinDistance(cleanInput, ans) <= 2) {
+                return { type: 'Metacognitive', msg: "거의 완벽해요! 철자나 관사(a/the)를 다시 확인해보세요." };
+            }
+        }
+
+        // 3. Strategic (Order Error)
+        // Check if all keywords are present but order is wrong OR structure matches partial
+        // Simple check: All keywords exist?
+        const missingKeywords = dialogue.keywords.filter(kw => !lowerInput.includes(kw.toLowerCase()));
+        if (missingKeywords.length === 0) {
+            return { type: 'Strategic', msg: `단어는 다 맞았는데 순서가 아쉬워요. [${dialogue.syntax}] 순서를 기억하세요!` };
+        }
+
+        // 4. Conceptual (Missing Knowledge)
+        // Some keywords are missing
+        if (missingKeywords.length > 0) {
+            const missing = missingKeywords.join(', ');
+            return { type: 'Conceptual', msg: `중요한 단어 '${missing}'이(가) 빠졌어요. 이 단어를 문장에 넣어보세요.` };
+        }
+
+        // 5. Motivational (Fallback)
+        return { type: 'Motivational', msg: `괜찮아요! 힌트: ${dialogue.hint} 형식을 따라해보세요.` };
+    }
+
+    getLevenshteinDistance(a, b) {
+        const matrix = [];
+        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+            for (let j = 1; j <= a.length; j++) {
+                if (b.charAt(i - 1) == a.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+                }
+            }
+        }
+        return matrix[b.length][a.length];
+    }
+
     castSpell(input) {
         if (!input) return;
         this.ui.addChat('user', input);
 
         const dialogue = this.getCurrentDialogue();
-        if (!dialogue) {
-            // Fallback for old data or error
-            console.error("No dialogue found");
-            return;
-        }
+        if (!dialogue) { console.error("No dialogue"); return; }
 
-        const lowerInput = input.toLowerCase().trim();
+        const result = this.analyzeInput(input, dialogue);
 
-        // 1. Check Perfect Match
-        const isPerfect = dialogue.perfect.some(ans => lowerInput.replace(/[^a-z ]/g, '') === ans.toLowerCase().replace(/[^a-z ]/g, ''));
-
-        // 2. Check Keyword Match (Partial)
-        const isKeyword = dialogue.keywords.some(kw => lowerInput.includes(kw.toLowerCase()));
-
-        if (isPerfect) {
+        if (result.type === 'Perfect') {
             // PERFECT HIT
             this.consecutiveErrors = 0;
-            const dmg = this.atk * 2; // Critical for perfect
+            const dmg = this.atk * 2;
             this.currentMonster.hp = Math.max(0, this.currentMonster.hp - dmg);
 
-            this.ui.addChat('system', `✨ Perfect! ${this.playerClass.action}!! (${dmg} DMG)`);
+            this.ui.addChat('perfect', `✨ Perfect! ${this.playerClass.action}!! (${dmg} DMG)`); // New type 'perfect'
             this.ui.animateMonsterHit();
 
             // Advance Dialogue Logic
-            if (!this.currentMonster.isBoss) {
-                if (this.currentMonster.currentDialogueIndex < this.currentMonster.dialogues.length - 1) {
-                    this.currentMonster.currentDialogueIndex++;
-                    // Show NEXT guide immediately
-                    const nextD = this.getCurrentDialogue();
-                    setTimeout(() => this.ui.addChat('guide', `[가이드] ${nextD.guide}`), 800);
-                }
+            if (!this.currentMonster.isBoss && this.currentMonster.currentDialogueIndex < this.currentMonster.dialogues.length - 1) {
+                this.currentMonster.currentDialogueIndex++;
+                const nextD = this.getCurrentDialogue();
+                setTimeout(() => this.ui.addChat('guide', `[가이드] ${nextD.guide}`), 800);
             }
 
             if (this.currentMonster.hp <= 0) {
@@ -140,29 +179,32 @@ export class GameState {
                 this.ui.updateRoundUI();
             }
 
-        } else if (isKeyword) {
-            // PARTIAL HIT (Weak)
-            const dmg = Math.floor(this.atk * 0.5); // Weak damage
-            this.currentMonster.hp = Math.max(0, this.currentMonster.hp - dmg);
-
-            this.ui.addChat('system', `⚠️ 부분 적중! (${dmg} DMG)`);
-            this.ui.addChat('guide', `💡 ${dialogue.feedback}`); // Show feedback
-            this.ui.animateMonsterHit();
-            this.ui.updateRoundUI();
-
         } else {
-            // MISS
-            this.consecutiveErrors++;
-            const dmg = Math.floor(10 * (1 + this.consecutiveErrors * 0.5));
-            this.hp -= dmg;
-            this.ui.addChat('monster', `실패! 반격을 당합니다. (-${dmg} HP)`);
+            // SCAFFOLDING FEEDBACK (Weak Hit or Miss logic can be adapted)
+            // For educational purpose, we punish HP only on "Motivational" (Complete failure)?
+            // Or Keep existing Partial Hit logic? 
+            // Let's map Scaffolding to Hit Types:
+            // Metacognitive/Strategic -> Weak Hit (Partial)
+            // Conceptual/Motivational -> Miss
 
-            // Show Beginner Hint
-            const hintMsg = dialogue.hint ? `💡 힌트: ${dialogue.hint}` : `💡 힌트 키워드: ${dialogue.keywords.join(', ')}`;
-            this.ui.addChat('guide', hintMsg);
-
-            this.ui.updateRoundUI();
-            if (this.hp <= 0) this.gameOver();
+            if (result.type === 'Metacognitive' || result.type === 'Strategic') {
+                // Partial Hit
+                const dmg = Math.floor(this.atk * 0.5);
+                this.currentMonster.hp = Math.max(0, this.currentMonster.hp - dmg);
+                this.ui.addChat('system', `⚠️ 부분 적중! (${dmg} DMG)`);
+                this.ui.addChat('scaffold', result.msg, result.type); // type passed for styling
+                this.ui.animateMonsterHit();
+                this.ui.updateRoundUI();
+            } else {
+                // Miss (Conceptual, Motivational)
+                this.consecutiveErrors++;
+                const dmg = Math.floor(10 * (1 + this.consecutiveErrors * 0.5));
+                this.hp -= dmg;
+                this.ui.addChat('monster', `실패! 반격을 당합니다. (-${dmg} HP)`);
+                this.ui.addChat('scaffold', result.msg, result.type);
+                this.ui.updateRoundUI();
+                if (this.hp <= 0) this.gameOver();
+            }
         }
     }
 
