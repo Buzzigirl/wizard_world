@@ -381,7 +381,61 @@ class UIController {
         }
     }
 
-    // ... (castSpell omitted)
+    addChat(sender, text) {
+        const div = document.createElement('div');
+        div.className = `msg ${sender}`;
+        div.textContent = text;
+        const list = this.els.game.chat;
+        if (list.children.length > 7) list.firstChild.remove(); // Increased history
+        list.appendChild(div);
+        list.scrollTop = list.scrollHeight; // Auto-scroll to bottom
+    }
+
+    castSpell() {
+        const input = this.els.game.input.value.trim();
+        if (!input) return;
+        this.els.game.input.value = '';
+        this.addChat('user', input);
+
+        const phase = this.game.getMonsterPhase();
+        const isMatch = input.toLowerCase().replace(/[^a-z]/g, '') === phase.target.toLowerCase().replace(/[^a-z]/g, '');
+
+        if (isMatch) {
+            this.game.consecutiveErrors = 0;
+            const dmg = this.game.atk * 2;
+            this.game.currentMonster.hp = Math.max(0, this.game.currentMonster.hp - dmg);
+            this.addChat('system', `✨ ${this.game.playerClass.action} 성공! (${dmg} 데미지)`);
+            this.els.game.mImg.classList.add('hit');
+            setTimeout(() => this.els.game.mImg.classList.remove('hit'), 300);
+
+            if (this.game.currentMonster.hp <= 0) {
+                this.els.game.mImg.classList.add('slashed');
+                this.addChat('system', "적을 물리쳤습니다!");
+                setTimeout(() => this.stageClear(), 1500);
+            } else {
+                this.updateRoundUI();
+                this.updateScaffolding();
+            }
+        } else {
+            this.game.consecutiveErrors++;
+            const dmg = Math.floor(10 * (1 + this.game.consecutiveErrors * 0.5));
+            this.game.hp -= dmg;
+            this.addChat('monster', `실패했습니다! 반격을 당합니다. (-${dmg} HP)`);
+            this.updateRoundUI();
+            if (this.game.hp <= 0) this.gameOver();
+        }
+    }
+
+    useHint() {
+        if (this.game.mana < 10) {
+            this.addChat('system', "마나가 부족합니다.");
+            return;
+        }
+        this.game.mana -= 10;
+        this.updateHUD();
+        const hint = this.game.getMonsterPhase().target;
+        this.addChat('system', `💡 힌트: ${hint}`);
+    }
 
     stageClear() {
         // Clear Condition: Stage 3 Cleared
