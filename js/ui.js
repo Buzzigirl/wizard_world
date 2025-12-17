@@ -131,7 +131,12 @@ export class UIManager {
                              </div>`;
 
             if (!locked) {
-                btn.onclick = () => { this.game.themeIdx = i; this.startGame(); };
+                btn.onclick = () => {
+                    // Remove listeners to prevent race condition
+                    btn.onmouseleave = null;
+                    this.game.themeIdx = i;
+                    this.startGame();
+                };
                 btn.onmouseenter = () => this.setBackground(t.bg);
                 btn.onmouseleave = () => this.setBackground(LOBBY_BG);
             }
@@ -217,20 +222,45 @@ export class UIManager {
     renderMap() {
         const container = this.els.hud.map;
         container.innerHTML = '';
+
+        // Retrieve current theme to get monster names
+        const theme = this.game.getTheme();
+        const monsters = theme.monsters; // Array of 5 mobs
+        // Boss is separate in theme.boss
+
         for (let i = 3; i >= 1; i--) {
             const node = document.createElement('div');
-            let label = `${i}F`;
-            if (i === 3) label = 'BOSS';
+            let icon = '⚔️';
+            let name = '';
+
+            if (i === 3) {
+                icon = '💀'; // Boss Skull
+                name = theme.boss.name;
+            } else {
+                // Map Stage 1, 2 to Monsters. 
+                // Logic: Stage 1 -> Mob 0? No, usually Stage 1, 2, 3...
+                // GameState generateMonster(stage): returns monsters[stage-1] or [stage%length]
+                // Let's assume standard mapping: Stage 1 -> monsters[0], Stage 2 -> monsters[1]
+                const mobIdx = (i - 1) % monsters.length;
+                name = monsters[mobIdx].name;
+                icon = i < this.game.stage ? '🚩' : '⚔️';
+            }
+
+            // Override icon for current/cleared
+            if (i < this.game.stage) icon = '🚩';
+            if (i === this.game.stage) icon = i === 3 ? '💀' : '⚔️';
 
             node.className = `map-node ${i === this.game.stage ? 'current' : ''} ${i < this.game.stage ? 'cleared' : ''}`;
-            node.innerHTML = `<span>${i === this.game.stage ? '⚔️' : (i < this.game.stage ? '🚩' : '🔒')}</span>`;
-            node.dataset.goal = i === 3 ? "최종 보스 처치" : "문법 퀴즈 해결";
-            if (i === this.game.stage) node.dataset.goal = "현재 목표: 몬스터 제압";
 
-            const txt = document.createElement('span');
-            txt.className = "map-label";
-            txt.textContent = label;
-            node.appendChild(txt);
+            // Add Name to Node
+            node.innerHTML = `
+                <div class="node-icon">${icon}</div>
+                <div class="node-info">
+                    <span class="stage-num">${i === 3 ? 'BOSS' : i + 'F'}</span>
+                    <span class="mob-name">${name}</span>
+                </div>
+            `;
+
             container.appendChild(node);
         }
     }
