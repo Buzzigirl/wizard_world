@@ -235,14 +235,32 @@ export class UIManager {
         }
     }
 
-    addChat(sender, text) {
+    addChat(type, msg) {
+        // Special routing for Guide messages
+        if (type === 'guide') {
+            if (this.els.game.guideBox) {
+                this.els.game.guideBox.innerHTML = msg.replace(/\n/g, '<br>');
+                this.els.game.guideBox.classList.remove('hidden');
+
+                // Visual Pulse
+                this.els.game.guideBox.style.transform = "scale(1.05)";
+                setTimeout(() => this.els.game.guideBox.style.transform = "scale(1)", 200);
+            }
+            return; // Do NOT add to chat log
+        }
+
         const div = document.createElement('div');
-        div.className = `msg ${sender}`;
-        div.textContent = text;
-        const list = this.els.game.chat;
-        if (list.children.length > 7) list.firstChild.remove();
-        list.appendChild(div);
-        list.scrollTop = list.scrollHeight;
+        div.className = `msg ${type}`;
+        div.textContent = msg;
+        this.els.game.chat.appendChild(div);
+
+        // Auto scroll
+        this.els.game.chat.scrollTop = this.els.game.chat.scrollHeight;
+
+        // Limit history
+        while (this.els.game.chat.children.length > 7) {
+            this.els.game.chat.removeChild(this.els.game.chat.firstChild);
+        }
     }
 
     // Animations requested by GameState
