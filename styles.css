@@ -139,14 +139,16 @@ body.low-hp::after {
     box-shadow: 0 8px 25px rgba(10, 132, 255, 0.6);
 }
 
-/* Main Grid */
+/* Main Grid Layout */
 .main-grid {
     position: absolute;
     inset: 0;
     display: grid;
-    grid-template-columns: 280px 1fr 320px;
-    padding: 20px;
+    grid-template-columns: 320px 1fr 320px;
+    /* Widened side panels */
+    grid-template-rows: 1fr;
     gap: 20px;
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -317,8 +319,11 @@ body.low-hp::after {
     gap: 15px;
 }
 
-/* 1. Host Comment (Situation) - Top Center (Raised) */
+/* Monster Zone Orders for "Status -> Image -> Name -> Guide -> HP" */
+
+/* 1. Host Comment (Situation) */
 #monster-situation {
+    order: 1;
     position: static;
     color: #ffd700;
     font-size: 1.5rem;
@@ -333,33 +338,15 @@ body.low-hp::after {
     /* Auto width, centered */
     min-width: 50%;
     text-align: center;
-    order: 1;
     z-index: 10;
     margin-bottom: 20px;
     /* Spacing from HP bar */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* 2. HP Bar - Below Comment, Above Monster */
-.hp-bar-bg {
-    position: static;
-    width: 60%;
-    height: 12px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
-    order: 2;
-    transform: none;
-    margin: 5px 0;
-}
-
-#monster-hp-bar {
-    height: 100%;
-    background: #ff3b30;
-    border-radius: 5px;
-}
-
-/* 3. Monster Image and Name */
+/* 2. Monster Image */
 .monster-img {
+    order: 2;
     width: 260px;
     height: 260px;
     object-fit: contain;
@@ -368,18 +355,92 @@ body.low-hp::after {
     border: 5px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.1);
     animation: float 4s ease-in-out infinite;
-    order: 3;
     z-index: 5;
     transition: 0.3s;
 }
 
+/* 3. Monster Name */
 #monster-name {
+    order: 3;
     position: static;
     font-size: 1.8rem;
-    order: 4;
     margin-top: 5px;
     background: none;
     text-shadow: 0 2px 5px black;
+}
+
+/* 4. Guide Box (Below Name) */
+.guide-panel {
+    order: 4;
+    /* Explicitly 4th */
+    position: static;
+    z-index: 20;
+
+    /* Sizing & Spacing */
+    width: 85%;
+    max-width: 500px;
+    margin: 10px auto;
+    padding: 15px 20px;
+
+    /* Enhanced Glass Morphism */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+
+    /* Shadows for Depth */
+    box-shadow:
+        0 8px 32px 0 rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+    /* Text Style */
+    color: #fbbf24;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+    /* Animation */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideUpFade 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.guide-panel:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    transform: translateY(-2px);
+    box-shadow:
+        0 12px 40px 0 rgba(0, 0, 0, 0.4),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.guide-panel.hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+/* 5. HP Bar (Bottom) */
+.hp-bar-bg {
+    order: 5;
+    /* Last */
+    position: static;
+    width: 60%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    transform: none;
+    margin: 5px 0 20px 0;
+}
+
+#monster-hp-bar {
+    height: 100%;
+    background: #ff3b30;
+    border-radius: 5px;
 }
 
 /* Chat (Very Bottom & Full Width) */
@@ -698,59 +759,61 @@ body.low-hp::after {
     display: block;
     width: 0;
 }
-/ *   G u i d e   M e s s a g e   ( E d u c a t i o n a l )   * /  
- . m s g . g u i d e   {  
-         c o l o r :   # f c a 5 a 5 ;  
-         / *   L i g h t   R e d / P i n k   f o r   b e t t e r   v i s i b i l i t y   * /  
-         b a c k g r o u n d :   r g b a ( 4 0 ,   0 ,   0 ,   0 . 6 ) ;  
-         b o r d e r :   1 p x   s o l i d   r g b a ( 2 5 5 ,   1 0 0 ,   1 0 0 ,   0 . 3 ) ;  
-         f o n t - s i z e :   1 . 0 5 r e m ;  
-         p a d d i n g :   8 p x   1 4 p x ;  
-         m a r g i n - t o p :   5 p x ;  
-         b o r d e r - r a d i u s :   1 0 p x ;  
-         t e x t - s h a d o w :   0   1 p x   2 p x   b l a c k ;  
-         b o x - s h a d o w :   0   2 p x   1 0 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 2 ) ;  
-         a n i m a t i o n :   f a d e I n   0 . 5 s   e a s e - o u t ;  
- }  
- / *   D e d i c a t e d   G u i d e   B o x   ( G l a s s   U I )   * /  
- . g u i d e - p a n e l   {  
-         w i d t h :   9 0 % ;  
-         m a r g i n :   1 0 p x   a u t o ;  
-         / *   C e n t e r e d   b e l o w   n a m e   * /  
-         p a d d i n g :   1 2 p x   1 8 p x ;  
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 1 5 ) ;  
-         / *   S l i g h t l y   b r i g h t e r   g l a s s   * /  
-         b a c k d r o p - f i l t e r :   b l u r ( 1 0 p x ) ;  
-         b o r d e r :   1 p x   s o l i d   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 3 ) ;  
-         b o r d e r - r a d i u s :   1 2 p x ;  
-         b o x - s h a d o w :   0   4 p x   1 5 p x   r g b a ( 0 ,   0 ,   0 ,   0 . 2 ) ;  
-  
-         c o l o r :   # f b b f 2 4 ;  
-         / *   G o l d / Y e l l o w   t e x t   f o r   v i s i b i l i t y   * /  
-         f o n t - s i z e :   1 r e m ;  
-         f o n t - w e i g h t :   b o l d ;  
-         t e x t - a l i g n :   c e n t e r ;  
-         l i n e - h e i g h t :   1 . 4 ;  
-  
-         t r a n s i t i o n :   a l l   0 . 3 s   e a s e ;  
-         a n i m a t i o n :   s l i d e U p F a d e   0 . 5 s   e a s e - o u t ;  
- }  
-  
- . g u i d e - p a n e l . h i d d e n   {  
-         o p a c i t y :   0 ;  
-         t r a n s f o r m :   t r a n s l a t e Y ( 1 0 p x ) ;  
-         p o i n t e r - e v e n t s :   n o n e ;  
- }  
-  
- @ k e y f r a m e s   s l i d e U p F a d e   {  
-         f r o m   {  
-                 o p a c i t y :   0 ;  
-                 t r a n s f o r m :   t r a n s l a t e Y ( 2 0 p x ) ;  
-         }  
-  
-         t o   {  
-                 o p a c i t y :   1 ;  
-                 t r a n s f o r m :   t r a n s l a t e Y ( 0 ) ;  
-         }  
- }  
- 
+
+/ *   G u i d e   M e s s a g e   ( E d u c a t i o n a l )   * /     . m s g . g u i d e    {
+                 c o l o r :    # f c a 5 a 5 ;
+                 / *   L i g h t   R e d / P i n k   f o r   b e t t e r   v i s i b i l i t y   * /             b a c k g r o u n d :    r g b a ( 4 0 ,    0 ,    0 ,    0 . 6 ) ;
+                 b o r d e r :    1 p x   s o l i d   r g b a ( 2 5 5 ,    1 0 0 ,    1 0 0 ,    0 . 3 ) ;
+                 f o n t - s i z e :    1 . 0 5 r e m ;
+                 p a d d i n g :    8 p x   1 4 p x ;
+                 m a r g i n - t o p :    5 p x ;
+                 b o r d e r - r a d i u s :    1 0 p x ;
+                 t e x t - s h a d o w :    0   1 p x   2 p x   b l a c k ;
+                 b o x - s h a d o w :    0   2 p x   1 0 p x   r g b a ( 0 ,    0 ,    0 ,    0 . 2 ) ;
+                 a n i m a t i o n :    f a d e I n   0 . 5 s   e a s e - o u t ;
+         
+}
+
+     / *   D e d i c a t e d   G u i d e   B o x   ( G l a s s   U I )   * /     . g u i d e - p a n e l    {
+                 w i d t h :    9 0 % ;
+                 m a r g i n :    1 0 p x   a u t o ;
+                 / *   C e n t e r e d   b e l o w   n a m e   * /             p a d d i n g :    1 2 p x   1 8 p x ;
+                 b a c k g r o u n d :    r g b a ( 2 5 5 ,    2 5 5 ,    2 5 5 ,    0 . 1 5 ) ;
+                 / *   S l i g h t l y   b r i g h t e r   g l a s s   * /             b a c k d r o p - f i l t e r :    b l u r ( 1 0 p x ) ;
+                 b o r d e r :    1 p x   s o l i d   r g b a ( 2 5 5 ,    2 5 5 ,    2 5 5 ,    0 . 3 ) ;
+                 b o r d e r - r a d i u s :    1 2 p x ;
+                 b o x - s h a d o w :    0   4 p x   1 5 p x   r g b a ( 0 ,    0 ,    0 ,    0 . 2 ) ;
+                     c o l o r :    # f b b f 2 4 ;
+                 / *   G o l d / Y e l l o w   t e x t   f o r   v i s i b i l i t y   * /             f o n t - s i z e :    1 r e m ;
+                 f o n t - w e i g h t :    b o l d ;
+                 t e x t - a l i g n :    c e n t e r ;
+                 l i n e - h e i g h t :    1 . 4 ;
+                     t r a n s i t i o n :    a l l   0 . 3 s   e a s e ;
+                 a n i m a t i o n :    s l i d e U p F a d e   0 . 5 s   e a s e - o u t ;
+         
+}
+
+         . g u i d e - p a n e l . h i d d e n    {
+                 o p a c i t y :    0 ;
+                 t r a n s f o r m :    t r a n s l a t e Y ( 1 0 p x ) ;
+                 p o i n t e r - e v e n t s :    n o n e ;
+         
+}
+
+         @ k e y f r a m e s   s l i d e U p F a d e    {
+                 f r o m    {
+                             o p a c i t y :    0 ;
+                             t r a n s f o r m :    t r a n s l a t e Y ( 2 0 p x ) ;
+                     
+    }
+
+                     t o    {
+                             o p a c i t y :    1 ;
+                             t r a n s f o r m :    t r a n s l a t e Y ( 0 ) ;
+                     
+    }
+
+         
+}
+
+     
