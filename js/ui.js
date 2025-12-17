@@ -31,6 +31,7 @@ export class UIManager {
             game: {
                 mImg: document.getElementById('monster-img'),
                 mName: document.getElementById('monster-name'),
+                guideBox: document.getElementById('guide-box'), // Guide Box
                 mHp: document.getElementById('monster-hp-bar'),
                 mHpText: document.getElementById('monster-hp-text'),
                 mSituation: document.getElementById('monster-situation'),
