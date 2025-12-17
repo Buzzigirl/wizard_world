@@ -1,6 +1,6 @@
 // ==========================================
-// Class 2: Roguelike Grammar Quest V3 (Final)
-// Features: 5 Themes, Event System, Shop, Perks, Bosses
+// Class 2: Roguelike Grammar Quest V4 (Final Polish)
+// Features: Korean Localization, World Map, Educational Context, Glassmorphism UI
 // ==========================================
 
 const CONFIG = {
@@ -10,92 +10,96 @@ const CONFIG = {
 };
 
 // ==========================================
-// Data: Game Content
+// Data: Game Content (Localized)
 // ==========================================
 
 const CLASSES = {
-    WARRIOR: { id: 'WARRIOR', name: '전사', hp: 150, mana: 30, atk: 20, desc: '체력이 높고 공격력이 강합니다. (Easy)' },
-    ROGUE: { id: 'ROGUE', name: '도적', hp: 100, mana: 50, atk: 15, desc: '균형 잡힌 능력치를 가집니다. (Normal)' },
-    MAGE: { id: 'MAGE', name: '마법사', hp: 70, mana: 100, atk: 10, desc: '체력은 낮지만 마나와 주문력이 높습니다. (Hard)' }
+    WARRIOR: { id: 'WARRIOR', name: '전사 (Warrior)', hp: 150, mana: 30, atk: 20, desc: '강인한 체력으로 문제를 버텨냅니다. (Easy)' },
+    ROGUE: { id: 'ROGUE', name: '도적 (Rogue)', hp: 100, mana: 50, atk: 15, desc: '균형 잡힌 능력치로 유연하게 대처합니다. (Normal)' },
+    MAGE: { id: 'MAGE', name: '마법사 (Mage)', hp: 70, mana: 100, atk: 10, desc: '풍부한 마나로 많은 해결책을 제시합니다. (Hard)' }
 };
 
 const FAIRIES = {
     FIRE: {
         id: 'FIRE', name: '이그니스', type: '불', color: 'text-red-500',
-        personality: '열정적이고 다혈질. "빨리 해! 시간 없어!"', icon: '🔥'
+        personality: '열정적', icon: '🔥',
+        idle: ["빨리 해결하자!", "자신감을 가져!", "넌 할 수 있어!"]
     },
     WATER: {
         id: 'WATER', name: '아쿠아', type: '물', color: 'text-blue-500',
-        personality: '차분하고 친절함. "천천히 생각해보세요~"', icon: '💧'
+        personality: '차분함', icon: '💧',
+        idle: ["천천히 생각해보세요.", "조급할 필요 없어요.", "물처럼 유연하게..."]
     },
     WIND: {
         id: 'WIND', name: '실피드', type: '바람', color: 'text-green-500',
-        personality: '장난끼 많고 자유분방. "히히, 이건 어때?"', icon: '🍃'
+        personality: '장난꾸러기', icon: '🍃',
+        idle: ["심심해~ 뭐라도 해봐!", "휘리릭~ 정답이 보이나?", "놀러 가고 싶다!"]
     },
     GROUND: {
         id: 'GROUND', name: '테라', type: '땅', color: 'text-yellow-600',
-        personality: '무뚝뚝하고 직설적. "집중해라. 답은..."', icon: '🪨'
+        personality: '진지함', icon: '🪨',
+        idle: ["집중해라.", "기반을 다져야 한다.", "묵직하게 한 방."]
     }
 };
 
 const THEMES = [
     {
-        id: 'FOREST', name: 'The Cursed Forest', bg: 'https://images.unsplash.com/photo-1448375240586-dfd8f3793371?q=80&w=2670&auto=format&fit=crop',
+        id: 'FOREST', name: '신비한 숲 (Forest)', bg: 'https://images.unsplash.com/photo-1448375240586-dfd8f3793371?q=80&w=2670&auto=format&fit=crop',
         monsters: [
-            { name: "Wild Boar", hp: 80, icon: "🐗", target: "I make you calm" },
-            { name: "Poison Vine", hp: 90, icon: "🌿", target: "I make it clean" },
-            { name: "Shadow Wolf", hp: 100, icon: "🐺", target: "I make light" }
+            { name: "성난 멧돼지", hp: 80, icon: "🐗", target: "I make you calm", situation: "멧돼지가 흥분하여 날뛰고 있습니다! 진정시켜야 합니다." },
+            { name: "독성 덩굴", hp: 90, icon: "🌿", target: "I make it clean", situation: "덩굴이 길을 막고 독을 뿜습니다. 정화해야 합니다." },
+            { name: "그림자 늑대", hp: 100, icon: "🐺", target: "I make light", situation: "어둠 속에서 늑대가 노려봅니다. 빛이 필요합니다." }
         ],
-        boss: { name: "Elder Ent", hp: 200, icon: "🌳", target: "I respect nature", desc: "숲의 수호자" }
+        boss: { name: "숲의 수호자 엔트", hp: 200, icon: "🌳", target: "I respect nature", situation: "거대한 엔트가 숲을 지키려 합니다. 자연을 존중함을 보여주세요.", desc: "숲의 주인" }
     },
     {
-        id: 'DESERT', name: 'Scorching Desert', bg: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=2574&auto=format&fit=crop',
+        id: 'DESERT', name: '작열하는 사막 (Desert)', bg: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=2574&auto=format&fit=crop',
         monsters: [
-            { name: "Sand Scorpion", hp: 110, icon: "🦂", target: "I freeze sand" },
-            { name: "Dust Devil", hp: 120, icon: "🌪️", target: "I stop wind" },
-            { name: "Mummy", hp: 130, icon: "🧟", target: "I give rest" }
+            { name: "모래 전갈", hp: 110, icon: "🦂", target: "I freeze sand", situation: "전갈이 뜨거운 모래 속에 숨어있습니다. 모래를 얼려야 합니다." },
+            { name: "모래 폭풍", hp: 120, icon: "🌪️", target: "I stop wind", situation: "거대한 모래 폭풍이 다가옵니다! 바람을 멈춰야 합니다." },
+            { name: "미라", hp: 130, icon: "🧟", target: "I give rest", situation: "잠들지 못한 미라가 배회합니다. 안식을 주어야 합니다." }
         ],
-        boss: { name: "Sand Worm", hp: 300, icon: "🪱", target: "I summon rain", desc: "사막의 포식자" }
+        boss: { name: "사막의 포식자 웜", hp: 300, icon: "🪱", target: "I summon rain", situation: "거대 지렁이가 모든 물을 마셨습니다. 비를 내려야 합니다.", desc: "사막의 왕" }
     },
     {
-        id: 'SEA', name: 'Abyssal Sea', bg: 'https://images.unsplash.com/photo-1498036882173-b41c28a8ba34?q=80&w=2664&auto=format&fit=crop',
+        id: 'SEA', name: '심해의 심연 (Sea)', bg: 'https://images.unsplash.com/photo-1498036882173-b41c28a8ba34?q=80&w=2664&auto=format&fit=crop',
         monsters: [
-            { name: "Siren", hp: 140, icon: "🧜‍♀️", target: "I block sound" },
-            { name: "Kraken Tentacle", hp: 150, icon: "🐙", target: "I cut tentacle" },
-            { name: "Deep Angler", hp: 160, icon: "🐟", target: "I flash light" }
+            { name: "세이렌", hp: 140, icon: "🧜‍♀️", target: "I block sound", situation: "세이렌의 노래가 정신을 혼미하게 합니다. 소리를 차단하세요!" },
+            { name: "크라켄 다리", hp: 150, icon: "🐙", target: "I cut tentacle", situation: "거대 문어 다리가 배를 감쌉니다. 끊어내야 합니다." },
+            { name: "심해 아귀", hp: 160, icon: "🐟", target: "I flash light", situation: "칠흑 같은 어둠 속 아귀가 있습니다. 강한 빛을 비추세요." }
         ],
-        boss: { name: "Poseidon's Shadow", hp: 400, icon: "🔱", target: "I calm ocean", desc: "바다의 지배자" }
+        boss: { name: "포세이돈의 그림자", hp: 400, icon: "🔱", target: "I calm ocean", situation: "바다의 분노가 형상화되었습니다. 바다를 진정시키세요.", desc: "심해의 주인" }
     },
     {
-        id: 'UNDEAD', name: 'Necropolis', bg: 'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?q=80&w=2670&auto=format&fit=crop',
+        id: 'UNDEAD', name: '죽은 자의 도시 (Undead)', bg: 'https://images.unsplash.com/photo-1509557965875-b88c97052f0e?q=80&w=2670&auto=format&fit=crop',
         monsters: [
-            { name: "Skeleton Knight", hp: 180, icon: "💀", target: "I break bone" },
-            { name: "Wraith", hp: 190, icon: "👻", target: "I banish spirit" },
-            { name: "Vampire Bat", hp: 200, icon: "🦇", target: "I show sun" }
+            { name: "해골 기사", hp: 180, icon: "💀", target: "I break bone", situation: "해골 기사가 길을 막습니다. 뼈를 부숴야 합니다." },
+            { name: "원혼", hp: 190, icon: "👻", target: "I banish spirit", situation: "원혼들이 괴롭힙니다. 성불시켜야 합니다." },
+            { name: "뱀파이어", hp: 200, icon: "🦇", target: "I show sun", situation: "뱀파이어가 흡혈을 시도합니다. 태양을 보여주세요!" }
         ],
-        boss: { name: "Lich King", hp: 500, icon: "👑", target: "I destroy phylactery", desc: "죽지 않는 왕" }
+        boss: { name: "리치 왕", hp: 500, icon: "👑", target: "I destroy phylactery", situation: "영생을 사는 리치입니다. 영혼석을 파괴해야 끝납니다.", desc: "언데드의 군주" }
     },
     {
-        id: 'CASTLE', name: 'Demon Castle', bg: 'https://images.unsplash.com/photo-1599596549216-b186b864a75e?q=80&w=2574&auto=format&fit=crop',
+        id: 'CASTLE', name: '마왕성 (Demon Castle)', bg: 'https://images.unsplash.com/photo-1599596549216-b186b864a75e?q=80&w=2574&auto=format&fit=crop',
         monsters: [
-            { name: "Demon Soldier", hp: 220, icon: "👺", target: "I banish evil" },
-            { name: "Dark Wizard", hp: 240, icon: "🧙‍♂️", target: "I reflect spell" },
-            { name: "Hell Hound", hp: 260, icon: "🐕‍🦺", target: "I tame beast" }
+            { name: "마족 병사", hp: 220, icon: "👺", target: "I banish evil", situation: "마왕군의 정예 병사입니다. 악을 추방하세요." },
+            { name: "암흑 마법사", hp: 240, icon: "🧙‍♂️", target: "I reflect spell", situation: "저주 마법이 날아옵니다! 반사해야 합니다." },
+            { name: "지옥견", hp: 260, icon: "🐕‍🦺", target: "I tame beast", situation: "사나운 지옥견입니다. 길들여야 합니다." }
         ],
-        boss: { name: "The Demon Lord", hp: 800, icon: "😈", target: "I save the world", desc: "최종 보스" }
+        boss: { name: "대마왕", hp: 800, icon: "😈", target: "I save the world", situation: "모든 재앙의 원흉입니다. 세상을 구해주세요!", desc: "최종 보스" }
     }
 ];
 
 const PERKS = [
-    { id: 'ATK_UP', name: '⚔️ Strength', desc: 'Attack Power +5', apply: (s) => s.baseAtk += 5 },
-    { id: 'HP_UP', name: '❤️ Vitality', desc: 'Max HP +30', apply: (s) => s.bonusHp += 30 },
-    { id: 'MANA_UP', name: '🔋 Wisdom', desc: 'Max Mana +30', apply: (s) => s.bonusMana += 30 },
+    { id: 'ATK_UP', name: '⚔️ 힘의 축복', desc: '공격력 +5 증가', apply: (s) => s.baseAtk += 5 },
+    { id: 'HP_UP', name: '❤️ 생명의 축복', desc: '최대 체력 +30 증가', apply: (s) => s.bonusHp += 30 },
+    { id: 'MANA_UP', name: '🔋 지혜의 축복', desc: '최대 마나 +30 증가', apply: (s) => s.bonusMana += 30 },
 ];
 
 const SHOP_ITEMS = [
-    { id: 'POTION', name: 'Health Potion', cost: 20, icon: '❤️', eff: (s) => s.hp = Math.min(s.maxHp, s.hp + 50) },
-    { id: 'MANA', name: 'Mana Elixir', cost: 15, icon: '🔋', eff: (s) => s.mana = Math.min(s.maxMana, s.mana + 50) },
-    { id: 'SHARP', name: 'Whetstone', cost: 30, icon: '⚔️', eff: (s) => s.atk += 5 }
+    { id: 'POTION', name: '체력 포션', cost: 20, icon: '❤️', eff: (s) => s.hp = Math.min(s.maxHp, s.hp + 50) },
+    { id: 'MANA', name: '마나 엘릭서', cost: 15, icon: '🔋', eff: (s) => s.mana = Math.min(s.maxMana, s.mana + 50) },
+    { id: 'SHARP', name: '숫돌', cost: 30, icon: '⚔️', eff: (s) => s.atk += 5 }
 ];
 
 // ==========================================
@@ -103,15 +107,10 @@ const SHOP_ITEMS = [
 // ==========================================
 class GameState {
     constructor() {
-        // Persistent Data
         this.clearedThemes = JSON.parse(localStorage.getItem('clearedThemes') || '[]');
-        this.perks = []; // Applied perks
-
-        // Base Stats (from Perks)
         this.baseAtk = 0;
         this.bonusHp = 0;
         this.bonusMana = 0;
-
         this.reset();
     }
 
@@ -124,9 +123,8 @@ class GameState {
         this.playerClass = null;
         this.fairy = null;
         this.themeIdx = 0;
-        this.stage = 1; // 1-5: Normal, 6: Boss
+        this.stage = 1;
 
-        // Current Stats
         this.hp = 100;
         this.maxHp = 100;
         this.mana = 50;
@@ -138,15 +136,11 @@ class GameState {
 
     initPlayer(classId) {
         this.playerClass = CLASSES[classId];
-        // Apply Base + Class + Perks
         this.maxHp = this.playerClass.hp + this.bonusHp;
         this.hp = this.maxHp;
         this.maxMana = this.playerClass.mana + this.bonusMana;
         this.mana = this.maxMana;
         this.atk = this.playerClass.atk + this.baseAtk;
-
-        // Skip cleared themes ?? No, play all to save world.
-        // But maybe boost stats if cleared? For now, standard run.
     }
 
     setFairy(fairyId) {
@@ -157,18 +151,15 @@ class GameState {
 
     // 4C/ID Stage Logic
     getHint(target) {
-        // Difficulty increase by Theme AND Stage
         const totalDifficulty = (this.themeIdx * 2) + Math.ceil(this.stage / 2);
 
         if (totalDifficulty <= 2) return `따라 쓰세요: "${target}"`;
         if (totalDifficulty <= 4) {
-            // Blank Key Word
             const words = target.split(' ');
             const masked = words.map((w, i) => i === words.length - 1 ? "_____" : w).join(' ');
             return `빈칸 완성: "${masked}"`;
         }
         if (totalDifficulty <= 7) {
-            // Initials
             return `힌트: ${target.split(' ').map(w => w[0] + '_'.repeat(w.length - 1)).join(' ')}`;
         }
         return "스스로 작문하세요 (No Hint)";
@@ -176,15 +167,14 @@ class GameState {
 }
 
 // ==========================================
-// AI Service (Simplified for Demo)
+// AI Service (Simplified)
 // ==========================================
 class AIService {
     static async evaluate(userText, target) {
-        // In deployed version, use fetch to API_URL
+        // 실제 배포 시 Fetch API 사용 권장
         const userClean = userText.toLowerCase().replace(/[.,!?]/g, '').trim();
         const targetClean = target.toLowerCase().replace(/[.,!?]/g, '').trim();
 
-        // Calculate similarity score
         const targetWords = targetClean.split(' ');
         const userWords = userClean.split(' ');
         let match = 0;
@@ -192,9 +182,9 @@ class AIService {
 
         const score = match / targetWords.length;
 
-        if (score === 1) return { correct: true, quality: 'PERFECT', msg: "Perfect Grammar!" };
-        if (score >= 0.7) return { correct: true, quality: 'GOOD', msg: "Good! Almost perfect." };
-        return { correct: false, quality: 'BAD', msg: "The spell fizzled..." };
+        if (score === 1) return { correct: true, quality: 'PERFECT', msg: "완벽한 해결책입니다!" };
+        if (score >= 0.7) return { correct: true, quality: 'GOOD', msg: "좋아요! 문제가 해결되었습니다." };
+        return { correct: false, quality: 'BAD', msg: "주문이 빗나갔습니다. 다시 시도하세요." };
     }
 }
 
@@ -205,9 +195,9 @@ class UIController {
     constructor() {
         this.game = new GameState();
         this.els = this.cacheDOM();
+        this.idleTimer = null;
         this.initEvents();
         this.showScreen('class');
-        this.updateThemeBadges();
     }
 
     cacheDOM() {
@@ -215,9 +205,13 @@ class UIController {
             screens: {
                 class: document.getElementById('screen-class'),
                 fairy: document.getElementById('screen-fairy'),
+                world: document.getElementById('screen-worldmap'), // NEW: World Map
                 game: document.getElementById('screen-game'),
                 gameover: document.getElementById('screen-gameover'),
-                event: document.getElementById('screen-event') // Modal for Shop/Rest
+                event: document.getElementById('screen-event')
+            },
+            world: {
+                points: document.getElementById('world-points')
             },
             hud: {
                 hp: document.getElementById('val-hp'),
@@ -234,6 +228,8 @@ class UIController {
                 mIcon: document.getElementById('monster-icon'),
                 mName: document.getElementById('monster-name'),
                 mHp: document.getElementById('monster-hp-bar'),
+                mHpText: document.getElementById('monster-hp-text'),
+                mSituation: document.getElementById('monster-situation'), // NEW: Educational Context
                 chat: document.getElementById('chat-list'),
                 input: document.getElementById('inp-spell'),
                 btn: document.getElementById('btn-cast'),
@@ -265,7 +261,7 @@ class UIController {
         document.querySelectorAll('.btn-fairy').forEach(b => {
             b.addEventListener('click', () => {
                 this.game.setFairy(b.dataset.id);
-                this.startGame();
+                this.showWorldMap();
             });
         });
 
@@ -284,6 +280,47 @@ class UIController {
         this.els.screens[id].classList.remove('hidden');
     }
 
+    showWorldMap() {
+        this.showScreen('world');
+        const container = this.els.world.points;
+        container.innerHTML = '';
+
+        THEMES.forEach((t, i) => {
+            const btn = document.createElement('button');
+            const locked = i > 0 && !this.game.clearedThemes.includes(THEMES[i - 1].id);
+            const cleared = this.game.clearedThemes.includes(t.id);
+
+            btn.className = `map-point ${locked ? 'locked' : ''} ${cleared ? 'cleared' : ''}`;
+            btn.innerHTML = `<span class="icon">${cleared ? '🚩' : (locked ? '🔒' : '⚔️')}</span><span class="label">${t.name}</span>`;
+
+            if (!locked) {
+                btn.onclick = () => {
+                    this.game.themeIdx = i;
+                    this.startGame();
+                };
+            }
+            container.appendChild(btn);
+        });
+    }
+
+    startGame() {
+        this.showScreen('game');
+        this.updateThemeBadges();
+        this.loadStage();
+        this.startFairyIdle();
+    }
+
+    startFairyIdle() {
+        if (this.idleTimer) clearInterval(this.idleTimer);
+        this.idleTimer = setInterval(() => {
+            if (this.game.idle && this.game.fairy) {
+                const msgs = this.game.fairy.idle;
+                const msg = msgs[Math.floor(Math.random() * msgs.length)];
+                this.fairySpeak(msg);
+            }
+        }, 15000); // 15 seconds
+    }
+
     updateThemeBadges() {
         this.els.hud.badges.innerHTML = '';
         THEMES.forEach((t, i) => {
@@ -291,21 +328,14 @@ class UIController {
             const active = i === this.game.themeIdx;
             const badge = document.createElement('div');
             badge.className = `badge ${cleared ? 'cleared' : ''} ${active ? 'active' : ''}`;
-            badge.textContent = i + 1; // 1..5
             this.els.hud.badges.appendChild(badge);
         });
-    }
-
-    startGame() {
-        this.showScreen('game');
-        this.loadStage();
     }
 
     loadStage() {
         const theme = this.game.getTheme();
         const isBoss = this.game.stage === 6;
 
-        // 1. Setup Monster
         let mobData;
         if (isBoss) {
             mobData = theme.boss;
@@ -316,21 +346,20 @@ class UIController {
 
         this.game.currentMonster = { ...mobData, maxHp: mobData.hp };
 
-        // 2. UI Update
         document.body.style.backgroundImage = `url('${theme.bg}')`;
         this.els.hud.theme.textContent = theme.name;
         this.els.hud.stage.textContent = isBoss ? "BOSS STAGE" : `Stage ${this.game.stage}`;
 
         this.els.game.mIcon.textContent = mobData.icon;
         this.els.game.mName.textContent = mobData.name;
+        this.els.game.mSituation.textContent = mobData.situation; // Educational Context
+
         this.updateMonsterHp();
         this.updateHUD();
         this.renderMap();
 
-        // 3. Guide
         this.els.game.guide.textContent = this.game.getHint(mobData.target);
-
-        this.addChat('system', `${mobData.name} encountered!`);
+        this.addChat('system', `[상황 발생] ${mobData.situation}`);
     }
 
     updateHUD() {
@@ -341,24 +370,23 @@ class UIController {
         this.els.hud.mpBar.style.height = `${(this.game.mana / this.game.maxMana) * 100}%`;
 
         this.els.hud.atk.textContent = this.game.atk;
-
         this.els.game.fairy.textContent = this.game.fairy?.icon || '🧚';
     }
 
     updateMonsterHp() {
         const pct = (this.game.currentMonster.hp / this.game.currentMonster.maxHp) * 100;
         this.els.game.mHp.style.width = `${pct}%`;
+        this.els.game.mHpText.textContent = `${this.game.currentMonster.hp} / ${this.game.currentMonster.maxHp}`;
     }
 
     renderMap() {
         const container = this.els.hud.map;
         container.innerHTML = '';
-        // 6 stages, stacked bottom-up
         for (let i = 6; i >= 1; i--) {
             const node = document.createElement('div');
             let type = '⚔️';
-            if (i === 6) type = '👑'; // Boss
-            else if (i % 2 === 0) type = '❓'; // Event potential (simplified visual)
+            if (i === 6) type = '👑';
+            else if (i % 2 === 0) type = '❓';
 
             node.className = `map-node ${i === this.game.stage ? 'current' : ''} ${i < this.game.stage ? 'cleared' : ''}`;
             node.innerHTML = type;
@@ -378,7 +406,7 @@ class UIController {
         if (res.correct) {
             const dmg = this.game.atk * (res.quality === 'PERFECT' ? 1.5 : 1.0);
             this.game.currentMonster.hp -= dmg;
-            this.addChat('system', `Hit! ${Math.floor(dmg)} Damage.`);
+            this.addChat('system', `✨ 해결책 적중! 문제 해결 진행률 +${Math.floor(dmg)}`);
             this.updateMonsterHp();
 
             if (this.game.currentMonster.hp <= 0) {
@@ -388,51 +416,40 @@ class UIController {
             }
         } else {
             this.monsterAttack();
-            this.fairySpeak("틀렸어! 집중해!");
+            this.fairySpeak("그건 답이 아니야! 집중해!");
         }
     }
 
     monsterAttack() {
-        const dmg = 10 + (this.game.themeIdx * 5); // Difficulty scales
+        const dmg = 10 + (this.game.themeIdx * 5);
         this.game.hp -= dmg;
         this.updateHUD();
-        this.addChat('monster', `${this.game.currentMonster.name} attacks! -${dmg} HP`);
+        this.addChat('monster', `문제가 악화되었습니다! (스트레스 +${dmg})`);
 
         if (this.game.hp <= 0) this.gameOver();
     }
 
     stageClear() {
-        this.addChat('system', "Monster Defeated!");
+        this.addChat('system', "문제가 완벽하게 해결되었습니다!");
 
         if (this.game.stage === 6) {
-            // Theme Clear
             if (!this.game.clearedThemes.includes(this.game.getTheme().id)) {
                 this.game.clearedThemes.push(this.game.getTheme().id);
                 this.game.saveProgress();
                 this.updateThemeBadges();
             }
 
-            this.game.themeIdx++;
-            if (this.game.themeIdx >= THEMES.length) {
-                alert("WORLD SAVED! 축하합니다.");
-                location.reload();
-            } else {
-                this.game.stage = 1; // Reset stage for new theme
-                alert("Next Theme Unlocked!");
-                this.triggerEvent(); // Events between themes too? Maybe just Rest.
-            }
+            this.showWorldMap();
+            alert("테마 클리어! 다음 지역이 잠금 해제되었습니다.");
         } else {
-            // Normal Stage Clear -> Event
             this.game.stage++;
             this.triggerEvent();
         }
     }
 
     triggerEvent() {
-        // Random Event: 40% Shop, 30% Rest, 30% Nothing (Combat Next)
         const rand = Math.random();
         if (rand < 0.3) {
-            // Just next combat
             this.startGame();
         } else if (rand < 0.6) {
             this.showEvent('REST');
@@ -449,19 +466,19 @@ class UIController {
         opts.innerHTML = '';
 
         if (type === 'REST') {
-            title.textContent = "⛺ Campsite";
+            title.textContent = "⛺ 안전한 쉼터";
             desc.textContent = "잠시 쉬어갑니다. 무엇을 할까요?";
-            this.createBtn(opts, "체력 회복 (+30 HP)", () => {
+            this.createBtn(opts, "휴식하기 (+30 HP)", () => {
                 this.game.hp = Math.min(this.game.maxHp, this.game.hp + 30);
                 this.startGame();
             });
-            this.createBtn(opts, "명상 (+30 Mana)", () => {
+            this.createBtn(opts, "명상하기 (+30 MP)", () => {
                 this.game.mana = Math.min(this.game.maxMana, this.game.mana + 30);
                 this.startGame();
             });
         } else if (type === 'SHOP') {
-            title.textContent = "💰 Wandering Merchant";
-            desc.textContent = `가진 마나: ${this.game.mana}`;
+            title.textContent = "💰 방랑 상인";
+            desc.textContent = `보유 마나: ${this.game.mana}`;
 
             SHOP_ITEMS.forEach(item => {
                 this.createBtn(opts, `${item.icon} ${item.name} (-${item.cost} MP)`, () => {
@@ -489,16 +506,15 @@ class UIController {
 
     useHint() {
         if (this.game.mana < 10) {
-            this.addChat('system', "Not enough Mana!");
+            this.addChat('system', "마나가 부족합니다!");
             return;
         }
         this.game.mana -= 10;
         this.updateHUD();
 
-        // Personality Text
-        const personality = this.game.fairy.personality.split('.')[0];
+        const personality = this.game.fairy.personality;
         const hint = this.game.currentMonster.target;
-        this.fairySpeak(`${personality}.. 답은 [ ${hint} ]!`);
+        this.fairySpeak(`(${personality}) 정답 힌트: [ ${hint} ]`);
     }
 
     fairySpeak(text) {
@@ -527,11 +543,9 @@ class UIController {
             btn.className = 'perk-btn';
             btn.innerHTML = `<b>${perk.name}</b><br>${perk.desc}`;
             btn.onclick = () => {
-                perk.apply(this.game); // Apply directly to base stats logic
-                this.game.reset(); // Reset level/stage
-                // Keep base stats boosts? V3 says yes "special item to select".
-                // We'll simplisticly add to base stats for next run
-                this.showScreen('class'); // Restart from class select
+                perk.apply(this.game);
+                this.game.reset();
+                this.showScreen('class');
             };
             list.appendChild(btn);
         });

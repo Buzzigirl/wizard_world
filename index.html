@@ -4,67 +4,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy: Roguelike V3</title>
+    <title>Wiz Academy: Roguelike V4</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div id="app" class="app-container">
 
-        <!-- ==================== SCREEN 1: Class Selection ==================== -->
+        <!-- ==================== 1. 캐릭터 선택 ==================== -->
         <div id="screen-class" class="screen full-center">
-            <h1>Choose Your Hero</h1>
+            <h1>영웅을 선택하세요</h1>
             <div class="cards">
                 <button class="btn-class" data-id="WARRIOR">
                     <div class="icon">⚔️</div>
-                    <h2>Warrior</h2>
-                    <p>High HP, Strong Attack</p>
+                    <h2>전사 (Easy)</h2>
+                    <p>높은 체력, 강한 공격</p>
                 </button>
                 <button class="btn-class" data-id="ROGUE">
                     <div class="icon">🗡️</div>
-                    <h2>Rogue</h2>
-                    <p>Balanced Stats</p>
+                    <h2>도적 (Normal)</h2>
+                    <p>균형 잡힌 능력치</p>
                 </button>
                 <button class="btn-class" data-id="MAGE">
                     <div class="icon">🔮</div>
-                    <h2>Mage</h2>
-                    <p>High Mana, Spell Power</p>
+                    <h2>마법사 (Hard)</h2>
+                    <p>높은 마나, 마법 특화</p>
                 </button>
             </div>
         </div>
 
-        <!-- ==================== SCREEN 2: Fairy Selection ==================== -->
+        <!-- ==================== 2. 요정 선택 ==================== -->
         <div id="screen-fairy" class="screen full-center hidden">
-            <h1>Choose Your Partner</h1>
+            <h1>파트너 요정을 선택하세요</h1>
             <div class="cards">
                 <button class="btn-fairy" data-id="FIRE">
                     <div class="icon">🔥</div>
-                    <h2>Ignis</h2>
-                    <p>Passionate</p>
+                    <h2>이그니스</h2>
+                    <p>열정적인 성격</p>
                 </button>
                 <button class="btn-fairy" data-id="WATER">
                     <div class="icon">💧</div>
-                    <h2>Aqua</h2>
-                    <p>Calm</p>
+                    <h2>아쿠아</h2>
+                    <p>차분한 성격</p>
                 </button>
                 <button class="btn-fairy" data-id="WIND">
                     <div class="icon">🍃</div>
-                    <h2>Sylphid</h2>
-                    <p>Playful</p>
+                    <h2>실피드</h2>
+                    <p>장난꾸러기</p>
                 </button>
                 <button class="btn-fairy" data-id="GROUND">
                     <div class="icon">🪨</div>
-                    <h2>Terra</h2>
-                    <p>Serious</p>
+                    <h2>테라</h2>
+                    <p>진지한 성격</p>
                 </button>
             </div>
         </div>
 
-        <!-- ==================== SCREEN 3: Main Game ==================== -->
+        <!-- ==================== 3. 월드맵 (NEW) ==================== -->
+        <div id="screen-worldmap" class="screen full-center hidden">
+            <h1>탐험할 지역을 선택하세요</h1>
+            <div id="world-points" class="map-grid">
+                <!-- JS Inject -->
+            </div>
+        </div>
+
+        <!-- ==================== 4. 메인 게임 ==================== -->
         <div id="screen-game" class="screen main-grid hidden">
             <!-- Left: Tower Map -->
             <div class="panel-left">
-                <h3>TOWER</h3>
+                <h3>진행 상황</h3>
                 <div id="map-container">
                     <!-- Nodes injected bottom-up -->
                 </div>
@@ -72,47 +80,47 @@
 
             <!-- Center: Stage -->
             <div class="panel-center">
-                <!-- Top HUD: Theme Badges & Info -->
+                <!-- Top HUD -->
                 <div class="top-hud">
-                    <div id="theme-badges" class="badges">
-                        <!-- 1 2 3 4 5 -->
-                    </div>
+                    <div id="theme-badges" class="badges"></div>
                 </div>
                 <div class="stage-info">
-                    <span id="display-theme">Forest</span> | <span id="display-stage">Stage 1</span>
+                    <span id="display-theme">숲</span> | <span id="display-stage">Stage 1</span>
                 </div>
 
                 <!-- Monster Area -->
                 <div class="monster-zone">
                     <div class="hp-bar-bg">
                         <div id="monster-hp-bar" style="width:100%"></div>
+                        <span id="monster-hp-text" class="hp-text-overlay">100 / 100</span>
                     </div>
                     <div id="monster-icon" class="bounce">🦁</div>
                     <div id="monster-name">Wild Beast</div>
+                    <div id="monster-situation" class="situation-text">상황 설명 텍스트</div>
                 </div>
 
-                <!-- Guide & Chat -->
-                <div id="guide-msg" class="guide-box">Hint Message</div>
-                <div id="chat-list" class="chat-list"></div>
+                <!-- Guide & Chat (Narrator Overlay) -->
+                <div id="guide-msg" class="guide-box">힌트 메시지</div>
+                <div id="chat-list" class="chat-overlay"></div>
 
                 <!-- Controls -->
                 <div class="control-zone">
-                    <input type="text" id="inp-spell" placeholder="Cast spell...">
+                    <input type="text" id="inp-spell" placeholder="해결책을 입력하세요...">
                     <button id="btn-cast">CAST</button>
                 </div>
             </div>
 
             <!-- Right: Fairy -->
             <div class="panel-right">
-                <h3>PARTNER</h3>
+                <h3>파트너</h3>
                 <div class="fairy-area">
                     <div id="fairy-bubble" class="speech-bubble hidden">Hint!</div>
                     <div id="fairy-char" class="float">🧚</div>
                 </div>
-                <p class="hint-cost">Click for Hint (-10 MP)</p>
+                <p class="hint-cost">클릭하여 힌트 사용<br>(-10 MP)</p>
             </div>
 
-            <!-- Bottom HUD: Status -->
+            <!-- Bottom HUD -->
             <div class="status-hud">
                 <div class="stat-group">
                     <div class="stat-icon">⚔️</div>
@@ -129,24 +137,20 @@
             </div>
         </div>
 
-        <!-- ==================== SCREEN 4: Event Modal ==================== -->
+        <!-- ==================== 5. 이벤트 모달 ==================== -->
         <div id="screen-event" class="screen full-center hidden overlay">
-            <div class="modal-box">
-                <h1 id="event-title">Event Title</h1>
-                <p id="event-desc">Event Description</p>
-                <div id="event-options" class="options-list">
-                    <!-- Buttons injected -->
-                </div>
+            <div class="modal-box glass">
+                <h1 id="event-title">이벤트</h1>
+                <p id="event-desc">설명</p>
+                <div id="event-options" class="options-list"></div>
             </div>
         </div>
 
-        <!-- ==================== SCREEN 5: Game Over (Perks) ==================== -->
+        <!-- ==================== 6. 게임 오버 ==================== -->
         <div id="screen-gameover" class="screen full-center hidden">
             <h1>GAME OVER</h1>
-            <p>Select a Perk for your next life:</p>
-            <div id="perk-list" class="cards">
-                <!-- Perk buttons -->
-            </div>
+            <p>특전을 선택하고 다시 도전하세요:</p>
+            <div id="perk-list" class="cards"></div>
         </div>
 
     </div>
