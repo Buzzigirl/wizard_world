@@ -120,12 +120,8 @@ export class UIManager {
         container.innerHTML = '';
         THEMES.forEach((t, i) => {
             const btn = document.createElement('button');
-            // Locking Logic: Theme locked if prev theme not cleared (except first one)
-            // Assuming THEMES order matches progression: Forest(0) -> Desert(1) -> Castle(2)
-            // clearedThemes contains IDs e.g., 'FOREST'
-            const prevTheme = i > 0 ? THEMES[i - 1] : null;
-            const isPrevCleared = prevTheme ? this.game.clearedThemes.includes(prevTheme.id) : true;
-            const locked = !isPrevCleared; // Locked if prev NOT cleared (and not first)
+            // Locking Logic: UNLOCK ALL (User Request)
+            const locked = false; // Force unlock all themes
 
             const cleared = this.game.clearedThemes.includes(t.id);
             btn.className = `map-point ${locked ? 'locked' : ''} ${cleared ? 'cleared' : ''}`;
