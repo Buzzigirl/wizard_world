@@ -173,6 +173,14 @@ export class UIManager {
         this.updateRoundUI();
         this.renderMap();
         this.addChat('system', `[전투 시작] ${this.game.playerClass.action} 준비!`);
+
+        // Initial Guide Message
+        if (mob.desc && !mob.isBoss) {
+            this.addChat('guide', `[가이드] ${mob.desc}`);
+        } else if (mob.isBoss) {
+            const phase = this.game.getMonsterPhase();
+            if (phase.desc) this.addChat('guide', `[가이드] ${phase.desc}`);
+        }
     }
 
     updateScaffolding() {
@@ -184,6 +192,11 @@ export class UIManager {
         const phase = this.game.getMonsterPhase();
         this.els.game.mSituation.textContent = phase.msg;
         this.updateHUD();
+
+        // Show guide message for current phase if boss, or general desc if mob
+        if (this.game.currentMonster.isBoss && phase.desc) {
+            this.addChat('guide', `[가이드] ${phase.desc}`);
+        }
     }
 
     updateHUD() {

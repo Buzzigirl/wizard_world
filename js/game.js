@@ -58,7 +58,8 @@ export class GameState {
             hp: baseHp, maxHp: baseHp,
             img: theme.mobImg,
             phases: phases,
-            isBoss: false
+            isBoss: false,
+            desc: mob.desc // Add guide message
         };
     }
 
@@ -101,6 +102,7 @@ export class GameState {
             const dmg = Math.floor(10 * (1 + this.consecutiveErrors * 0.5));
             this.hp -= dmg;
             this.ui.addChat('monster', `실패했습니다! 반격을 당합니다. (-${dmg} HP)`);
+            this.ui.addChat('guide', `💡 힌트: 정확한 문장은 "${phase.target}" 입니다.`);
             this.ui.updateRoundUI();
             if (this.hp <= 0) this.gameOver();
         }
