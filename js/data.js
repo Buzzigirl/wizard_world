@@ -63,18 +63,18 @@ export const THEMES = [
                 name: "어린 멧돼지",
                 dialogues: [
                     {
-                        guide: "멧돼지가 꿀꿀거리며 날뛰고 있어요! 진정시켜야 해요. '**calm**' (진정하다) 단어를 써서 '**나는 진정한다**'라고 영어로 말해볼까요?",
+                        guide: "멧돼지가 꿀꿀거리며 날뛰고 있어요! 진정시켜야 해요. 'calm' (진정하다) 단어를 써서 '나는 진정한다'라고 영어로 말해볼까요?",
                         keywords: ["calm"],
                         perfect: ["I calm down", "I calm you down", "Calm down"],
-                        feedback: "주어 **I**(나는) 다음에 동사 **calm**(진정하다)을 써보세요. 뒤에 **down**을 붙이면 더 좋아요!",
-                        hint: "정답 형식: **I c___ down** (나는 진정한다)"
+                        feedback: "주어 I(나는) 다음에 동사 calm(진정하다)을 써보세요. 뒤에 down을 붙이면 더 좋아요!",
+                        hint: "정답 형식: I c___ down (나는 진정한다)"
                     },
                     {
-                        guide: "휴, 조금 조용해졌네요. 이제 우리가 친구라고 안심시켜 주세요. '**friend**' (친구) 단어를 쓸 수 있죠?",
+                        guide: "휴, 조금 조용해졌네요. 이제 우리가 친구라고 안심시켜 주세요. 'friend' (친구) 단어를 쓸 수 있죠?",
                         keywords: ["friend"],
                         perfect: ["We are friends", "You are my friend", "Nature is friend"],
-                        feedback: "**We**(우리는) + **are**(이다) + **friends**(친구들). 이 순서로 말해보세요!",
-                        hint: "정답 형식: **We are f______**"
+                        feedback: "We(우리는) + are(이다) + friends(친구들). 이 순서로 말해보세요!",
+                        hint: "정답 형식: We are f______"
                     }
                 ]
             },
@@ -82,18 +82,18 @@ export const THEMES = [
                 name: "성난 멧돼지",
                 dialogues: [
                     {
-                        guide: "저런, 멧돼지가 다친 것 같아요. 치료해주겠다고 말해요. '**heal**' (치료하다) 단어를 사용해 보세요.",
+                        guide: "저런, 멧돼지가 다친 것 같아요. 치료해주겠다고 말해요. 'heal' (치료하다) 단어를 사용해 보세요.",
                         keywords: ["heal"],
                         perfect: ["I heal you", "I will heal you"],
-                        feedback: "**I**(내가) + **heal**(치료한다) + **you**(너를). 간단하죠?",
-                        hint: "정답 형식: **I h___ you**"
+                        feedback: "I(내가) + heal(치료한다) + you(너를). 간단하죠?",
+                        hint: "정답 형식: I h___ you"
                     },
                     {
-                        guide: "상처가 생각보다 깊어요! 마법을 써야겠어요. '**magic**' (마법) 단어를 넣어볼까요?",
+                        guide: "상처가 생각보다 깊어요! 마법을 써야겠어요. 'magic' (마법) 단어를 넣어볼까요?",
                         keywords: ["magic"],
                         perfect: ["I use magic", "Healing magic"],
-                        feedback: "**I use**(나는 사용한다) 뒤에 **magic**(마법)을 붙여보세요.",
-                        hint: "정답 형식: **I use m____**"
+                        feedback: "I use(나는 사용한다) 뒤에 magic(마법)을 붙여보세요.",
+                        hint: "정답 형식: I use m____"
                     }
                 ]
             },
@@ -101,18 +101,18 @@ export const THEMES = [
                 name: "광란의 멧돼지",
                 dialogues: [
                     {
-                        guide: "위험해요! 멧돼지가 돌진합니다! '**stop**' (멈추다)이라고 크게 외쳐서 막으세요!",
+                        guide: "위험해요! 멧돼지가 돌진합니다! 'stop' (멈추다)이라고 크게 외쳐서 막으세요!",
                         keywords: ["stop"],
                         perfect: ["Stop it", "Please stop", "Stop running"],
-                        feedback: "강하게 '**Stop**'(멈춰) 뒤에 '**it**'을 붙여보세요.",
-                        hint: "정답 형식: **S___ it!**"
+                        feedback: "강하게 'Stop'(멈춰) 뒤에 'it'을 붙여보세요.",
+                        hint: "정답 형식: S___ it!"
                     },
                     {
-                        guide: "아직 흥분이 안 가라앉았어요. 집으로 돌아가라고 하세요. '**home**' (집) 단어를 아시죠?",
+                        guide: "아직 흥분이 안 가라앉았어요. 집으로 돌아가라고 하세요. 'home' (집) 단어를 아시죠?",
                         keywords: ["home", "back"],
                         perfect: ["Go back home", "Go home"],
-                        feedback: "**Go**(가라) + **back home**(집으로). 명령하듯이 말해보세요.",
-                        hint: "정답 형식: **Go b___ h___**"
+                        feedback: "Go(가라) + back home(집으로). 명령하듯이 말해보세요.",
+                        hint: "정답 형식: Go b___ h___"
                     }
                 ]
             },
@@ -120,18 +120,18 @@ export const THEMES = [
                 name: "숲의 파괴자",
                 dialogues: [
                     {
-                        guide: "이 괴물이 숲을 망치고 있어요! '**protect**' (지키다) 단어를 써서 숲을 지킨다고 말하세요!",
+                        guide: "이 괴물이 숲을 망치고 있어요! 'protect' (지키다) 단어를 써서 숲을 지킨다고 말하세요!",
                         keywords: ["protect"],
                         perfect: ["I protect forest", "I protect nature"],
-                        feedback: "**I**(나는) + **protect**(지킨다) + **forest**(숲). 숲은 영어로 forest예요.",
-                        hint: "정답 형식: **I p______ forest**"
+                        feedback: "I(나는) + protect(지킨다) + forest(숲). 숲은 영어로 forest예요.",
+                        hint: "정답 형식: I p______ forest"
                     },
                     {
-                        guide: "나무들이 쓰러져 있어요. 다시 자라나라고 말해줘요. '**grow**' (자라다)를 써보세요.",
+                        guide: "나무들이 쓰러져 있어요. 다시 자라나라고 말해줘요. 'grow' (자라다)를 써보세요.",
                         keywords: ["grow"],
                         perfect: ["Trees grow again", "Let trees grow"],
-                        feedback: "**Trees**(나무들아) + **grow**(자라라) + **again**(다시).",
-                        hint: "정답 형식: **Trees g___ again**"
+                        feedback: "Trees(나무들아) + grow(자라라) + again(다시).",
+                        hint: "정답 형식: Trees g___ again"
                     }
                 ]
             },
@@ -139,18 +139,18 @@ export const THEMES = [
                 name: "오염된 정령",
                 dialogues: [
                     {
-                        guide: "정령이 검게 변했어요. '**pure**' (순수한) 단어를 써서 다시 순수해지라고 해주세요.",
+                        guide: "정령이 검게 변했어요. 'pure' (순수한) 단어를 써서 다시 순수해지라고 해주세요.",
                         keywords: ["pure"],
                         perfect: ["Be pure again", "You are pure"],
-                        feedback: "**Be**(되어라) + **pure**(순수하게) + **again**(다시).",
-                        hint: "정답 형식: **Be p___ again**"
+                        feedback: "Be(되어라) + pure(순수하게) + again(다시).",
+                        hint: "정답 형식: Be p___ again"
                     },
                     {
-                        guide: "아직 어둠이 남았어요. '**light**' (빛)를 비춰주세요!",
+                        guide: "아직 어둠이 남았어요. 'light' (빛)를 비춰주세요!",
                         keywords: ["light"],
                         perfect: ["Light shine", "Show me light"],
-                        feedback: "**Light**(빛아) + **shine**(빛나라).",
-                        hint: "정답 형식: **L____ shine**"
+                        feedback: "Light(빛아) + shine(빛나라).",
+                        hint: "정답 형식: L____ shine"
                     }
                 ]
             }

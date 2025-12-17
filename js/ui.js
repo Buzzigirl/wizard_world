@@ -252,13 +252,10 @@ export class UIManager {
 
             node.className = `map-node ${i === this.game.stage ? 'current' : ''} ${i < this.game.stage ? 'cleared' : ''}`;
 
-            // Add Name to Node
+            // Simplified: No monster name
             node.innerHTML = `
                 <div class="node-icon">${icon}</div>
-                <div class="node-info">
-                    <span class="stage-num">${i === 3 ? 'BOSS' : i + 'F'}</span>
-                    <span class="mob-name">${name}</span>
-                </div>
+                <span class="stage-num">${i === 3 ? 'BOSS' : i + 'F'}</span>
             `;
 
             container.appendChild(node);
