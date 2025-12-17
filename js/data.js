@@ -63,16 +63,18 @@ export const THEMES = [
                 name: "어린 멧돼지",
                 dialogues: [
                     {
-                        guide: "멧돼지가 흥분해 날뛰고 있습니다! **'calm'**을 사용하여 진정시키세요.",
+                        guide: "멧돼지가 꿀꿀거리며 날뛰고 있어요! 진정시켜야 해요. '**calm**' (진정하다) 단어를 써서 '**나는 진정한다**'라고 영어로 말해볼까요?",
                         keywords: ["calm"],
                         perfect: ["I calm down", "I calm you down", "Calm down"],
-                        feedback: "주어(I)와 동사(calm)를 사용하여 '나는 진정한다'라고 말해보세요."
+                        feedback: "주어 **I**(나는) 다음에 동사 **calm**(진정하다)을 써보세요. 뒤에 **down**을 붙이면 더 좋아요!",
+                        hint: "정답 형식: **I c___ down** (나는 진정한다)"
                     },
                     {
-                        guide: "멧돼지가 조금 진정되었습니다. **'friend'**를 사용하여 우리가 친구임을 알려주세요.",
+                        guide: "휴, 조금 조용해졌네요. 이제 우리가 친구라고 안심시켜 주세요. '**friend**' (친구) 단어를 쓸 수 있죠?",
                         keywords: ["friend"],
                         perfect: ["We are friends", "You are my friend", "Nature is friend"],
-                        feedback: "'우리는 친구다(We are friends)'라고 안심시켜 보세요."
+                        feedback: "**We**(우리는) + **are**(이다) + **friends**(친구들). 이 순서로 말해보세요!",
+                        hint: "정답 형식: **We are f______**"
                     }
                 ]
             },
@@ -80,16 +82,18 @@ export const THEMES = [
                 name: "성난 멧돼지",
                 dialogues: [
                     {
-                        guide: "멧돼지가 다친 것 같습니다. **'heal'**을 사용하여 치료해주겠다고 하세요.",
+                        guide: "저런, 멧돼지가 다친 것 같아요. 치료해주겠다고 말해요. '**heal**' (치료하다) 단어를 사용해 보세요.",
                         keywords: ["heal"],
                         perfect: ["I heal you", "I will heal you"],
-                        feedback: "'내가 널 치료해줄게(I heal you)'라고 말해보세요."
+                        feedback: "**I**(내가) + **heal**(치료한다) + **you**(너를). 간단하죠?",
+                        hint: "정답 형식: **I h___ you**"
                     },
                     {
-                        guide: "상처가 깊어 보입니다. **'magic'**으로 더 강력한 치유를 하세요.",
+                        guide: "상처가 생각보다 깊어요! 마법을 써야겠어요. '**magic**' (마법) 단어를 넣어볼까요?",
                         keywords: ["magic"],
                         perfect: ["I use magic", "Healing magic"],
-                        feedback: "'나는 마법을 쓴다(I use magic)'라고 해보세요."
+                        feedback: "**I use**(나는 사용한다) 뒤에 **magic**(마법)을 붙여보세요.",
+                        hint: "정답 형식: **I use m____**"
                     }
                 ]
             },
@@ -97,16 +101,18 @@ export const THEMES = [
                 name: "광란의 멧돼지",
                 dialogues: [
                     {
-                        guide: "너무 위험합니다! **'stop'**을 외쳐 멈추게 하세요.",
+                        guide: "위험해요! 멧돼지가 돌진합니다! '**stop**' (멈추다)이라고 크게 외쳐서 막으세요!",
                         keywords: ["stop"],
                         perfect: ["Stop it", "Please stop", "Stop running"],
-                        feedback: "단호하게 '멈춰(Stop it)'라고 말하세요."
+                        feedback: "강하게 '**Stop**'(멈춰) 뒤에 '**it**'을 붙여보세요.",
+                        hint: "정답 형식: **S___ it!**"
                     },
                     {
-                        guide: "진정이 안 됩니다. **'home'**으로 돌려보내야 합니다.",
+                        guide: "아직 흥분이 안 가라앉았어요. 집으로 돌아가라고 하세요. '**home**' (집) 단어를 아시죠?",
                         keywords: ["home", "back"],
                         perfect: ["Go back home", "Go home"],
-                        feedback: "'집으로 돌아가(Go back home)'라고 명령하세요."
+                        feedback: "**Go**(가라) + **back home**(집으로). 명령하듯이 말해보세요.",
+                        hint: "정답 형식: **Go b___ h___**"
                     }
                 ]
             },
@@ -114,16 +120,18 @@ export const THEMES = [
                 name: "숲의 파괴자",
                 dialogues: [
                     {
-                        guide: "숲을 파괴하고 있습니다. **'protect'**를 사용하여 막으세요!",
+                        guide: "이 괴물이 숲을 망치고 있어요! '**protect**' (지키다) 단어를 써서 숲을 지킨다고 말하세요!",
                         keywords: ["protect"],
                         perfect: ["I protect forest", "I protect nature"],
-                        feedback: "'나는 숲을 지킨다(I protect forest)'라고 선언하세요."
+                        feedback: "**I**(나는) + **protect**(지킨다) + **forest**(숲). 숲은 영어로 forest예요.",
+                        hint: "정답 형식: **I p______ forest**"
                     },
                     {
-                        guide: "나무들이 쓰러집니다. **'grow'**를 써서 다시 자라게 하세요.",
+                        guide: "나무들이 쓰러져 있어요. 다시 자라나라고 말해줘요. '**grow**' (자라다)를 써보세요.",
                         keywords: ["grow"],
                         perfect: ["Trees grow again", "Let trees grow"],
-                        feedback: "'나무들아 다시 자라라(Trees grow again)'라고 외치세요."
+                        feedback: "**Trees**(나무들아) + **grow**(자라라) + **again**(다시).",
+                        hint: "정답 형식: **Trees g___ again**"
                     }
                 ]
             },
@@ -131,16 +139,18 @@ export const THEMES = [
                 name: "오염된 정령",
                 dialogues: [
                     {
-                        guide: "정령이 고통받고 있습니다. **'pure'**를 사용하여 정화하세요.",
+                        guide: "정령이 검게 변했어요. '**pure**' (순수한) 단어를 써서 다시 순수해지라고 해주세요.",
                         keywords: ["pure"],
                         perfect: ["Be pure again", "You are pure"],
-                        feedback: "'다시 순수해져라(Be pure again)'라고 주문을 외우세요."
+                        feedback: "**Be**(되어라) + **pure**(순수하게) + **again**(다시).",
+                        hint: "정답 형식: **Be p___ again**"
                     },
                     {
-                        guide: "검은 기운이 남아있습니다. **'light'**로 어둠을 걷어내세요.",
+                        guide: "아직 어둠이 남았어요. '**light**' (빛)를 비춰주세요!",
                         keywords: ["light"],
                         perfect: ["Light shine", "Show me light"],
-                        feedback: "'빛아 비춰라(Light shine)'라고 해보세요."
+                        feedback: "**Light**(빛아) + **shine**(빛나라).",
+                        hint: "정답 형식: **L____ shine**"
                     }
                 ]
             }
@@ -152,10 +162,11 @@ export const THEMES = [
                     hp: 200, msg: "엔트가 당신을 경계합니다.",
                     dialogues: [
                         {
-                            guide: "엔트가 인간을 불신합니다. **'respect'**를 써서 존중을 표하세요.",
+                            guide: "엔트가 인간을 믿지 않아요. '**respect**' (존중하다) 단어를 써서 당신을 존중한다고 말해주세요.",
                             keywords: ["respect"],
                             perfect: ["I respect nature", "I respect you"],
-                            feedback: "'나는 자연을 존중해(I respect nature)'라고 진심을 전하세요!"
+                            feedback: "**I**(나는) + **respect**(존중한다) + **nature**(자연을).",
+                            hint: "정답 형식: **I r______ nature**"
                         }
                     ]
                 },
@@ -163,10 +174,11 @@ export const THEMES = [
                     hp: 100, msg: "엔트가 숲의 지혜를 묻습니다.",
                     dialogues: [
                         {
-                            guide: "엔트와 소통해야 합니다. **'listen'**을 사용하여 귀를 기울이세요.",
+                            guide: "엔트가 당신을 시험합니다. '**listen**' (듣다) 단어를 사용해, 나무의 소리를 듣는다고 답하세요.",
                             keywords: ["listen"],
                             perfect: ["I listen to tree", "I listen to nature"],
-                            feedback: "'나는 나무의 소리를 들어(I listen to tree)'라고 대답하세요."
+                            feedback: "**I listen to**(나는 ~를 듣는다) + **tree**(나무).",
+                            hint: "정답 형식: **I l_____ to tree**"
                         }
                     ]
                 },
@@ -174,10 +186,11 @@ export const THEMES = [
                     hp: 0, msg: "엔트가 평온을 되찾습니다.",
                     dialogues: [
                         {
-                            guide: "마지막으로 맹세하세요. **'protect'**를 써서 숲을 지키겠다고 하세요!",
+                            guide: "마지막 관문입니다! 숲을 지키겠다고 맹세하세요. '**protect**' (지키다)를 사용하세요.",
                             keywords: ["protect", "save"],
                             perfect: ["Protect the forest", "I save the forest"],
-                            feedback: "'숲을 지켜라(Protect the forest)'라고 외치세요!"
+                            feedback: "**Protect**(지켜라) + **the forest**(그 숲을).",
+                            hint: "정답 형식: **P______ the forest**"
                         }
                     ]
                 }

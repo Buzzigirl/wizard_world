@@ -156,7 +156,11 @@ export class GameState {
             const dmg = Math.floor(10 * (1 + this.consecutiveErrors * 0.5));
             this.hp -= dmg;
             this.ui.addChat('monster', `실패! 반격을 당합니다. (-${dmg} HP)`);
-            this.ui.addChat('guide', `💡 힌트 키워드: ${dialogue.keywords.join(', ')}`);
+
+            // Show Beginner Hint
+            const hintMsg = dialogue.hint ? `💡 힌트: ${dialogue.hint}` : `💡 힌트 키워드: ${dialogue.keywords.join(', ')}`;
+            this.ui.addChat('guide', hintMsg);
+
             this.ui.updateRoundUI();
             if (this.hp <= 0) this.gameOver();
         }
