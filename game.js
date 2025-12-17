@@ -271,7 +271,7 @@ class UIController {
         container.innerHTML = '';
         THEMES.forEach((t, i) => {
             const btn = document.createElement('button');
-            const locked = i > 0 && !this.game.clearedThemes.includes(THEMES[i - 1].id);
+            const locked = false; // All themes unlocked by user request
             const cleared = this.game.clearedThemes.includes(t.id);
             btn.className = `map-point ${locked ? 'locked' : ''} ${cleared ? 'cleared' : ''}`;
 
