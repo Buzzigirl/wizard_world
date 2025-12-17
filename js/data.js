@@ -162,11 +162,11 @@ export const THEMES = [
                     hp: 200, msg: "엔트가 당신을 경계합니다.",
                     dialogues: [
                         {
-                            guide: "엔트가 인간을 믿지 않아요. '**respect**' (존중하다) 단어를 써서 당신을 존중한다고 말해주세요.",
+                            guide: "엔트가 인간을 믿지 않아요. 'respect' (존중하다) 단어를 써서 당신을 존중한다고 말해주세요.",
                             keywords: ["respect"],
                             perfect: ["I respect nature", "I respect you"],
-                            feedback: "**I**(나는) + **respect**(존중한다) + **nature**(자연을).",
-                            hint: "정답 형식: **I r______ nature**"
+                            feedback: "I(나는) + respect(존중한다) + nature(자연을).",
+                            hint: "정답 형식: I r______ nature"
                         }
                     ]
                 },
@@ -174,11 +174,11 @@ export const THEMES = [
                     hp: 100, msg: "엔트가 숲의 지혜를 묻습니다.",
                     dialogues: [
                         {
-                            guide: "엔트가 당신을 시험합니다. '**listen**' (듣다) 단어를 사용해, 나무의 소리를 듣는다고 답하세요.",
+                            guide: "엔트가 당신을 시험합니다. 'listen' (듣다) 단어를 사용해, 나무의 소리를 듣는다고 답하세요.",
                             keywords: ["listen"],
                             perfect: ["I listen to tree", "I listen to nature"],
-                            feedback: "**I listen to**(나는 ~를 듣는다) + **tree**(나무).",
-                            hint: "정답 형식: **I l_____ to tree**"
+                            feedback: "I listen to(나는 ~를 듣는다) + tree(나무).",
+                            hint: "정답 형식: I l_____ to tree"
                         }
                     ]
                 },
@@ -186,11 +186,11 @@ export const THEMES = [
                     hp: 0, msg: "엔트가 평온을 되찾습니다.",
                     dialogues: [
                         {
-                            guide: "마지막 관문입니다! 숲을 지키겠다고 맹세하세요. '**protect**' (지키다)를 사용하세요.",
+                            guide: "마지막 관문입니다! 숲을 지키겠다고 맹세하세요. 'protect' (지키다)를 사용하세요.",
                             keywords: ["protect", "save"],
                             perfect: ["Protect the forest", "I save the forest"],
-                            feedback: "**Protect**(지켜라) + **the forest**(그 숲을).",
-                            hint: "정답 형식: **P______ the forest**"
+                            feedback: "Protect(지켜라) + the forest(그 숲을).",
+                            hint: "정답 형식: P______ the forest"
                         }
                     ]
                 }
