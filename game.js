@@ -4,6 +4,7 @@
 // ==========================================
 
 const CONFIG = { API_KEY: "" };
+const LOBBY_BG = 'https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?q=80&w=2574';
 
 const CLASSES = {
     WARRIOR: {
@@ -246,7 +247,6 @@ class UIController {
 
         // Background Logic
         // Magical Tower Interior for Lobby
-        const LOBBY_BG = 'https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?q=80&w=2574';
 
         if (id === 'game') {
             const theme = this.game.getTheme();
@@ -282,7 +282,13 @@ class UIController {
                                 <span class="desc">${t.desc}</span>
                              </div>`;
 
-            if (!locked) btn.onclick = () => { this.game.themeIdx = i; this.startGame(); };
+            if (!locked) {
+                btn.onclick = () => { this.game.themeIdx = i; this.startGame(); };
+
+                // Hover Effects: Preview Theme Background
+                btn.onmouseenter = () => this.setBackground(t.bg);
+                btn.onmouseleave = () => this.setBackground(LOBBY_BG);
+            }
             container.appendChild(btn);
         });
     }
