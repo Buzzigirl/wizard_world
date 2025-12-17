@@ -175,11 +175,11 @@ export class UIManager {
         this.addChat('system', `[전투 시작] ${this.game.playerClass.action} 준비!`);
 
         // Initial Guide Message
-        if (mob.desc && !mob.isBoss) {
-            this.addChat('guide', `[가이드] ${mob.desc}`);
-        } else if (mob.isBoss) {
-            const phase = this.game.getMonsterPhase();
-            if (phase.desc) this.addChat('guide', `[가이드] ${phase.desc}`);
+        // Initial Guide Message
+        const dialogue = this.game.getCurrentDialogue();
+        if (dialogue) {
+            // Use setTimeout to ensure it appears after "Battle Start" message
+            setTimeout(() => this.addChat('guide', `[가이드] ${dialogue.guide}`), 500);
         }
     }
 
