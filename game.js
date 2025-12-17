@@ -243,6 +243,25 @@ class UIController {
     showScreen(id) {
         Object.values(this.els.screens).forEach(el => el.classList.add('hidden'));
         this.els.screens[id].classList.remove('hidden');
+
+        // Background Logic
+        const LOBBY_BG = 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2672';
+
+        if (id === 'game') {
+            const theme = this.game.getTheme();
+            if (theme) this.setBackground(theme.bg);
+        } else {
+            this.setBackground(LOBBY_BG);
+        }
+    }
+
+    setBackground(url) {
+        // Preload image to prevent flickering
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+            document.body.style.backgroundImage = `url('${url}')`;
+        };
     }
 
     showWorldMap() {
@@ -286,7 +305,11 @@ class UIController {
         this.game.currentMonster = mob;
 
         const theme = this.game.getTheme();
-        document.body.style.backgroundImage = `url('${theme.bg}')`;
+        // Background is handled by setBackground/showScreen now, but ensure update if theme changes in game
+        if (document.body.style.backgroundImage.indexOf(theme.bg) === -1) {
+            this.setBackground(theme.bg);
+        }
+
         this.els.hud.displayTheme.textContent = theme.name;
         this.els.hud.displayStage.textContent = mob.isBoss ? "BOSS" : `Stage ${this.game.stage}`;
 
