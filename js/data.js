@@ -60,7 +60,7 @@ export const THEMES = [
         mobImg: 'assets/1.png', bossImg: 'assets/3.png',
         monsters: [
             {
-                name: "귀여운 멧돼지", // Changed from "어린 멧돼지"
+                name: "꼬마 버섯",
                 img: 'assets/1.png', // Explicit img
                 dialogues: [
                     {
@@ -82,7 +82,7 @@ export const THEMES = [
                 ]
             },
             {
-                name: "꼬마 버섯", // New Monster
+                name: "아기 나무", // New Monster
                 img: 'assets/2.png',
                 dialogues: [
                     {
@@ -105,7 +105,7 @@ export const THEMES = [
             }
         ],
         boss: {
-            name: "장로 엔트", hp: 300,
+            name: "숲 올빼미", hp: 300,
             img: 'assets/3.png',
             phases: [
                 {
@@ -158,7 +158,7 @@ export const THEMES = [
         mobImg: 'assets/7.png', bossImg: 'assets/9.png',
         monsters: [
             {
-                name: "모래 전갈",
+                name: "사막 돌맹이",
                 img: 'assets/7.png',
                 dialogues: [{
                     guide: "전갈이 모래 속에 숨었습니다. 'freeze' (얼리다) 단어를 써서 모래를 얼려보세요!",
@@ -170,7 +170,7 @@ export const THEMES = [
                 }]
             },
             {
-                name: "선인장 투사", // Renamed for Cute Cactus feel (d2.png)
+                name: "꼬마 도마뱀", // Renamed for Cute Cactus feel (d2.png)
                 img: 'assets/8.png', // New Asset
                 dialogues: [{
                     guide: "독침이 위험합니다! 'remove' (제거하다)와 'poison' (독)을 사용해 해독하세요.",
@@ -184,7 +184,7 @@ export const THEMES = [
 
         ],
         boss: {
-            name: "거대 샌드웜", hp: 400,
+            name: "사막 여우", hp: 400,
             img: 'assets/9.png',
             phases: [
                 {
@@ -231,7 +231,7 @@ export const THEMES = [
         mobImg: 'assets/4.png', bossImg: 'assets/6.png',
         monsters: [
             {
-                name: "장난꾸러기 임프", // Renamed for Cute Imp (m1.png)
+                name: "꼬마 박쥐", // Renamed for Cute Imp (m1.png)
                 img: 'assets/4.png',
                 dialogues: [{
                     guide: "문을 지키고 있습니다. 'open' (열다)과 'gate' (문)를 사용하세요.",
@@ -243,7 +243,7 @@ export const THEMES = [
                 }]
             },
             {
-                name: "꼬마 갑옷", // Renamed for Cute Armor (m2.png)
+                name: "장난 유령", // Renamed for Cute Armor (m2.png)
                 img: 'assets/5.png',
                 dialogues: [{
                     guide: "갑옷이 혼자 움직입니다! 'stop' (멈추다)을 외쳐보세요.",
@@ -257,7 +257,7 @@ export const THEMES = [
 
         ],
         boss: {
-            name: "마왕", hp: 500,
+            name: "뚱띵 악마", hp: 500,
             img: 'assets/6.png',
             phases: [
                 {
