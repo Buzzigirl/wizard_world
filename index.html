@@ -1,100 +1,172 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiz Academy - Grammar Quest</title>
+    <title>Wiz Academy - Roguelike Quest</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div id="app" class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-left">
-                <div class="logo-icon">🪄</div>
-                <div class="header-info">
-                    <h1 class="title">Wiz Academy</h1>
-                    <div class="mode-display">Mode: <span id="game-mode">INTRO</span></div>
+        <!-- Intro Screen -->
+        <div id="intro-screen" class="intro-screen">
+            <div class="intro-overlay"></div>
+            <div class="intro-content">
+                <h1 class="intro-title">
+                    <span class="wand-icon">🪄</span>
+                    Class 2: The Forbidden Forest
+                </h1>
+                <div class="intro-sections">
+                    <section class="intro-section">
+                        <h2 class="section-title objective">🎯 학습 목표</h2>
+                        <div class="section-content">
+                            <ul>
+                                <li><strong>반의어(Antonyms) 학습:</strong> Hot ↔ Cold, Heavy ↔ Light 등의 반대 개념을 익힙니다.</li>
+                                <li><strong>상황 해결 능력:</strong> 몬스터 전투 뿐만 아니라, <strong>실생활 문제</strong> 상황에 맞는 형용사를 사용해
+                                    봅니다.</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="intro-section">
+                        <h2 class="section-title rules">🧠 게임 규칙</h2>
+                        <ul class="rules-list">
+                            <li>몬스터의 <strong>속성</strong>을 보고 <strong>반대되는 형용사</strong>로 공격하세요.</li>
+                            <li>(예: 불 몬스터 → Cold Magic)</li>
+                            <li>3스테이지마다 <strong>실생활 미션</strong>이 등장합니다!</li>
+                        </ul>
+                    </section>
+                    <button id="start-game-btn" class="start-button">학습 시작하기</button>
                 </div>
             </div>
-            <div class="header-right">
-                <button id="mana-btn" class="mana-button">
-                    🔋 <span id="mana-display">50</span>
-                </button>
-                <button id="grimoire-btn" class="grimoire-button">
-                    📖 <span>Grimoire</span>
-                </button>
-            </div>
-        </header>
+        </div>
 
-        <!-- Visual Stage -->
-        <main class="stage" id="stage">
-            <div class="stage-overlay"></div>
-            
-            <!-- Character Display -->
-            <div class="character-container" id="character-container">
-                <div class="character" id="character">
-                    <div class="character-icon" id="character-icon">🐻</div>
-                </div>
-                <div class="hp-bar" id="hp-bar-container">
-                    <div class="hp-fill" id="hp-fill" style="width: 100%"></div>
-                </div>
-            </div>
-
-            <!-- Chat Area -->
-            <div class="chat-area" id="chat-area">
-                <!-- Messages will be dynamically added here -->
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <!-- Task Guide -->
-                <div class="task-guide" id="task-guide">
-                    <div class="task-header">
-                        <span class="task-type" id="task-type">⚔️ Combat Task</span>
-                        <span class="task-step" id="task-step">Step 1</span>
-                    </div>
-                    <div class="task-instruction" id="task-instruction">
-                        게임을 시작합니다...
+        <!-- Game Screen -->
+        <div id="game-screen" class="game-screen hidden">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="logo-icon">🪄</div>
+                    <div class="header-info">
+                        <h1 class="title">Wiz Academy: Roguelike</h1>
+                        <div class="stage-display">Stage <span id="stage-count">1</span></div>
                     </div>
                 </div>
 
-                <!-- Input Area -->
-                <div class="input-area">
-                    <input 
-                        type="text" 
-                        id="user-input" 
-                        class="message-input" 
-                        placeholder="주문을 입력하세요..."
-                    >
-                    <button id="send-btn" class="send-button">
-                        <span id="send-icon">➤</span>
+                <!-- Inventory -->
+                <div id="inventory" class="inventory"></div>
+
+                <!-- Status Bars -->
+                <div class="status-bars">
+                    <div class="hp-status">
+                        <span class="status-icon">❤️</span>
+                        <span id="hp-display" class="status-value">100/100</span>
+                    </div>
+                    <button id="mana-btn" class="mana-status">
+                        <span class="status-icon">🔋</span>
+                        <span id="mana-display" class="status-value">50/50</span>
+                    </button>
+                    <button id="grimoire-btn" class="grimoire-btn">
+                        <span class="status-icon">📖</span>
+                        <span class="btn-text">Guide</span>
                     </button>
                 </div>
-            </div>
-        </footer>
+            </header>
+
+            <!-- Main Stage -->
+            <main class="stage" id="stage">
+                <div class="stage-overlay"></div>
+
+                <!-- Monster/Scenario Display -->
+                <div class="entity-container" id="entity-container">
+                    <div id="weakness-hint" class="weakness-hint hidden"></div>
+                    <div id="entity-icon" class="entity-icon"></div>
+                    <div class="entity-hp-bar">
+                        <div id="entity-hp-fill" class="hp-fill"></div>
+                    </div>
+                    <div id="entity-name" class="entity-name"></div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="chat-area" id="chat-area"></div>
+
+                <!-- Reward Screen -->
+                <div id="reward-screen" class="reward-screen hidden">
+                    <h2 class="reward-title">Stage Cleared!</h2>
+                    <p class="reward-subtitle">멋진 해결 능력이군요! 보상을 선택하세요.</p>
+                    <div id="artifact-choices" class="artifact-choices"></div>
+                </div>
+            </main>
+
+            <!-- Footer / Input Area -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div id="task-guide" class="task-guide hidden"></div>
+                    <div class="input-area">
+                        <input type="text" id="user-input" class="message-input"
+                            placeholder="해결책을 입력하세요 (예: I make it cold)">
+                        <button id="send-btn" class="send-button">
+                            <span id="send-icon">➤</span>
+                        </button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="gameover-screen hidden">
+            <div class="gameover-icon">💀</div>
+            <h1 class="gameover-title">GAME OVER</h1>
+            <p class="gameover-subtitle">체력이 모두 소진되었습니다.</p>
+            <button id="retry-btn" class="retry-button">다시 도전</button>
+        </div>
     </div>
 
     <!-- Grimoire Modal -->
     <div id="grimoire-modal" class="modal hidden">
         <div class="modal-content grimoire-content">
             <button class="modal-close" id="grimoire-close">✕</button>
-            <h2 class="modal-title">📖 마법 도감 (Grimoire)</h2>
-            <div class="grimoire-section">
-                <h3>⚡ 전투 마법 공식 (Syntax)</h3>
-                <div class="formula">S (주인공) + V (행동) + O (대상)</div>
-                <ul>
-                    <li><strong>I</strong> (나) + <strong>hit</strong> (때리다) + <strong>the slime</strong> (슬라임)</li>
-                    <li><strong>I</strong> (나) + <strong>make</strong> (만들다) + <strong>a shield</strong> (방패)</li>
-                </ul>
+            <h2 class="modal-title">📖 속성 반의어 가이드</h2>
+            <div class="grimoire-grid">
+                <div class="grimoire-card fire">
+                    <h3>🔥 불 (Hot/Fire)</h3>
+                    <p>반대 속성 (해결책):</p>
+                    <div class="weakness-tags">
+                        <span class="tag">Cold</span>
+                        <span class="tag">Cool</span>
+                    </div>
+                </div>
+                <div class="grimoire-card water">
+                    <h3>💧 물/추위 (Cold/Water)</h3>
+                    <p>반대 속성 (해결책):</p>
+                    <div class="weakness-tags">
+                        <span class="tag">Hot</span>
+                        <span class="tag">Warm</span>
+                        <span class="tag">Dry</span>
+                    </div>
+                </div>
+                <div class="grimoire-card metal">
+                    <h3>⚙️ 강철/무거움 (Heavy)</h3>
+                    <p>반대 속성 (해결책):</p>
+                    <div class="weakness-tags">
+                        <span class="tag">Light (가벼운)</span>
+                        <span class="tag">Strong (강한)</span>
+                    </div>
+                </div>
+                <div class="grimoire-card dark">
+                    <h3>🌑 어둠 (Dark)</h3>
+                    <p>반대 속성 (해결책):</p>
+                    <div class="weakness-tags">
+                        <span class="tag">Bright</span>
+                        <span class="tag">Shiny</span>
+                    </div>
+                </div>
             </div>
-            <div class="grimoire-section">
-                <h3>🗣️ 소통의 기술 (Expression)</h3>
-                <p>원하는 게 있을 땐: <strong>"I want ~"</strong></p>
-                <p>질문할 땐: <strong>"Do you want ~?"</strong></p>
+            <div class="grimoire-tip">
+                💡 Tip: "Make it <strong>[Adjective]</strong>" 또는 "I use <strong>[Adjective]</strong> magic" 형태로 문장을
+                만들어보세요.
             </div>
         </div>
     </div>
@@ -103,17 +175,18 @@
     <div id="mana-modal" class="modal hidden">
         <div class="modal-content mana-content">
             <button class="modal-close" id="mana-close">✕</button>
-            <h2 class="modal-title">🔋 마나 충전소</h2>
-            <div class="quiz-display" id="quiz-display">
-                <div class="quiz-word" id="quiz-word">때리다</div>
+            <h2 class="modal-title">🔋 마나 훈련소</h2>
+            <p class="mana-subtitle">형용사를 맞춰 마나를 충전하세요!</p>
+            <div class="quiz-display">
+                <div id="quiz-word" class="quiz-word"></div>
                 <div class="quiz-hint">영어로 무엇일까요?</div>
+                <div id="quiz-feedback" class="quiz-feedback"></div>
             </div>
-            <div class="quiz-options" id="quiz-options">
-                <!-- Options will be added dynamically -->
-            </div>
+            <div id="quiz-options" class="quiz-options"></div>
         </div>
     </div>
 
     <script src="game.js"></script>
 </body>
+
 </html>

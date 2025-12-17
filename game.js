@@ -1,174 +1,131 @@
 // ==========================================
-// Grammar Quest Game - Main JavaScript
-// Designed for Railway deployment
+// Class 2: Roguelike Grammar Quest
 // ==========================================
 
-// ==========================================
-// Configuration - API 설정 (Railway 환경변수로 관리 가능)
-// ==========================================
 const CONFIG = {
-    // API 키는 나중에 환경변수로 관리할 예정
-    // Railway에서는 process.env 또는 서버사이드에서 주입
-    API_KEY: "", // 여기에 Gemini API 키 입력
+    API_KEY: "", // Gemini API 키 (환경변수로 관리 권장)
     API_URL: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 };
 
 // ==========================================
-// Game Data - 시나리오 데이터베이스
+// Game Data
 // ==========================================
-const SCENARIO_DATA = {
-    title: "Class 1: The Hungry Gatekeeper",
-    intro: "마법 학교로 가는 문을 거대한 곰이 막고 있습니다! 배가 고파서 난동을 부리는 것 같아요.",
+const MONSTERS = [
+    {
+        id: 'm1', name: "Fire Spirit", type: "FIRE", weakness: ["cold", "cool", "icy", "wet"],
+        hp: 150, icon: "🔥", desc: "불타는 정령입니다. 차가운(Cold) 공격이 필요합니다.", category: 'MONSTER'
+    },
+    {
+        id: 'm2', name: "Water Slime", type: "WATER", weakness: ["hot", "warm", "dry", "electric"],
+        hp: 120, icon: "💧", desc: "축축한 슬라임입니다. 뜨거운(Hot) 공격에 약합니다.", category: 'MONSTER'
+    },
+    {
+        id: 'm3', name: "Iron Golem", type: "METAL", weakness: ["strong", "heavy", "hard", "hot"],
+        hp: 200, icon: "⚙️", desc: "단단한 강철 골렘입니다. 강한(Strong) 충격이나 녹이는 열이 필요합니다.", category: 'MONSTER'
+    },
+    {
+        id: 'm4', name: "Wind Bat", type: "WIND", weakness: ["heavy", "fast", "quick"],
+        hp: 100, icon: "💨", desc: "재빠른 박쥐입니다. 무거운(Heavy) 바람으로 누르거나 더 빨라야(Fast) 합니다.", category: 'MONSTER'
+    },
+    {
+        id: 'm5', name: "Dark Shadow", type: "DARK", weakness: ["bright", "shiny", "light"],
+        hp: 130, icon: "🌑", desc: "어둠의 그림자입니다. 밝은(Bright) 빛이 약점입니다.", category: 'MONSTER'
+    }
+];
 
-    // Part A: Combat Mode (Syntax Focus - S+V+O)
-    combatTasks: [
-        {
-            id: 'c1',
-            type: 'worked',
-            situation: "곰이 공격하려 합니다! 방어 주문을 따라하세요.",
-            target: "I make a shield.",
-            guide: "따라 쓰세요: I make a shield."
-        },
-        {
-            id: 'c2',
-            type: 'completion',
-            situation: "곰이 돌을 던집니다! 받아내야 해요.",
-            target: "I catch the stone.",
-            answerKeyword: "catch",
-            guide: "빈칸 채우기: I _____ the stone. (잡다)"
-        },
-        {
-            id: 'c3',
-            type: 'creation',
-            situation: "곰이 달려옵니다! 곰을 멈춰세우세요!",
-            target: "I stop the bear.",
-            guide: "곰을 멈추는(그만) 문장을 스스로 만드세요!"
-        }
-    ],
+const REAL_LIFE_SCENARIOS = [
+    {
+        id: 'r1', name: "Too Hot Coffee", type: "TOO HOT", weakness: ["cold", "cool", "iced"],
+        hp: 80, icon: "☕", desc: "커피가 너무 뜨거워서 마실 수 없습니다! 식혀주세요.", category: 'REAL_LIFE'
+    },
+    {
+        id: 'r2', name: "Heavy Luggage", type: "HEAVY", weakness: ["light", "strong"],
+        hp: 100, icon: "💼", desc: "짐이 너무 무거워서 들 수 없습니다. 가볍게 만들거나(Light) 힘을 쓰세요(Strong).", category: 'REAL_LIFE'
+    },
+    {
+        id: 'r3', name: "Dark Room", type: "DARKNESS", weakness: ["bright", "light"],
+        hp: 60, icon: "🌞", desc: "방이 너무 어둡습니다. 불을 켜거나 밝게 만들어주세요.", category: 'REAL_LIFE'
+    }
+];
 
-    // Part B: Social Mode (Expression Focus - Wants & Needs)
-    socialTasks: [
-        {
-            id: 's1',
-            type: 'scaffolded',
-            situation: "곰이 진정되었습니다. 상태를 물어보세요.",
-            target: "Are you hungry?",
-            hint: "Hint: Are you ...?",
-            guide: "배가 고픈지 물어보세요."
-        },
-        {
-            id: 's2',
-            type: 'scaffolded',
-            situation: "곰이 사과 그림을 가리킵니다. 원하는지 물어보세요.",
-            target: "Do you want an apple?",
-            hint: "Hint: Do you want ...?",
-            guide: "사과를 원하는지 물어보세요."
-        },
-        {
-            id: 's3',
-            type: 'real_world',
-            situation: "[상점] 곰에게 줄 사과를 사야 합니다.",
-            target: "I want an apple, please.",
-            guide: "상점 주인에게 사과를 달라고 말하세요. (want 사용)"
-        },
-        {
-            id: 's4',
-            type: 'real_world',
-            situation: "곰에게 사과를 건네주세요.",
-            target: "Eat this apple.",
-            guide: "곰에게 사과를 먹으라고 하거나 주세요."
-        }
-    ]
-};
+const ARTIFACTS = [
+    { id: 'Potion', name: 'Health Potion', icon: '❤️', desc: '즉시 HP 50 회복 (1회용)', type: 'CONSUMABLE' },
+    { id: 'ManaCrystal', name: 'Mana Crystal', icon: '🔋', desc: '최대 마나 +20 (지속)', type: 'PASSIVE' },
+    { id: 'GrimoirePage', name: 'Secret Page', icon: '📖', desc: '몬스터 약점 자동 분석 (지속)', type: 'PASSIVE' }
+];
 
-// Mana Station Quiz Data
-const QUIZ_DATA = [
-    { q: "때리다", a: "hit" },
-    { q: "원하다", a: "want" },
-    { q: "사과", a: "apple" },
-    { q: "방패", a: "shield" },
-    { q: "잡다", a: "catch" },
-    { q: "멈추다", a: "stop" }
+const VOCAB_QUIZZES = [
+    { q: "차가운", a: "cold" }, { q: "뜨거운", a: "hot" },
+    { q: "빠른", a: "fast" }, { q: "무거운", a: "heavy" },
+    { q: "밝은", a: "bright" }, { q: "강한", a: "strong" },
+    { q: "날카로운", a: "sharp" }, { q: "젖은", a: "wet" }
 ];
 
 // ==========================================
-// Game State - 게임 상태 관리
+// Game State
 // ==========================================
 class GameState {
     constructor() {
-        this.gameMode = 'INTRO'; // INTRO, COMBAT, SOCIAL, END
-        this.taskIndex = 0;
+        this.phase = 'INTRO'; // INTRO, COMBAT, REWARD, GAME_OVER
+        this.playerHp = 100;
+        this.maxHp = 100;
         this.mana = 50;
-        this.monsterHp = 100;
-        this.monsterState = 'ANGRY'; // ANGRY, SAD, HAPPY
-        this.background = 'FOREST'; // FOREST, SHOP
+        this.maxMana = 50;
         this.inventory = [];
         this.messages = [];
+        this.currentMonster = null;
+        this.stageCount = 1;
+        this.monsterHp = 100;
         this.isLoading = false;
         this.quizIndex = 0;
     }
 
-    get currentTasks() {
-        return this.gameMode === 'COMBAT'
-            ? SCENARIO_DATA.combatTasks
-            : SCENARIO_DATA.socialTasks;
-    }
-
-    get currentTask() {
-        return this.currentTasks[this.taskIndex] || {};
-    }
-
     reset() {
-        this.gameMode = 'INTRO';
-        this.taskIndex = 0;
+        this.phase = 'INTRO';
+        this.playerHp = 100;
+        this.maxHp = 100;
         this.mana = 50;
-        this.monsterHp = 100;
-        this.monsterState = 'ANGRY';
-        this.background = 'FOREST';
+        this.maxMana = 50;
         this.inventory = [];
         this.messages = [];
-        this.quizIndex = 0;
+        this.currentMonster = null;
+        this.stageCount = 1;
+        this.monsterHp = 100;
     }
 }
 
 // ==========================================
-// AI Service - Gemini API 통신
+// AI Service
 // ==========================================
 class AIService {
-    static async getWizFeedback(userText, mode, currentTask) {
-        // API 키가 없으면 로컬 평가 사용
+    static async getWizFeedback(userText, currentMonster) {
         if (!CONFIG.API_KEY) {
-            return this.localEvaluation(userText, currentTask);
+            return this.localEvaluation(userText, currentMonster);
         }
 
         try {
+            const isRealLife = currentMonster.category === 'REAL_LIFE';
             const systemPrompt = `
-                당신은 AI 튜터 '위즈'입니다. 교육학적 스캐폴딩 이론에 기반하여 학생을 지도합니다.
-                
-                [현재 상황]
-                - Mode: ${mode}
-                - Task: ${currentTask.situation}
-                - Target: ${currentTask.target}
+당신은 AI 튜터 '위즈'입니다. 로그라이크 게임의 심판입니다.
 
-                [스캐폴딩 사이클 진단 및 선택]
-                학습자의 입력(Performance)을 분석하여 다음 4가지 중 하나의 비계(Scaffolding)를 선택(Selection)하여 지원(Support)하세요.
+[현재 상황: ${isRealLife ? "실생활 문제 해결" : "몬스터 전투"}]
+- 대상: ${currentMonster.name} (속성/상태: ${currentMonster.type})
+- 유효 해결 단어(반의어 등): ${currentMonster.weakness.join(', ')}
+- 목표 구문: S + V + Adjective + O (예: I make it cool, I cast cold ice)
 
-                1. **Conceptual (개념적)**: 지식의 부재(예: 어순 S+V+O 모름)가 원인일 때.
-                   - 반응 예: "주어(S) 뒤에는 반드시 동사(V)가 와야 해."
-                2. **Strategic (전략적)**: 방법의 부재(예: 단어는 아는데 순서가 틀림)가 원인일 때.
-                   - 반응 예: "단어의 순서를 바꿔볼까? 누가(Who) 행동(Do) 무엇(What) 순서야."
-                3. **Metacognitive (메타인지적)**: 반복적인 실수나 미세한 오류일 때 성찰 유도.
-                   - 반응 예: "아까 맞았던 문장이랑 지금 문장이랑 뭐가 다를까?"
-                4. **Motivational (동기적)**: 거의 맞았거나, 좌절할 것 같을 때.
-                   - 반응 예: "거의 다 왔어! 동사 하나만 고치면 완벽해!"
+[판정 기준]
+1. 문법(어순)이 대략적으로 맞아야 함.
+2. **형용사(Adjective)**가 대상의 상태를 해결하거나 반대되는 개념(반의어)이면 "Critical Hit".
+3. 형용사가 없거나 관련 없으면 "Normal Hit" (데미지 낮음).
+4. 문맥상 완전히 틀리면 "Miss".
 
-                [Output JSON Format]
-                {
-                    "isCorrect": boolean,
-                    "scaffoldingType": "Conceptual" | "Strategic" | "Metacognitive" | "Motivational" | "Success",
-                    "message": "위즈의 대사 (이모지 포함)",
-                    "action": "NONE" | "ATTACK" | "DEFEND" | "BUY_ITEM"
-                }
+[Output JSON]
+{
+  "isCorrect": boolean,
+  "damage": number (0=Miss, 20=Normal, 60=Critical),
+  "message": "위즈의 피드백 (한국어, 이모지 포함, ${isRealLife ? "실생활 조언 톤으로" : "전투 톤으로"})",
+  "scaffoldingType": "Conceptual" | "Strategic" | "Motivational" | "Success"
+}
             `;
 
             const response = await fetch(
@@ -177,7 +134,7 @@ class AIService {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `User Input: "${userText}"` }] }],
+                        contents: [{ parts: [{ text: `Check this input against target '${currentMonster.name}': ${userText}` }] }],
                         systemInstruction: { parts: [{ text: systemPrompt }] },
                         generationConfig: { responseMimeType: "application/json" }
                     }),
@@ -190,59 +147,43 @@ class AIService {
 
         } catch (error) {
             console.error("AI Service Error:", error);
-            return this.localEvaluation(userText, currentTask);
+            return this.localEvaluation(userText, currentMonster);
         }
     }
 
-    // 로컬 평가 (API 없이 동작)
-    static localEvaluation(userText, currentTask) {
+    static localEvaluation(userText, currentMonster) {
         const userLower = userText.toLowerCase().trim();
-        const targetLower = currentTask.target?.toLowerCase().trim() || "";
 
-        // 정확히 일치하거나 매우 유사한 경우
-        if (userLower === targetLower ||
-            userLower.replace(/[.,!?]/g, '') === targetLower.replace(/[.,!?]/g, '')) {
+        // Check if any weakness keyword is in the input
+        const hasWeakness = currentMonster.weakness.some(w => userLower.includes(w));
+
+        if (hasWeakness) {
             return {
                 isCorrect: true,
-                scaffoldingType: "Success",
-                message: "✨ 완벽해! 마법이 성공적으로 발동했어!",
-                action: currentTask.id?.startsWith('s3') ? "BUY_ITEM" : "ATTACK"
+                damage: 60,
+                message: "🔥 Critical Hit! 완벽한 해결책입니다!",
+                scaffoldingType: "Success"
             };
-        }
-
-        // 부분적으로 맞는 경우
-        const targetWords = targetLower.split(' ');
-        const userWords = userLower.split(' ');
-        const matchCount = targetWords.filter(w => userWords.includes(w)).length;
-        const matchRatio = matchCount / targetWords.length;
-
-        if (matchRatio >= 0.7) {
+        } else if (userLower.length > 5) {
             return {
-                isCorrect: false,
-                scaffoldingType: "Motivational",
-                message: "🔥 거의 다 왔어! 조금만 더 다듬어보자!",
-                action: "NONE"
-            };
-        } else if (matchRatio >= 0.4) {
-            return {
-                isCorrect: false,
-                scaffoldingType: "Strategic",
-                message: "🎯 단어는 좋아! 순서를 확인해봐. 누가(S) → 행동(V) → 무엇(O)",
-                action: "NONE"
+                isCorrect: true,
+                damage: 20,
+                message: "👍 괜찮아요! 하지만 더 효과적인 형용사를 사용해보세요.",
+                scaffoldingType: "Strategic"
             };
         } else {
             return {
                 isCorrect: false,
-                scaffoldingType: "Conceptual",
-                message: "📚 기본 공식을 확인해볼까? 주어(I) + 동사 + 목적어 순서야!",
-                action: "NONE"
+                damage: 0,
+                message: "❌ 주문 실패! 반대되는 형용사를 사용해보세요.",
+                scaffoldingType: "Conceptual"
             };
         }
     }
 }
 
 // ==========================================
-// UI Controller - DOM 조작 및 렌더링
+// UI Controller
 // ==========================================
 class UIController {
     constructor(gameState) {
@@ -252,35 +193,45 @@ class UIController {
     }
 
     initElements() {
-        // Main elements
-        this.gameModeDisplay = document.getElementById('game-mode');
+        // Screens
+        this.introScreen = document.getElementById('intro-screen');
+        this.gameScreen = document.getElementById('game-screen');
+        this.gameoverScreen = document.getElementById('gameover-screen');
+
+        // Game elements
+        this.stageDisplay = document.getElementById('stage-count');
+        this.hpDisplay = document.getElementById('hp-display');
         this.manaDisplay = document.getElementById('mana-display');
+        this.inventory = document.getElementById('inventory');
         this.chatArea = document.getElementById('chat-area');
         this.userInput = document.getElementById('user-input');
         this.sendBtn = document.getElementById('send-btn');
         this.sendIcon = document.getElementById('send-icon');
 
-        // Stage elements
+        // Entity display
         this.stage = document.getElementById('stage');
-        this.characterIcon = document.getElementById('character-icon');
-        this.character = document.getElementById('character');
-        this.hpFill = document.getElementById('hp-fill');
-        this.hpBarContainer = document.getElementById('hp-bar-container');
-
-        // Task guide elements
+        this.entityIcon = document.getElementById('entity-icon');
+        this.entityHpFill = document.getElementById('entity-hp-fill');
+        this.entityName = document.getElementById('entity-name');
+        this.weaknessHint = document.getElementById('weakness-hint');
         this.taskGuide = document.getElementById('task-guide');
-        this.taskType = document.getElementById('task-type');
-        this.taskStep = document.getElementById('task-step');
-        this.taskInstruction = document.getElementById('task-instruction');
 
-        // Modal elements
+        // Reward
+        this.rewardScreen = document.getElementById('reward-screen');
+        this.artifactChoices = document.getElementById('artifact-choices');
+
+        // Modals
         this.grimoireModal = document.getElementById('grimoire-modal');
         this.manaModal = document.getElementById('mana-modal');
         this.quizWord = document.getElementById('quiz-word');
         this.quizOptions = document.getElementById('quiz-options');
+        this.quizFeedback = document.getElementById('quiz-feedback');
     }
 
     bindEvents() {
+        // Start game
+        document.getElementById('start-game-btn').addEventListener('click', () => this.startGame());
+
         // Send message
         this.sendBtn.addEventListener('click', () => this.handleSend());
         this.userInput.addEventListener('keypress', (e) => {
@@ -301,6 +252,11 @@ class UIController {
             this.manaModal.classList.add('hidden');
         });
 
+        // Retry
+        document.getElementById('retry-btn').addEventListener('click', () => {
+            location.reload();
+        });
+
         // Close modals on background click
         this.grimoireModal.addEventListener('click', (e) => {
             if (e.target === this.grimoireModal) this.grimoireModal.classList.add('hidden');
@@ -310,96 +266,167 @@ class UIController {
         });
     }
 
+    startGame() {
+        this.state.phase = 'COMBAT';
+        this.introScreen.classList.add('hidden');
+        this.gameScreen.classList.remove('hidden');
+
+        this.addMessage('wiz', "좋아, 숲으로 들어가자! 상황에 맞는 '반의어 형용사'를 사용해서 문제를 해결해야 해.");
+        this.startStage();
+    }
+
+    startStage() {
+        let targetEntity;
+        let introMsg;
+
+        // Every 3rd stage is a real-life scenario
+        if (this.state.stageCount % 3 === 0) {
+            targetEntity = REAL_LIFE_SCENARIOS[Math.floor(Math.random() * REAL_LIFE_SCENARIOS.length)];
+            introMsg = `🏙️ 실생활 미션 발생! ${targetEntity.name} 상황을 해결하세요!`;
+        } else {
+            targetEntity = MONSTERS[Math.floor(Math.random() * MONSTERS.length)];
+            introMsg = `⚠️ 야생의 ${targetEntity.name}(이)가 나타났다!`;
+        }
+
+        this.state.currentMonster = { ...targetEntity, maxHp: targetEntity.hp };
+        this.state.monsterHp = targetEntity.hp;
+        this.state.phase = 'COMBAT';
+
+        this.addMessage('system', introMsg);
+        this.updateEntityDisplay();
+        this.updateTaskGuide();
+        this.updateBackground();
+    }
+
     async handleSend() {
         const text = this.userInput.value.trim();
-        if (!text || this.state.isLoading || this.state.gameMode === 'END') return;
+        if (!text || this.state.isLoading || this.state.phase !== 'COMBAT') return;
 
-        // Add user message
+        if (this.state.mana < 5) {
+            this.addMessage('system', "⚠️ 마나가 부족합니다! '마나 훈련소'에서 충전하세요.");
+            return;
+        }
+
         this.addMessage('user', text);
         this.userInput.value = '';
         this.setLoading(true);
+        this.state.mana = Math.max(0, this.state.mana - 5);
+        this.updateMana();
 
-        // Get AI feedback
-        const result = await AIService.getWizFeedback(
-            text,
-            this.state.gameMode,
-            this.state.currentTask
-        );
-
+        const result = await AIService.getWizFeedback(text, this.state.currentMonster);
         this.setLoading(false);
+
         this.addMessage('wiz', result.message, result.scaffoldingType);
 
-        // Handle correct answer
         if (result.isCorrect) {
-            this.handleCorrectAnswer(result);
-        }
-    }
+            const dmg = result.damage || 20;
+            const newHp = Math.max(0, this.state.monsterHp - dmg);
+            this.state.monsterHp = newHp;
+            this.updateEntityDisplay();
 
-    handleCorrectAnswer(result) {
-        // Combat mode: damage monster
-        if (this.state.gameMode === 'COMBAT') {
-            this.state.monsterHp = Math.max(0, this.state.monsterHp - 34);
-            this.updateHpBar();
-        }
-
-        // Handle buy item action
-        if (result.action === 'BUY_ITEM') {
-            this.state.inventory.push('Apple');
-            this.addMessage('system', '🍎 사과를 획득했습니다!');
-        }
-
-        // Check if more tasks remain
-        if (this.state.taskIndex < this.state.currentTasks.length - 1) {
-            // Handle location changes in social mode
-            if (this.state.gameMode === 'SOCIAL' && this.state.taskIndex === 1) {
-                this.state.background = 'SHOP';
-                this.updateBackground();
-                this.addMessage('system', '🏠 상점으로 이동합니다.');
-            }
-            if (this.state.gameMode === 'SOCIAL' && this.state.taskIndex === 2) {
-                this.state.background = 'FOREST';
-                this.updateBackground();
-                this.addMessage('system', '🌲 다시 곰에게 돌아갑니다.');
+            if (dmg >= 60) {
+                this.addMessage('system', "🔥 Critical Hit! 완벽한 해결책입니다!");
             }
 
-            // Move to next task
-            setTimeout(() => {
-                this.state.taskIndex++;
-                this.updateTaskGuide();
-            }, 1000);
+            if (newHp <= 0) {
+                this.handleStageCleared();
+            } else {
+                this.handleCounterAttack();
+            }
         } else {
-            // End of current mode
-            if (this.state.gameMode === 'COMBAT') {
-                this.handleCombatEnd();
-            } else if (this.state.gameMode === 'SOCIAL') {
-                this.handleGameEnd();
-            }
+            this.handleFailedAttack();
         }
     }
 
-    handleCombatEnd() {
-        this.addMessage('system', '✨ 곰이 공격을 멈췄습니다!');
-        this.state.monsterHp = 0;
-        this.state.monsterState = 'SAD';
-        this.state.gameMode = 'SOCIAL';
-        this.state.taskIndex = 0;
+    handleStageCleared() {
+        this.state.stageCount++;
+        this.state.phase = 'REWARD';
 
-        this.updateHpBar();
-        this.updateCharacter();
-        this.updateModeDisplay();
-        this.updateTaskGuide();
+        const clearMsg = this.state.currentMonster.category === 'REAL_LIFE'
+            ? `✅ 문제 해결 완료! ${this.state.currentMonster.name} 상황을 극복했습니다.`
+            : `🏆 ${this.state.currentMonster.name} 처치! 보상을 선택하세요.`;
+
+        this.addMessage('system', clearMsg);
+        this.showRewardScreen();
     }
 
-    handleGameEnd() {
-        this.state.monsterState = 'HAPPY';
-        this.state.gameMode = 'END';
-        this.addMessage('system', '🎉 미션 성공! 문이 열렸습니다!');
+    handleCounterAttack() {
+        const damageAmount = Math.floor(Math.random() * 10) + 5;
+        this.state.playerHp = Math.max(0, this.state.playerHp - damageAmount);
+        this.updateHp();
 
-        this.updateCharacter();
-        this.updateModeDisplay();
-        this.taskGuide.classList.add('hidden');
-        this.userInput.disabled = true;
-        this.userInput.placeholder = '미션 완료! 🎊';
+        const attackMsg = this.state.currentMonster.category === 'REAL_LIFE'
+            ? `💦 상황이 악화되었습니다. 스트레스를 받습니다. (HP -${damageAmount})`
+            : `💥 몬스터가 반격합니다! (HP -${damageAmount})`;
+
+        this.addMessage('system', attackMsg);
+
+        if (this.state.playerHp <= 0) {
+            this.showGameOver();
+        }
+    }
+
+    handleFailedAttack() {
+        const damageAmount = 15;
+        this.state.playerHp = Math.max(0, this.state.playerHp - damageAmount);
+        this.updateHp();
+
+        const failMsg = this.state.currentMonster.category === 'REAL_LIFE'
+            ? `❌ 해결 실패! 상황이 더 꼬였습니다. (HP -${damageAmount})`
+            : `❌ 주문 실패! 몬스터에게 강하게 맞았습니다. (HP -${damageAmount})`;
+
+        this.addMessage('system', failMsg);
+
+        if (this.state.playerHp <= 0) {
+            this.showGameOver();
+        }
+    }
+
+    showRewardScreen() {
+        this.rewardScreen.classList.remove('hidden');
+        this.artifactChoices.innerHTML = '';
+
+        ARTIFACTS.forEach(art => {
+            const btn = document.createElement('button');
+            btn.className = 'artifact-card';
+            btn.innerHTML = `
+                <div class="artifact-icon">${art.icon}</div>
+                <div class="artifact-name">${art.name}</div>
+                <div class="artifact-desc">${art.desc}</div>
+            `;
+            btn.addEventListener('click', () => this.selectArtifact(art));
+            this.artifactChoices.appendChild(btn);
+        });
+    }
+
+    selectArtifact(artifact) {
+        if (artifact.type === 'CONSUMABLE') {
+            if (artifact.id === 'Potion') {
+                this.state.playerHp = Math.min(this.state.maxHp, this.state.playerHp + 50);
+                this.updateHp();
+            }
+        } else {
+            this.state.inventory.push(artifact);
+            this.updateInventory();
+
+            if (artifact.id === 'ManaCrystal') {
+                this.state.maxMana += 20;
+                this.state.mana += 20;
+                this.updateMana();
+            }
+        }
+
+        this.addMessage('system', `🎁 ${artifact.name} 획득! 다음 스테이지로 이동합니다...`);
+        this.rewardScreen.classList.add('hidden');
+
+        setTimeout(() => {
+            this.startStage();
+        }, 1000);
+    }
+
+    showGameOver() {
+        this.gameScreen.classList.add('hidden');
+        this.gameoverScreen.classList.remove('hidden');
     }
 
     addMessage(sender, text, scaffoldingType = null) {
@@ -411,12 +438,12 @@ class UIController {
             header.className = 'wiz-header';
             header.innerHTML = `
                 <span class="wiz-name">🪄 Wiz</span>
-                ${this.getScaffoldingBadge(scaffoldingType)}
+                <span class="scaffolding-badge">${scaffoldingType} Support</span>
             `;
             messageDiv.appendChild(header);
         }
 
-        const textNode = document.createElement('span');
+        const textNode = document.createElement('div');
         textNode.textContent = text;
         messageDiv.appendChild(textNode);
 
@@ -426,94 +453,81 @@ class UIController {
         this.state.messages.push({ sender, text, scaffoldingType });
     }
 
-    getScaffoldingBadge(type) {
-        const badges = {
-            'Conceptual': '<span class="scaffolding-badge badge-conceptual">🧠 Conceptual</span>',
-            'Strategic': '<span class="scaffolding-badge badge-strategic">🎯 Strategic</span>',
-            'Metacognitive': '<span class="scaffolding-badge badge-metacognitive">💡 Reflection</span>',
-            'Motivational': '<span class="scaffolding-badge badge-motivational">😊 Cheer Up</span>',
-            'Success': '<span class="scaffolding-badge badge-success">✨ Success</span>'
-        };
-        return badges[type] || '';
-    }
-
     setLoading(isLoading) {
         this.state.isLoading = isLoading;
         this.sendBtn.disabled = isLoading;
         this.userInput.disabled = isLoading;
 
+        this.sendIcon.textContent = isLoading ? '⟳' : '➤';
         if (isLoading) {
-            this.sendBtn.classList.add('loading');
-            this.sendIcon.textContent = '⟳';
+            this.sendIcon.classList.add('loading');
         } else {
-            this.sendBtn.classList.remove('loading');
-            this.sendIcon.textContent = '➤';
+            this.sendIcon.classList.remove('loading');
         }
     }
 
-    updateModeDisplay() {
-        this.gameModeDisplay.textContent = this.state.gameMode;
+    updateEntityDisplay() {
+        if (!this.state.currentMonster) return;
+
+        this.entityIcon.textContent = this.state.currentMonster.icon;
+        this.entityIcon.style.fontSize = '80px';
+
+        const hpPercent = (this.state.monsterHp / this.state.currentMonster.maxHp) * 100;
+        this.entityHpFill.style.width = `${hpPercent}%`;
+
+        const prefix = this.state.currentMonster.category === 'REAL_LIFE' ? '🏙️ Mission: ' : `Lv.${this.state.stageCount} `;
+        this.entityName.textContent = prefix + this.state.currentMonster.name;
+
+        // Show weakness hint if artifact exists
+        const hasGrimoire = this.state.inventory.some(i => i.id === 'GrimoirePage');
+        if (hasGrimoire) {
+            this.weaknessHint.textContent = `👁️ Key Word: ${this.state.currentMonster.weakness[0]}`;
+            this.weaknessHint.classList.remove('hidden');
+        } else {
+            this.weaknessHint.classList.add('hidden');
+        }
     }
 
     updateTaskGuide() {
-        const task = this.state.currentTask;
-        const isCombat = this.state.gameMode === 'COMBAT';
+        if (!this.state.currentMonster) return;
 
-        this.taskGuide.classList.remove('hidden', 'combat', 'social');
-        this.taskGuide.classList.add(isCombat ? 'combat' : 'social');
-
-        this.taskType.textContent = isCombat ? '⚔️ Combat Task' : '🗣️ Social Task';
-        this.taskStep.textContent = `Step ${this.state.taskIndex + 1}`;
-        this.taskInstruction.textContent = task.guide || '';
-    }
-
-    updateHpBar() {
-        this.hpFill.style.width = `${this.state.monsterHp}%`;
-
-        if (this.state.monsterHp <= 0) {
-            this.hpBarContainer.style.display = 'none';
-        }
-    }
-
-    updateCharacter() {
-        const icon = this.characterIcon;
-        const char = this.character;
-
-        // Remove all state classes
-        icon.classList.remove('calm', 'happy', 'shop');
-        char.classList.remove('angry');
-
-        if (this.state.background === 'SHOP') {
-            icon.classList.add('shop');
-            icon.textContent = '🛒';
-        } else {
-            icon.textContent = '🐻';
-
-            switch (this.state.monsterState) {
-                case 'ANGRY':
-                    char.classList.add('angry');
-                    break;
-                case 'SAD':
-                    icon.classList.add('calm');
-                    break;
-                case 'HAPPY':
-                    icon.classList.add('happy');
-                    break;
-            }
-        }
+        const isRealLife = this.state.currentMonster.category === 'REAL_LIFE';
+        this.taskGuide.className = `task-guide ${isRealLife ? 'real-life' : 'monster'}`;
+        this.taskGuide.innerHTML = `
+            <div class="task-header">
+                <span>${isRealLife ? 'Real Life Mission' : 'Survival Mode'}</span>
+                <span>Target: ${this.state.currentMonster.type}</span>
+            </div>
+            <div class="task-desc">${this.state.currentMonster.desc}</div>
+        `;
+        this.taskGuide.classList.remove('hidden');
     }
 
     updateBackground() {
-        if (this.state.background === 'SHOP') {
-            this.stage.classList.add('shop-bg');
+        if (this.state.currentMonster?.category === 'REAL_LIFE') {
+            this.stage.classList.add('real-life-bg');
         } else {
-            this.stage.classList.remove('shop-bg');
+            this.stage.classList.remove('real-life-bg');
         }
-        this.updateCharacter();
+    }
+
+    updateHp() {
+        this.hpDisplay.textContent = `${this.state.playerHp}/${this.state.maxHp}`;
     }
 
     updateMana() {
-        this.manaDisplay.textContent = this.state.mana;
+        this.manaDisplay.textContent = `${this.state.mana}/${this.state.maxMana}`;
+    }
+
+    updateInventory() {
+        this.inventory.innerHTML = '';
+        this.state.inventory.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'inventory-item';
+            div.title = item.name;
+            div.textContent = item.icon;
+            this.inventory.appendChild(div);
+        });
     }
 
     // Mana Quiz
@@ -523,10 +537,10 @@ class UIController {
     }
 
     renderQuiz() {
-        const quiz = QUIZ_DATA[this.state.quizIndex];
+        const quiz = VOCAB_QUIZZES[this.state.quizIndex];
         this.quizWord.textContent = quiz.q;
+        this.quizFeedback.textContent = '';
 
-        // Generate options (correct answer + random wrong answers)
         const options = this.generateQuizOptions(quiz.a);
         this.quizOptions.innerHTML = '';
 
@@ -540,57 +554,37 @@ class UIController {
     }
 
     generateQuizOptions(correctAnswer) {
-        const allAnswers = QUIZ_DATA.map(q => q.a);
+        const allAnswers = VOCAB_QUIZZES.map(q => q.a);
         const wrongAnswers = allAnswers.filter(a => a !== correctAnswer);
-
-        // Shuffle and pick 3 wrong answers
         const shuffled = wrongAnswers.sort(() => Math.random() - 0.5).slice(0, 3);
-
-        // Add correct answer and shuffle all
         return [...shuffled, correctAnswer].sort(() => Math.random() - 0.5);
     }
 
     checkQuizAnswer(selected, correct) {
         if (selected === correct) {
-            this.state.mana += 10;
+            this.state.mana = Math.min(this.state.maxMana, this.state.mana + 10);
             this.updateMana();
+            this.quizFeedback.textContent = 'Correct! (+10 Mana)';
+            this.quizFeedback.className = 'quiz-feedback correct';
 
-            if (this.state.quizIndex < QUIZ_DATA.length - 1) {
-                this.state.quizIndex++;
+            setTimeout(() => {
+                this.state.quizIndex = (this.state.quizIndex + 1) % VOCAB_QUIZZES.length;
                 this.renderQuiz();
-            } else {
-                alert('🎉 마나 충전 완료!');
-                this.state.quizIndex = 0;
-                this.manaModal.classList.add('hidden');
-            }
+            }, 1000);
         } else {
-            alert('❌ 다시 시도해보세요!');
+            this.quizFeedback.textContent = 'Wrong! Try again.';
+            this.quizFeedback.className = 'quiz-feedback wrong';
         }
-    }
-
-    // Initialize game
-    startGame() {
-        this.state.gameMode = 'INTRO';
-        this.updateModeDisplay();
-        this.addMessage('wiz', `안녕! 위즈야. ${SCENARIO_DATA.intro}`);
-
-        setTimeout(() => {
-            this.state.gameMode = 'COMBAT';
-            this.updateModeDisplay();
-            this.updateTaskGuide();
-            this.character.classList.add('angry');
-        }, 2000);
     }
 }
 
 // ==========================================
-// Initialize Game
+// Initialize
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     const gameState = new GameState();
     const ui = new UIController(gameState);
-    ui.startGame();
 
-    console.log('🎮 Wiz Academy - Grammar Quest loaded!');
+    console.log('🎮 Wiz Academy - Roguelike Quest loaded!');
     console.log('📝 API 키를 설정하려면 CONFIG.API_KEY에 Gemini API 키를 입력하세요.');
 });
