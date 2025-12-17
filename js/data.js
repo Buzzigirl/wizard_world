@@ -204,18 +204,90 @@ export const THEMES = [
         music: 'https://cdn.pixabay.com/audio/2021/11/01/audio_00fa556557.mp3',
         mobImg: 'assets/scorpion.png', bossImg: 'assets/sandworm.png',
         monsters: [
-            { name: "모래 전갈", target: "I freeze sand", desc: "전갈이 모래 속에 숨었습니다. '나는 모래를 얼린다(I freeze sand)'라고 마법을 거세요!" },
-            { name: "맹독 전갈", target: "Remove poison", desc: "독침이 위험합니다! '독을 제거해(Remove poison)'라고 외쳐 해독하세요." },
-            { name: "강철 전갈", target: "Break armor", desc: "껍질이 너무 단단해요. '갑옷을 부숴(Break armor)'라고 명령하세요!" },
-            { name: "사막 도적", target: "Stop stealing", desc: "도적이 물건을 훔치려 합니다. '훔치지 마(Stop stealing)'라고 경고하세요." },
-            { name: "미라 병사", target: "Rest in peace", desc: "미라가 깨어났습니다. '편히 잠드소서(Rest in peace)'라고 안식을 주세요." }
+            {
+                name: "모래 전갈",
+                dialogues: [{
+                    guide: "전갈이 모래 속에 숨었습니다. 'freeze' (얼리다) 단어를 써서 모래를 얼려보세요!",
+                    keywords: ["freeze", "sand"],
+                    perfect: ["I freeze sand", "Freeze sand"],
+                    feedback: "I(나는) + freeze(얼린다) + sand(모래를).",
+                    hint: "정답 형식: I f_____ sand"
+                }]
+            },
+            {
+                name: "맹독 전갈",
+                dialogues: [{
+                    guide: "독침이 위험합니다! 'remove' (제거하다)와 'poison' (독)을 사용해 해독하세요.",
+                    keywords: ["remove", "poison"],
+                    perfect: ["Remove poison", "Remove the poison"],
+                    feedback: "Remove(제거해) + poison(독을).",
+                    hint: "정답 형식: R_____ poison"
+                }]
+            },
+            {
+                name: "강철 전갈",
+                dialogues: [{
+                    guide: "껍질이 너무 단단해요. 'break' (부수다)와 'armor' (갑옷)으로 깨뜨리세요!",
+                    keywords: ["break", "armor"],
+                    perfect: ["Break armor", "Break the armor"],
+                    feedback: "Break(부숴) + armor(갑옷을).",
+                    hint: "정답 형식: B_____ armor"
+                }]
+            },
+            {
+                name: "사막 도적",
+                dialogues: [{
+                    guide: "도적이 물건을 훔치려 합니다. 'stop' (멈춰)과 'stealing' (훔치기)으로 경고하세요.",
+                    keywords: ["stop", "stealing"],
+                    perfect: ["Stop stealing", "Stop the stealing"],
+                    feedback: "Stop(멈춰) + stealing(훔치는 것을).",
+                    hint: "정답 형식: S___ stealing"
+                }]
+            },
+            {
+                name: "미라 병사",
+                dialogues: [{
+                    guide: "미라가 깨어났습니다. 'rest' (쉬다)와 'peace' (평화)로 안식을 주세요.",
+                    keywords: ["rest", "peace"],
+                    perfect: ["Rest in peace", "Peace for you"],
+                    feedback: "Rest(쉬어라) + in peace(평화롭게).",
+                    hint: "정답 형식: R___ in peace"
+                }]
+            }
         ],
         boss: {
             name: "거대 샌드웜", hp: 400,
             phases: [
-                { hp: 300, msg: "샌드웜이 모래폭풍을 일으킵니다!", target: "Stop the storm", desc: "폭풍이 몰아칩니다! '폭풍을 멈춰(Stop the storm)'라고 외쳐 막으세요!" },
-                { hp: 150, msg: "샌드웜이 삼키려 합니다!", target: "I block mouth", desc: "입을 벌리고 달려듭니다! '나는 입을 막는다(I block mouth)'라고 방어하세요!" },
-                { hp: 0, msg: "샌드웜이 사막 깊이 숨습니다.", target: "Rain fall down", desc: "마무리는 비를 뿌리는 것입니다. '비야 내려라(Rain fall down)'라고 외치세요!" }
+                {
+                    hp: 300, msg: "샌드웜이 모래폭풍을 일으킵니다!",
+                    dialogues: [{
+                        guide: "폭풍이 몰아칩니다! 'stop' (멈추다)과 'storm' (폭풍)으로 막으세요!",
+                        keywords: ["stop", "storm"],
+                        perfect: ["Stop the storm", "Stop storm"],
+                        feedback: "Stop(멈춰라) + the storm(그 폭풍을).",
+                        hint: "정답 형식: S___ the storm"
+                    }]
+                },
+                {
+                    hp: 150, msg: "샌드웜이 삼키려 합니다!",
+                    dialogues: [{
+                        guide: "입을 벌리고 달려듭니다! 'block' (막다)과 'mouth' (입)으로 방어하세요!",
+                        keywords: ["block", "mouth"],
+                        perfect: ["I block mouth", "Block the mouth"],
+                        feedback: "I(나는) + block(막는다) + mouth(입을).",
+                        hint: "정답 형식: I b____ mouth"
+                    }]
+                },
+                {
+                    hp: 0, msg: "샌드웜이 사막 깊이 숨습니다.",
+                    dialogues: [{
+                        guide: "마무리는 비를 뿌리는 것입니다. 'rain' (비)과 'fall' (내리다)을 외쳐요!",
+                        keywords: ["rain", "fall"],
+                        perfect: ["Rain fall down", "Let rain fall"],
+                        feedback: "Rain(비야) + fall down(내려라).",
+                        hint: "정답 형식: R___ fall down"
+                    }]
+                }
             ]
         }
     },
@@ -226,18 +298,90 @@ export const THEMES = [
         music: 'https://cdn.pixabay.com/audio/2022/03/15/audio_201de9832c.mp3',
         mobImg: 'assets/demon_soldier.png', bossImg: 'assets/demon_king.png',
         monsters: [
-            { name: "마계 병사", target: "Drop weapon", desc: "병사가 무기를 들고 덤빕니다. '무기를 버려(Drop weapon)'라고 명령하세요!" },
-            { name: "마계 정예병", target: "Kneel down", desc: "강력한 정예병입니다. 위엄 있게 '무릎 꿇어(Kneel down)'라고 외치세요." },
-            { name: "암흑 기사", target: "Light shine", desc: "어둠에 싸여 공격이 통하지 않습니다. '빛아 비춰라(Light shine)'라고 외치세요!" },
-            { name: "서큐버스", target: "Go away", desc: "현혹되지 마세요. 단호하게 '저리 가(Go away)'라고 거절하세요." },
-            { name: "지옥견", target: "Sit down dog", desc: "사나운 개가 짖습니다. '앉아, 개야(Sit down dog)'라고 명령해서 진정시키세요." }
+            {
+                name: "마계 병사",
+                dialogues: [{
+                    guide: "병사가 무기를 들고 덤빕니다. 'drop' (내려놓다)과 'weapon' (무기)을 사용하세요!",
+                    keywords: ["drop", "weapon"],
+                    perfect: ["Drop weapon", "Drop your weapon"],
+                    feedback: "Drop(내려놔) + weapon(무기를).",
+                    hint: "정답 형식: D___ weapon"
+                }]
+            },
+            {
+                name: "마계 정예병",
+                dialogues: [{
+                    guide: "강력한 정예병입니다. 'kneel' (무릎 꿇다)과 'down' (아래로)을 당당히 외치세요!",
+                    keywords: ["kneel", "down"],
+                    perfect: ["Kneel down", "Kneel"],
+                    feedback: "Kneel(무릎 꿇어) + down(아래로).",
+                    hint: "정답 형식: K____ down"
+                }]
+            },
+            {
+                name: "암흑 기사",
+                dialogues: [{
+                    guide: "어둠에 싸여 공격이 통하지 않습니다. 'light' (빛)과 'shine' (빛나다)으로 물리치세요!",
+                    keywords: ["light", "shine"],
+                    perfect: ["Light shine", "Shine light"],
+                    feedback: "Light(빛아) + shine(빛나라).",
+                    hint: "정답 형식: L____ shine"
+                }]
+            },
+            {
+                name: "서큐버스",
+                dialogues: [{
+                    guide: "현혹되지 마세요! 'go' (가다)와 'away' (떨어져서)로 단호하게 거절하세요.",
+                    keywords: ["go", "away"],
+                    perfect: ["Go away", "Get away"],
+                    feedback: "Go(가) + away(저리).",
+                    hint: "정답 형식: G_ away"
+                }]
+            },
+            {
+                name: "지옥견",
+                dialogues: [{
+                    guide: "사나운 개가 짖습니다. 'sit' (앉다)과 'down' (아래로)으로 명령하세요!",
+                    keywords: ["sit", "down", "dog"],
+                    perfect: ["Sit down dog", "Sit down"],
+                    feedback: "Sit(앉아) + down(아래로) + dog(개야).",
+                    hint: "정답 형식: S__ down dog"
+                }]
+            }
         ],
         boss: {
             name: "대마왕", hp: 1000,
             phases: [
-                { hp: 700, msg: "마왕이 세상을 조롱합니다.", target: "We have hope", desc: "마왕이 희망이 없다고 비웃습니다. '우리에겐 희망이 있다(We have hope)'라고 반박하세요!" },
-                { hp: 300, msg: "마왕이 파괴 마법을 영창합니다!", target: "Reflect magic", desc: "강력한 마법을 반사해야 합니다. '마법 반사(Reflect magic)'를 외치세요!" },
-                { hp: 0, msg: "마왕이 소멸합니다. 세상에 평화가...", target: "Peace for world", desc: "마지막 일격입니다! '세상을 위해 평화를(Peace for world)'이라고 외치며 끝내세요!" }
+                {
+                    hp: 700, msg: "마왕이 세상을 조롱합니다.",
+                    dialogues: [{
+                        guide: "마왕이 희망이 없다고 비웃습니다. 'hope' (희망)을 보여주세요!",
+                        keywords: ["hope", "have"],
+                        perfect: ["We have hope", "Hope is alive"],
+                        feedback: "We(우리에겐) + have(있어) + hope(희망이).",
+                        hint: "정답 형식: We h___ hope"
+                    }]
+                },
+                {
+                    hp: 300, msg: "마왕이 파괴 마법을 영창합니다!",
+                    dialogues: [{
+                        guide: "강력한 마법을 반사해야 합니다. 'reflect' (반사하다)와 'magic' (마법)을 외치세요!",
+                        keywords: ["reflect", "magic"],
+                        perfect: ["Reflect magic", "Magic reflect"],
+                        feedback: "Reflect(반사해) + magic(마법을).",
+                        hint: "정답 형식: R______ magic"
+                    }]
+                },
+                {
+                    hp: 0, msg: "마왕이 소멸합니다. 세상에 평화가...",
+                    dialogues: [{
+                        guide: "마지막 일격입니다! 'peace' (평화)와 'world' (세상)를 외치며 끝내세요!",
+                        keywords: ["peace", "world"],
+                        perfect: ["Peace for world", "World peace"],
+                        feedback: "Peace(평화를) + for world(세상을 위해).",
+                        hint: "정답 형식: P____ for world"
+                    }]
+                }
             ]
         }
     }
