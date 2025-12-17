@@ -317,22 +317,27 @@ body.low-hp::after {
     gap: 15px;
 }
 
-/* 1. Host Comment (Situation) - Top Center */
+/* 1. Host Comment (Situation) - Top Center (Raised) */
 #monster-situation {
     position: static;
     color: #ffd700;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+    /* Larger for center focus */
     font-weight: bold;
     text-shadow: 0 2px 4px black;
     background: rgba(0, 0, 0, 0.6);
-    padding: 10px 30px;
-    border-radius: 30px;
-    width: 80%;
-    /* Match Chat Width */
+    padding: 15px 40px;
+    border-radius: 40px;
+    width: auto;
+    max-width: 90%;
+    /* Auto width, centered */
+    min-width: 50%;
     text-align: center;
     order: 1;
     z-index: 10;
-    margin-bottom: 0;
+    margin-bottom: 20px;
+    /* Spacing from HP bar */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* 2. HP Bar - Below Comment, Above Monster */
@@ -377,26 +382,28 @@ body.low-hp::after {
     text-shadow: 0 2px 5px black;
 }
 
-/* Chat (Bottom & Matched Width) */
+/* Chat (Very Bottom & Full Width) */
 .chat-overlay {
     position: absolute;
-    bottom: 20px;
+    bottom: 5px;
     /* Very bottom */
     left: 50%;
     transform: translateX(-50%);
-    width: 80%;
-    /* Match Host Comment Width */
+    width: 96%;
+    /* Almost full width */
     height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    /* Slightly darker */
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
+    border-radius: 16px;
     padding: 10px;
     backdrop-filter: blur(10px);
-    z-index: 20;
+    z-index: 30;
+    /* Higher z-index */
 }
 
 .msg {
