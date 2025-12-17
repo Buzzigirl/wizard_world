@@ -57,153 +57,93 @@ export const THEMES = [
         desc: '초급 모험가를 위한 숲입니다. 멧돼지와 엔트가 출현합니다.',
         bg: 'assets/bg_forest.png',
         music: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
-        mobImg: 'assets/boar.png', bossImg: 'assets/treant.png',
+        mobImg: 'assets/f1.png', bossImg: 'assets/f3.png',
         monsters: [
             {
-                name: "어린 멧돼지",
+                name: "귀여운 멧돼지", // Changed from "어린 멧돼지"
+                img: 'assets/f1.png', // Explicit img
                 dialogues: [
                     {
-                        guide: "멧돼지가 꿀꿀거리며 날뛰고 있어요! 진정시켜야 해요. 'calm' (진정하다) 단어를 써서 '나는 진정한다'라고 영어로 말해볼까요?",
-                        keywords: ["calm"],
-                        syntax: "I (S) + calm (V) + down",
-                        perfect: ["I calm down", "I calm you down", "Calm down"],
-                        feedback: "주어 I(나는) 다음에 동사 calm(진정하다)을 써보세요. 뒤에 down을 붙이면 더 좋아요!",
-                        hint: "정답 형식: I c___ down (나는 진정한다)"
+                        guide: "아기 멧돼지가 놀고 싶어해요. 'play' (놀다)를 써서 같이 놀자고 말해보세요.",
+                        keywords: ["play"],
+                        syntax: "Let's (Aux) + play (V)",
+                        perfect: ["Let's play", "Let us play"],
+                        feedback: "Let's(하자) + play(놀다).",
+                        hint: "정답 형식: L____ play"
                     },
                     {
-                        guide: "휴, 조금 조용해졌네요. 이제 우리가 친구라고 안심시켜 주세요. 'friend' (친구) 단어를 쓸 수 있죠?",
-                        keywords: ["friend"],
-                        syntax: "We (S) + are (V) + friends (C)",
-                        perfect: ["We are friends", "You are my friend", "Nature is friend"],
-                        feedback: "We(우리는) + are(이다) + friends(친구들). 이 순서로 말해보세요!",
-                        hint: "정답 형식: We are f______"
+                        guide: "배가 고픈가 봐요. 'eat' (먹다)과 'apple' (사과)을 주세요.",
+                        keywords: ["eat", "apple"],
+                        syntax: "Eat (V) + this apple (O)",
+                        perfect: ["Eat this apple", "Eat apple"],
+                        feedback: "Eat(먹어라) + apple(사과를).",
+                        hint: "정답 형식: E__ this a____"
                     }
                 ]
             },
             {
-                name: "성난 멧돼지",
+                name: "꼬마 버섯", // New Monster
+                img: 'assets/f2.png',
                 dialogues: [
                     {
-                        guide: "저런, 멧돼지가 다친 것 같아요. 치료해주겠다고 말해요. 'heal' (치료하다) 단어를 사용해 보세요.",
-                        keywords: ["heal"],
-                        syntax: "I (S) + heal (V) + you (O)",
-                        perfect: ["I heal you", "I will heal you"],
-                        feedback: "I(내가) + heal(치료한다) + you(너를). 간단하죠?",
-                        hint: "정답 형식: I h___ you"
+                        guide: "버섯이 춤추고 있어요! 'dance' (춤추다)라고 말해서 응원해주세요.",
+                        keywords: ["dance"],
+                        syntax: "You (S) + dance (V) + well (Adv)",
+                        perfect: ["You dance well", "Dance mushroom"],
+                        feedback: "You(너는) + dance(춤춘다).",
+                        hint: "정답 형식: You d____ well"
                     },
                     {
-                        guide: "상처가 생각보다 깊어요! 마법을 써야겠어요. 'magic' (마법) 단어를 넣어볼까요?",
-                        keywords: ["magic"],
-                        syntax: "I (S) + use (V) + magic (O)",
-                        perfect: ["I use magic", "Healing magic"],
-                        feedback: "I use(나는 사용한다) 뒤에 magic(마법)을 붙여보세요.",
-                        hint: "정답 형식: I use m____"
-                    }
-                ]
-            },
-            {
-                name: "광란의 멧돼지",
-                dialogues: [
-                    {
-                        guide: "위험해요! 멧돼지가 돌진합니다! 'stop' (멈추다)이라고 크게 외쳐서 막으세요!",
-                        keywords: ["stop"],
-                        syntax: "Stop (V) + it (O)",
-                        perfect: ["Stop it", "Please stop", "Stop running"],
-                        feedback: "강하게 'Stop'(멈춰) 뒤에 'it'을 붙여보세요.",
-                        hint: "정답 형식: S___ it!"
-                    },
-                    {
-                        guide: "아직 흥분이 안 가라앉았어요. 집으로 돌아가라고 하세요. 'home' (집) 단어를 아시죠?",
-                        keywords: ["home", "back"],
-                        syntax: "Go (V) + back home (Adv)",
-                        perfect: ["Go back home", "Go home"],
-                        feedback: "Go(가라) + back home(집으로). 명령하듯이 말해보세요.",
-                        hint: "정답 형식: Go b___ h___"
-                    }
-                ]
-            },
-            {
-                name: "숲의 파괴자",
-                dialogues: [
-                    {
-                        guide: "이 괴물이 숲을 망치고 있어요! 'protect' (지키다) 단어를 써서 숲을 지킨다고 말하세요!",
-                        keywords: ["protect"],
-                        syntax: "I (S) + protect (V) + forest (O)",
-                        perfect: ["I protect forest", "I protect nature"],
-                        feedback: "I(나는) + protect(지킨다) + forest(숲). 숲은 영어로 forest예요.",
-                        hint: "정답 형식: I p______ forest"
-                    },
-                    {
-                        guide: "나무들이 쓰러져 있어요. 다시 자라나라고 말해줘요. 'grow' (자라다)를 써보세요.",
+                        guide: "버섯이 쑥쑥 자라네요. 'grow' (자라다)를 써보세요.",
                         keywords: ["grow"],
-                        syntax: "Trees (S) + grow (V) + again (Adv)",
-                        perfect: ["Trees grow again", "Let trees grow"],
-                        feedback: "Trees(나무들아) + grow(자라라) + again(다시).",
-                        hint: "정답 형식: Trees g___ again"
-                    }
-                ]
-            },
-            {
-                name: "오염된 정령",
-                dialogues: [
-                    {
-                        guide: "정령이 검게 변했어요. 'pure' (순수한) 단어를 써서 다시 순수해지라고 해주세요.",
-                        keywords: ["pure"],
-                        syntax: "Be (V) + pure (C) + again",
-                        perfect: ["Be pure again", "You are pure"],
-                        feedback: "Be(되어라) + pure(순수하게) + again(다시).",
-                        hint: "정답 형식: Be p___ again"
-                    },
-                    {
-                        guide: "아직 어둠이 남았어요. 'light' (빛)를 비춰주세요!",
-                        keywords: ["light"],
-                        syntax: "Light (S) + shine (V)",
-                        perfect: ["Light shine", "Show me light"],
-                        feedback: "Light(빛아) + shine(빛나라).",
-                        hint: "정답 형식: L____ shine"
+                        syntax: "Grow (V) + tall (Adj)",
+                        perfect: ["Grow tall", "Grow fast"],
+                        feedback: "Grow(자라라) + tall(키가 크게).",
+                        hint: "정답 형식: G___ tall"
                     }
                 ]
             }
         ],
         boss: {
-            name: "숲의 주인 엔트", hp: 300,
+            name: "장로 엔트", hp: 300,
+            img: 'assets/f3.png',
             phases: [
                 {
-                    hp: 200, msg: "엔트가 당신을 경계합니다.",
+                    hp: 200, msg: "엔트가 인자하게 웃습니다.",
                     dialogues: [
                         {
-                            guide: "엔트가 인간을 믿지 않아요. 'respect' (존중하다) 단어를 써서 당신을 존중한다고 말해주세요.",
-                            keywords: ["respect"],
-                            syntax: "I (S) + respect (V) + nature (O)",
-                            perfect: ["I respect nature", "I respect you"],
-                            feedback: "I(나는) + respect(존중한다) + nature(자연을).",
-                            hint: "정답 형식: I r______ nature"
+                            guide: "엔트에게 숲이 아름답다고 말해주세요. 'forest' (숲)와 'beautiful' (아름다운).",
+                            keywords: ["forest", "beautiful"],
+                            syntax: "The forest (S) + is (V) + beautiful (C)",
+                            perfect: ["The forest is beautiful", "Forest is beautiful"],
+                            feedback: "The forest(숲은) + is(이다) + beautiful(아름다운).",
+                            hint: "정답 형식: The f_____ is b________"
                         }
                     ]
                 },
                 {
-                    hp: 100, msg: "엔트가 숲의 지혜를 묻습니다.",
+                    hp: 100, msg: "엔트가 가지를 흔듭니다.",
                     dialogues: [
                         {
-                            guide: "엔트가 당신을 시험합니다. 'listen' (듣다) 단어를 사용해, 나무의 소리를 듣는다고 답하세요.",
-                            keywords: ["listen"],
-                            syntax: "I (S) + listen to (V) + tree (O)",
-                            perfect: ["I listen to tree", "I listen to nature"],
-                            feedback: "I listen to(나는 ~를 듣는다) + tree(나무).",
-                            hint: "정답 형식: I l_____ to tree"
+                            guide: "엔트와 친구가 되고 싶나요? 'be' (되다)와 'friends' (친구)를 쓰세요.",
+                            keywords: ["friends"],
+                            syntax: "Let's (Aux) + be (V) + friends (C)",
+                            perfect: ["Let's be friends", "We are friends"],
+                            feedback: "Let's be(되자) + friends(친구가).",
+                            hint: "정답 형식: Let's be f______"
                         }
                     ]
                 },
                 {
-                    hp: 0, msg: "엔트가 평온을 되찾습니다.",
+                    hp: 0, msg: "엔트가 꽃을 피웁니다.",
                     dialogues: [
                         {
-                            guide: "마지막 관문입니다! 숲을 지키겠다고 맹세하세요. 'protect' (지키다)를 사용하세요.",
-                            keywords: ["protect", "save"],
-                            syntax: "Protect (V) + the forest (O)",
-                            perfect: ["Protect the forest", "I save the forest"],
-                            feedback: "Protect(지켜라) + the forest(그 숲을).",
-                            hint: "정답 형식: P______ the forest"
+                            guide: "이제 작별 인사를 해요. 'goodbye' (안녕)!",
+                            keywords: ["goodbye", "bye"],
+                            syntax: "Goodbye (Interj) + friend (N)",
+                            perfect: ["Goodbye friend", "Bye bye"],
+                            feedback: "Goodbye(안녕) + friend(친구야).",
+                            hint: "정답 형식: G______ friend"
                         }
                     ]
                 }
@@ -219,6 +159,7 @@ export const THEMES = [
         monsters: [
             {
                 name: "모래 전갈",
+                img: 'assets/scorpion.png',
                 dialogues: [{
                     guide: "전갈이 모래 속에 숨었습니다. 'freeze' (얼리다) 단어를 써서 모래를 얼려보세요!",
                     keywords: ["freeze", "sand"],
@@ -230,6 +171,7 @@ export const THEMES = [
             },
             {
                 name: "맹독 전갈",
+                img: 'assets/scorpion.png', // Reusing image
                 dialogues: [{
                     guide: "독침이 위험합니다! 'remove' (제거하다)와 'poison' (독)을 사용해 해독하세요.",
                     keywords: ["remove", "poison"],
@@ -239,42 +181,11 @@ export const THEMES = [
                     hint: "정답 형식: R_____ poison"
                 }]
             },
-            {
-                name: "강철 전갈",
-                dialogues: [{
-                    guide: "껍질이 너무 단단해요. 'break' (부수다)와 'armor' (갑옷)으로 깨뜨리세요!",
-                    keywords: ["break", "armor"],
-                    syntax: "Break (V) + armor (O)",
-                    perfect: ["Break armor", "Break the armor"],
-                    feedback: "Break(부숴) + armor(갑옷을).",
-                    hint: "정답 형식: B_____ armor"
-                }]
-            },
-            {
-                name: "사막 도적",
-                dialogues: [{
-                    guide: "도적이 물건을 훔치려 합니다. 'stop' (멈춰)과 'stealing' (훔치기)으로 경고하세요.",
-                    keywords: ["stop", "stealing"],
-                    syntax: "Stop (V) + stealing (O)",
-                    perfect: ["Stop stealing", "Stop the stealing"],
-                    feedback: "Stop(멈춰) + stealing(훔치는 것을).",
-                    hint: "정답 형식: S___ stealing"
-                }]
-            },
-            {
-                name: "미라 병사",
-                dialogues: [{
-                    guide: "미라가 깨어났습니다. 'rest' (쉬다)와 'peace' (평화)로 안식을 주세요.",
-                    keywords: ["rest", "peace"],
-                    syntax: "Rest (V) + in peace (Adv)",
-                    perfect: ["Rest in peace", "Peace for you"],
-                    feedback: "Rest(쉬어라) + in peace(평화롭게).",
-                    hint: "정답 형식: R___ in peace"
-                }]
-            }
+
         ],
         boss: {
             name: "거대 샌드웜", hp: 400,
+            img: 'assets/sandworm.png',
             phases: [
                 {
                     hp: 300, msg: "샌드웜이 모래폭풍을 일으킵니다!",
@@ -299,14 +210,14 @@ export const THEMES = [
                     }]
                 },
                 {
-                    hp: 0, msg: "샌드웜이 사막 깊이 숨습니다.",
+                    hp: 0, msg: "샌드웜이 힘을 잃습니다.",
                     dialogues: [{
-                        guide: "마무리는 비를 뿌리는 것입니다. 'rain' (비)과 'fall' (내리다)을 외쳐요!",
-                        keywords: ["rain", "fall"],
-                        syntax: "Rain (S) + fall down (V)",
-                        perfect: ["Rain fall down", "Let rain fall"],
-                        feedback: "Rain(비야) + fall down(내려라).",
-                        hint: "정답 형식: R___ fall down"
+                        guide: "마지막 일격입니다! 'finish' (끝내다)를 외쳐요!",
+                        keywords: ["finish"],
+                        syntax: "I (S) + finish (V) + it (O)",
+                        perfect: ["I finish it", "Finish it"],
+                        feedback: "Finish(끝내라) + it(그것을).",
+                        hint: "정답 형식: F_____ it"
                     }]
                 }
             ]
@@ -314,104 +225,76 @@ export const THEMES = [
     },
     {
         id: 'CASTLE', name: '마왕성',
-        desc: '최상급 난이도. 마왕과의 최종 결전이 기다립니다.',
+        desc: '최종 관문입니다. 마왕을 물리치세요!',
         bg: 'assets/bg_castle.png',
-        music: 'https://cdn.pixabay.com/audio/2022/03/15/audio_201de9832c.mp3',
+        music: 'https://cdn.pixabay.com/audio/2022/03/09/audio_822f354972.mp3',
         mobImg: 'assets/demon_soldier.png', bossImg: 'assets/demon_king.png',
         monsters: [
             {
-                name: "마계 병사",
+                name: "성 지킴이",
+                img: 'assets/demon_soldier.png',
                 dialogues: [{
-                    guide: "병사가 무기를 들고 덤빕니다. 'drop' (내려놓다)과 'weapon' (무기)을 사용하세요!",
-                    keywords: ["drop", "weapon"],
-                    syntax: "Drop (V) + the weapon (O)",
-                    perfect: ["Drop weapon", "Drop your weapon"],
-                    feedback: "Drop(내려놔) + weapon(무기를).",
-                    hint: "정답 형식: D___ weapon"
+                    guide: "문을 지키고 있습니다. 'open' (열다)과 'gate' (문)를 사용하세요.",
+                    keywords: ["open", "gate"],
+                    syntax: "Open (V) + the gate (O)",
+                    perfect: ["Open the gate", "Open gate"],
+                    feedback: "Open(열어라) + the gate(문을).",
+                    hint: "정답 형식: O___ the gate"
                 }]
             },
             {
-                name: "마계 정예병",
+                name: "정예 기사",
+                img: 'assets/demon_soldier.png',
                 dialogues: [{
-                    guide: "강력한 정예병입니다. 'kneel' (무릎 꿇다)과 'down' (아래로)을 당당히 외치세요!",
-                    keywords: ["kneel", "down"],
-                    syntax: "Kneel (V) + down (Adv)",
-                    perfect: ["Kneel down", "Kneel"],
-                    feedback: "Kneel(무릎 꿇어) + down(아래로).",
-                    hint: "정답 형식: K____ down"
+                    guide: "강력한 기사입니다. 'fight' (싸우다)으로 도전장을 내미세요.",
+                    keywords: ["fight"],
+                    syntax: "I (S) + will (Aux) + fight (V)",
+                    perfect: ["I will fight", "I fight you"],
+                    feedback: "I will(나는 할 것이다) + fight(싸우다).",
+                    hint: "정답 형식: I w___ fight"
                 }]
             },
-            {
-                name: "암흑 기사",
-                dialogues: [{
-                    guide: "어둠에 싸여 공격이 통하지 않습니다. 'light' (빛)과 'shine' (빛나다)으로 물리치세요!",
-                    keywords: ["light", "shine"],
-                    syntax: "Light (S) + shine (V)",
-                    perfect: ["Light shine", "Shine light"],
-                    feedback: "Light(빛아) + shine(빛나라).",
-                    hint: "정답 형식: L____ shine"
-                }]
-            },
-            {
-                name: "서큐버스",
-                dialogues: [{
-                    guide: "현혹되지 마세요! 'go' (가다)와 'away' (떨어져서)로 단호하게 거절하세요.",
-                    keywords: ["go", "away"],
-                    syntax: "Go (V) + away (Adv)",
-                    perfect: ["Go away", "Get away"],
-                    feedback: "Go(가) + away(저리).",
-                    hint: "정답 형식: G_ away"
-                }]
-            },
-            {
-                name: "지옥견",
-                dialogues: [{
-                    guide: "사나운 개가 짖습니다. 'sit' (앉다)과 'down' (아래로)으로 명령하세요!",
-                    keywords: ["sit", "down", "dog"],
-                    syntax: "Sit (V) + down (Adv)",
-                    perfect: ["Sit down dog", "Sit down"],
-                    feedback: "Sit(앉아) + down(아래로) + dog(개야).",
-                    hint: "정답 형식: S__ down dog"
-                }]
-            }
+
         ],
         boss: {
-            name: "대마왕", hp: 1000,
+            name: "마왕", hp: 500,
+            img: 'assets/demon_king.png',
             phases: [
                 {
-                    hp: 700, msg: "마왕이 세상을 조롱합니다.",
+                    hp: 350, msg: "마왕이 어둠의 힘을 모읍니다.",
                     dialogues: [{
-                        guide: "마왕이 희망이 없다고 비웃습니다. 'hope' (희망)을 보여주세요!",
-                        keywords: ["hope", "have"],
-                        syntax: "We (S) + have (V) + hope (O)",
-                        perfect: ["We have hope", "Hope is alive"],
-                        feedback: "We(우리에겐) + have(있어) + hope(희망이).",
-                        hint: "정답 형식: We h___ hope"
+                        guide: "어둠을 걷어내야 해요! 'light' (빛)여 비추어라!",
+                        keywords: ["light"],
+                        syntax: "Let (V) + light (S) + shine (V)",
+                        perfect: ["Let light shine", "Light shine"],
+                        feedback: "Let light(빛이 하게 해라) + shine(비추도록).",
+                        hint: "정답 형식: L__ light shine"
                     }]
                 },
                 {
-                    hp: 300, msg: "마왕이 파괴 마법을 영창합니다!",
+                    hp: 150, msg: "마왕이 최후의 발악을 합니다.",
                     dialogues: [{
-                        guide: "강력한 마법을 반사해야 합니다. 'reflect' (반사하다)와 'magic' (마법)을 외치세요!",
-                        keywords: ["reflect", "magic"],
-                        syntax: "Reflect (V) + magic (O)",
-                        perfect: ["Reflect magic", "Magic reflect"],
-                        feedback: "Reflect(반사해) + magic(마법을).",
-                        hint: "정답 형식: R______ magic"
+                        guide: "결계가 무너집니다. 'strike' (공격하다)로 끝내세요!",
+                        keywords: ["strike"],
+                        syntax: "Strike (V) + now (Adv)",
+                        perfect: ["Strike now", "I strike now"],
+                        feedback: "Strike(공격해) + now(지금).",
+                        hint: "정답 형식: S_____ now"
                     }]
                 },
                 {
-                    hp: 0, msg: "마왕이 소멸합니다. 세상에 평화가...",
+                    hp: 0, msg: "마왕이 쓰러집니다.",
                     dialogues: [{
-                        guide: "마지막 일격입니다! 'peace' (평화)와 'world' (세상)를 외치며 끝내세요!",
-                        keywords: ["peace", "world"],
-                        syntax: "Peace (S/O) + for world",
-                        perfect: ["Peace for world", "World peace"],
-                        feedback: "Peace(평화를) + for world(세상을 위해).",
-                        hint: "정답 형식: P____ for world"
+                        guide: "세상을 구했습니다! 'victory' (승리)를 외치세요!",
+                        keywords: ["victory"],
+                        syntax: "This (S) + is (V) + victory (C)",
+                        perfect: ["This is victory", "Victory"],
+                        feedback: "This is(이것은 ~이다) + victory(승리).",
+                        hint: "정답 형식: This is v______"
                     }]
                 }
             ]
         }
     }
 ];
+

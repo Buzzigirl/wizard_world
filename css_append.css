@@ -1,0 +1,22 @@
+/* Monster Floating Animation */
+@keyframes monsterFloat {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.monster-img {
+    animation: monsterFloat 3s ease-in-out infinite;
+    /* Ensure image fits well */
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
