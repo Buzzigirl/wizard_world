@@ -57,11 +57,11 @@ export const THEMES = [
         desc: '초급 모험가를 위한 숲입니다. 멧돼지와 엔트가 출현합니다.',
         bg: 'assets/bg_forest.png',
         music: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
-        mobImg: 'assets/f1.png', bossImg: 'assets/f3.png',
+        mobImg: 'assets/1.png', bossImg: 'assets/3.png',
         monsters: [
             {
                 name: "귀여운 멧돼지", // Changed from "어린 멧돼지"
-                img: 'assets/f1.png', // Explicit img
+                img: 'assets/1.png', // Explicit img
                 dialogues: [
                     {
                         guide: "아기 멧돼지가 놀고 싶어해요. 'play' (놀다)를 써서 같이 놀자고 말해보세요.",
@@ -83,7 +83,7 @@ export const THEMES = [
             },
             {
                 name: "꼬마 버섯", // New Monster
-                img: 'assets/f2.png',
+                img: 'assets/2.png',
                 dialogues: [
                     {
                         guide: "버섯이 춤추고 있어요! 'dance' (춤추다)라고 말해서 응원해주세요.",
@@ -106,7 +106,7 @@ export const THEMES = [
         ],
         boss: {
             name: "장로 엔트", hp: 300,
-            img: 'assets/f3.png',
+            img: 'assets/3.png',
             phases: [
                 {
                     hp: 200, msg: "엔트가 인자하게 웃습니다.",
@@ -155,11 +155,11 @@ export const THEMES = [
         desc: '중급 모험가를 위한 사막입니다. 전갈과 샌드웜을 조심하세요.',
         bg: 'assets/bg_desert.png',
         music: 'https://cdn.pixabay.com/audio/2021/11/01/audio_00fa556557.mp3',
-        mobImg: 'assets/d1.png', bossImg: 'assets/d3.png',
+        mobImg: 'assets/7.png', bossImg: 'assets/9.png',
         monsters: [
             {
                 name: "모래 전갈",
-                img: 'assets/d1.png',
+                img: 'assets/7.png',
                 dialogues: [{
                     guide: "전갈이 모래 속에 숨었습니다. 'freeze' (얼리다) 단어를 써서 모래를 얼려보세요!",
                     keywords: ["freeze", "sand"],
@@ -171,7 +171,7 @@ export const THEMES = [
             },
             {
                 name: "선인장 투사", // Renamed for Cute Cactus feel (d2.png)
-                img: 'assets/d2.png', // New Asset
+                img: 'assets/8.png', // New Asset
                 dialogues: [{
                     guide: "독침이 위험합니다! 'remove' (제거하다)와 'poison' (독)을 사용해 해독하세요.",
                     keywords: ["remove", "poison"],
@@ -185,7 +185,7 @@ export const THEMES = [
         ],
         boss: {
             name: "거대 샌드웜", hp: 400,
-            img: 'assets/d3.png',
+            img: 'assets/9.png',
             phases: [
                 {
                     hp: 300, msg: "샌드웜이 모래폭풍을 일으킵니다!",
@@ -228,11 +228,11 @@ export const THEMES = [
         desc: '최종 관문입니다. 마왕을 물리치세요!',
         bg: 'assets/bg_castle.png',
         music: 'https://cdn.pixabay.com/audio/2022/03/09/audio_822f354972.mp3',
-        mobImg: 'assets/m1.png', bossImg: 'assets/m3.png',
+        mobImg: 'assets/4.png', bossImg: 'assets/6.png',
         monsters: [
             {
                 name: "장난꾸러기 임프", // Renamed for Cute Imp (m1.png)
-                img: 'assets/m1.png',
+                img: 'assets/4.png',
                 dialogues: [{
                     guide: "문을 지키고 있습니다. 'open' (열다)과 'gate' (문)를 사용하세요.",
                     keywords: ["open", "gate"],
@@ -244,7 +244,7 @@ export const THEMES = [
             },
             {
                 name: "꼬마 갑옷", // Renamed for Cute Armor (m2.png)
-                img: 'assets/m2.png',
+                img: 'assets/5.png',
                 dialogues: [{
                     guide: "갑옷이 혼자 움직입니다! 'stop' (멈추다)을 외쳐보세요.",
                     keywords: ["fight"],
@@ -258,7 +258,7 @@ export const THEMES = [
         ],
         boss: {
             name: "마왕", hp: 500,
-            img: 'assets/m3.png',
+            img: 'assets/6.png',
             phases: [
                 {
                     hp: 350, msg: "마왕이 어둠의 힘을 모읍니다.",
