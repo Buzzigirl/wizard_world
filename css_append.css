@@ -15,9 +15,42 @@
 /* Adjust chat overlay for better visibility */
 .chat-overlay {
     max-height: 40vh !important;
-    /* Limit chat height */
+    overflow-x: hidden !important;
+    /* Prevent horizontal scroll */
     overflow-y: auto !important;
+    /* Enable vertical scroll only */
     flex-shrink: 0;
+}
+
+/* Speech bubble style for scaffolder dialogue */
+#fairy-scaffold {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    min-height: 120px;
+    padding: 20px 25px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 193, 7, 0.9));
+    border-radius: 20px;
+    color: #1a1a1a;
+    margin-top: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+    border: 3px solid rgba(255, 255, 255, 0.6);
+    position: relative;
+    font-weight: 600;
+}
+
+/* Speech bubble tail */
+#fairy-scaffold::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid rgba(255, 215, 0, 0.95);
 }
 
 /* Responsive adjustments for smaller screens */
