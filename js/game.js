@@ -41,10 +41,17 @@ export class GameState {
     generateMonster(stage) {
         const theme = this.getTheme();
         const isBoss = stage === 3; // Reduced to 3 stages (3F = Boss)
-        if (isBoss) return { ...theme.boss, maxHp: theme.boss.hp, img: theme.bossImg, isBoss: true };
+        if (isBoss) {
+            // Use boss.img from theme data
+            return {
+                ...theme.boss,
+                maxHp: theme.boss.hp,
+                img: theme.boss.img, // Use boss's own image
+                isBoss: true
+            };
+        }
 
         const mobTemplate = theme.monsters[stage - 1]; // Map 1,2 to index 0,1
-        // Fallback if monster not found (though index 0-4 exist, stage 1-2 are safe)
         const mob = mobTemplate || theme.monsters[0];
 
         const baseHp = 80 + (stage * 20) + (this.themeIdx * 30);
@@ -54,15 +61,12 @@ export class GameState {
             { hp: 0, msg: `${mob.name}을(를) 제압했습니다!`, target: "Finish it" }
         ];
 
-        // Initialize Dialogue for Mob (Non-Boss)
-        // If it's a mob, we treat the whole fight as a sequence of dialogues.
-        // We attach the dialogues array to the monster object.
-        const mobDialogues = mob.dialogues || []; // Fallback empty
+        const mobDialogues = mob.dialogues || [];
 
         return {
             name: mob.name,
             hp: baseHp, maxHp: baseHp,
-            img: theme.mobImg,
+            img: mob.img, // Use individual mob's image
             phases: phases,
             isBoss: false,
             dialogues: mobDialogues,
@@ -354,9 +358,22 @@ Respond in JSON format:
             return;
         }
         this.mana -= 10;
-        this.ui.updateHUD(); // UI update needs manual call? Or updateRoundUI?
-        const hint = this.getMonsterPhase().target;
-        this.ui.addChat('system', `💡 힌트: ${hint}`);
+        this.ui.updateHUD();
+
+        // Get current dialogue's perfect answer
+        const dialogue = this.getCurrentDialogue();
+        if (dialogue && dialogue.perfect && dialogue.perfect[0]) {
+            const answer = dialogue.perfect[0];
+            const words = answer.split(' ');
+            // Show first letter of each word, rest as dashes
+            const hint = words.map(word => {
+                if (word.length === 0) return '';
+                return word[0] + '-'.repeat(word.length - 1);
+            }).join(' ');
+            this.ui.addChat('system', `💡 힌트: ${hint}`);
+        } else {
+            this.ui.addChat('system', `💡 힌트: ${dialogue.hint}`);
+        }
     }
 
     stageClear() {
