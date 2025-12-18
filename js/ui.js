@@ -206,17 +206,29 @@ export class UIManager {
         // Update stage objective - show learning goal, not the answer
         const dialogue = this.game.getCurrentDialogue();
         let objective = "문법 학습 중";
-        if (dialogue) {
-            // Extract learning goal from syntax or create descriptive goal
-            const syntax = dialogue.syntax || "";
-            if (syntax.includes("Subject + Verb")) {
+        if (dialogue && dialogue.syntax) {
+            const syntax = dialogue.syntax;
+
+            // Analyze syntax pattern and create learning goal
+            if (syntax.includes("Let's") || syntax.includes("Aux")) {
+                objective = "제안하기 표현 학습";
+            } else if (syntax.includes("(S)") && syntax.includes("(V)") && syntax.includes("(O)")) {
+                objective = "3형식 문장 구조 학습";
+            } else if (syntax.includes("(S)") && syntax.includes("(V)") && syntax.includes("(Adv)")) {
+                objective = "부사 활용 문장 학습";
+            } else if (syntax.includes("(S)") && syntax.includes("(V)")) {
                 objective = "주어 + 동사 구조 학습";
+            } else if (syntax.includes("(V)") && syntax.includes("(O)")) {
+                objective = "동사 + 목적어 구조 학습";
+            } else if (syntax.includes("(V)") && syntax.includes("(Adj)")) {
+                objective = "동사 + 형용사 구조 학습";
             } else if (syntax.includes("be동사")) {
                 objective = "be동사 활용 학습";
             } else if (syntax.includes("형용사")) {
                 objective = "형용사 사용법 학습";
-            } else if (syntax) {
-                objective = `${syntax} 구조 학습`;
+            } else {
+                // Default: show simplified structure
+                objective = "영어 문장 구조 학습";
             }
         }
         const objectiveEl = document.getElementById('display-objective');
