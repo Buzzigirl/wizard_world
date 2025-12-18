@@ -205,6 +205,65 @@ Respond in JSON format:
         }
     }
 
+    // --- Continuous AI Scaffolding ---
+    async provideAIScaffolding(dialogue) {
+        if (!CONFIG.AI_ENABLED) return null;
+
+        try {
+            const prompt = `You are an English grammar teacher providing scaffolding for a student.
+
+Current dialogue context: ${dialogue.guide.replace(/<br>/g, ' ')}
+Expected answer: "${dialogue.perfect[0]}"
+Syntax pattern: ${dialogue.syntax}
+
+Provide ONE appropriate scaffolding message in Korean (2-3 sentences) that helps the student understand what they need to do. Choose the most appropriate type:
+
+1. **Metacognitive**: Help them think about their thinking process
+2. **Strategic**: Guide them on the approach or structure
+3. **Conceptual**: Explain the grammar concept
+4. **Motivational**: Encourage and build confidence
+
+Respond in JSON format:
+{
+  "type": "Metacognitive|Strategic|Conceptual|Motivational",
+  "message": "Korean scaffolding message"
+}`;
+
+            const result = await this.callOpenAI(prompt);
+            return result;
+        } catch (error) {
+            console.error('AI Scaffolding Error:', error);
+            return {
+                type: "Motivational",
+                message: "화이팅! 천천히 생각해보세요. 💪"
+            };
+        }
+    }
+
+    // Helper to display AI scaffolding in fairy panel
+    async showAIScaffolding(dialogue) {
+        if (!CONFIG.AI_ENABLED) return;
+
+        const scaffolding = await this.provideAIScaffolding(dialogue);
+        if (scaffolding && scaffolding.message) {
+            const fairyScaffold = document.getElementById('fairy-scaffold');
+            if (fairyScaffold) {
+                fairyScaffold.textContent = `[${scaffolding.type}] ${scaffolding.message}`;
+                fairyScaffold.style.color = this.getScaffoldColor(scaffolding.type);
+            }
+        }
+    }
+
+    getScaffoldColor(type) {
+        const colors = {
+            'Metacognitive': '#60a5fa',  // Blue
+            'Strategic': '#34d399',      // Green
+            'Conceptual': '#fbbf24',     // Yellow
+            'Motivational': '#f87171'    // Red
+        };
+        return colors[type] || '#ffd700';
+    }
+
     async castSpell(input) {
         if (!input) return;
         this.ui.addChat('user', input);
@@ -242,7 +301,15 @@ Respond in JSON format:
             if (!this.currentMonster.isBoss && this.currentMonster.currentDialogueIndex < this.currentMonster.dialogues.length - 1) {
                 this.currentMonster.currentDialogueIndex++;
                 const nextD = this.getCurrentDialogue();
-                setTimeout(() => this.ui.addChat('guide', `[가이드] ${nextD.guide}`), 800);
+                setTimeout(() => {
+                    this.ui.addChat('guide', `[가이드] ${nextD.guide}`);
+                    // Provide AI scaffolding for new dialogue
+                    this.showAIScaffolding(nextD);
+                }, 800);
+            } else {
+                // Same dialogue, provide scaffolding
+                const currentD = this.getCurrentDialogue();
+                this.showAIScaffolding(currentD);
             }
 
             if (this.currentMonster.hp <= 0) {

@@ -1,22 +1,43 @@
-/* Monster Floating Animation */
-@keyframes monsterFloat {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-15px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
+/* Enhanced Scaffolder (Fairy) Panel - Larger dialogue area */
+.fairy-area {
+    min-height: 250px;
+    /* Increased from default */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-.monster-img {
-    animation: monsterFloat 3s ease-in-out infinite;
-    /* Ensure image fits well */
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
+.fairy-info-box {
+    min-height: 180px;
+    /* Larger dialogue box */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.scaffold-msg {
+    font-size: 1.1rem;
+    /* Larger text */
+    line-height: 1.6;
+    min-height: 120px;
+    /* More space for scaffolding messages */
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    margin-top: 10px;
+}
+
+#fairy-scaffold {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    min-height: 120px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    color: #ffd700;
+    margin-top: 10px;
+    text-align: center;
 }
