@@ -163,15 +163,24 @@ export class GameState {
         }
 
         try {
-            const prompt = `You are an English grammar teacher evaluating a student's answer.
+            const prompt = `You are a friendly English teacher helping an elementary school student learn English grammar.
 
 Expected answer: "${dialogue.perfect[0]}"
 Student's answer: "${userAnswer}"
 Context: ${dialogue.guide.replace(/<br>/g, ' ')}
+Grammar pattern: ${dialogue.syntax}
 
-Task 1: Is the student's answer semantically correct and grammatically acceptable? Consider synonyms (e.g., "hit" vs "punch"), different phrasings, and natural variations.
+Task 1: Is the student's answer semantically correct and grammatically acceptable? 
+- Consider synonyms (e.g., "hit" vs "punch", "play" vs "have fun")
+- Accept different phrasings that mean the same thing
+- Accept natural variations in expression
 
-Task 2: If incorrect, provide brief scaffolding feedback in Korean (1-2 sentences) that guides the student without giving the full answer.
+Task 2: If the answer is incorrect, provide helpful feedback in Korean (2-4 sentences) that:
+- Explains what part is wrong in simple terms
+- Gives a hint about the correct grammar pattern
+- Encourages the student to try again
+- Uses simple, friendly language suitable for elementary students
+- Example: "주어(누가)와 동사(무엇을)의 순서를 확인해보세요. '${dialogue.syntax}' 형태로 만들어야 해요. 다시 한번 도전해볼까요?"
 
 Respond in JSON format:
 {
@@ -216,18 +225,32 @@ Respond in JSON format:
         if (!CONFIG.AI_ENABLED) return null;
 
         try {
-            const prompt = `You are an English grammar teacher providing scaffolding for a student.
+            const prompt = `You are a friendly English teacher helping an elementary school student.
 
-Current dialogue context: ${dialogue.guide.replace(/<br>/g, ' ')}
-Expected answer: "${dialogue.perfect[0]}"
-Syntax pattern: ${dialogue.syntax}
+Current situation: ${dialogue.guide.replace(/<br>/g, ' ')}
+Expected answer pattern: "${dialogue.perfect[0]}"
+Grammar structure: ${dialogue.syntax}
+Hint: ${dialogue.hint}
 
-Provide ONE appropriate scaffolding message in Korean (2-3 sentences) that helps the student understand what they need to do. Choose the most appropriate type:
+Provide ONE helpful scaffolding message in Korean (3-4 sentences) that:
+- Explains the grammar pattern in simple, clear terms
+- Gives specific examples or hints
+- Uses encouraging, friendly language
+- Helps the student understand what to do step by step
 
-1. **Metacognitive**: Help them think about their thinking process
-2. **Strategic**: Guide them on the approach or structure
-3. **Conceptual**: Explain the grammar concept
-4. **Motivational**: Encourage and build confidence
+Choose the most appropriate scaffolding type:
+
+1. **Metacognitive** (사고 과정): Help them think about HOW to approach the problem
+   Example: "먼저 누가 무엇을 하는지 생각해보세요. 주어는 '누가'이고, 동사는 '무엇을 한다'예요. 이 순서대로 문장을 만들어보세요!"
+
+2. **Strategic** (전략): Guide them on the sentence structure and order
+   Example: "영어 문장은 '주어 + 동사' 순서로 만들어요. 예를 들어 '나는 놀아'는 'I play'가 되는 거예요. 이 형태를 따라해보세요!"
+
+3. **Conceptual** (개념): Explain the grammar concept clearly
+   Example: "현재형 문장은 지금 하는 일을 말해요. '주어 + 동사' 형태로 만들면 돼요. 주어가 '나'면 'I', 동사가 '놀다'면 'play'를 써요!"
+
+4. **Motivational** (격려): Encourage and build confidence
+   Example: "잘하고 있어요! 영어 문장 만들기는 연습하면 쉬워져요. 천천히 생각하고 다시 한번 도전해보세요! 💪"
 
 Respond in JSON format:
 {
