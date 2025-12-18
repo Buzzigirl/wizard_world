@@ -163,7 +163,12 @@ export class GameState {
         }
 
         try {
-            const prompt = `You are a friendly English teacher helping an elementary school student learn English grammar.
+            const scaffolderPersonality = this.fairy.personality || "친절한 선생님";
+            const scaffolderStyle = this.fairy.speechStyle || "부드럽고 차분한 말투";
+
+            const prompt = `You are a friendly English teacher helping an elementary school student.
+You are speaking as "${this.fairy.name}" with personality: ${scaffolderPersonality}
+Speech style: ${scaffolderStyle}
 
 Expected answer: "${dialogue.perfect[0]}"
 Student's answer: "${userAnswer}"
@@ -176,16 +181,17 @@ Task 1: Is the student's answer semantically correct and grammatically acceptabl
 - Accept natural variations in expression
 
 Task 2: If the answer is incorrect, provide helpful feedback in Korean (2-4 sentences) that:
-- Explains what part is wrong in simple terms
-- Gives a hint about the correct grammar pattern
+- Uses ${this.fairy.name}'s speech style: ${scaffolderStyle}
+- Explains what part is wrong in simple terms WITHOUT giving the answer
+- Gives a hint about the grammar pattern to think about
 - Encourages the student to try again
-- Uses simple, friendly language suitable for elementary students
-- Example: "주어(누가)와 동사(무엇을)의 순서를 확인해보세요. '${dialogue.syntax}' 형태로 만들어야 해요. 다시 한번 도전해볼까요?"
+- NEVER reveals the complete correct answer
+- Example: "음... 순서를 다시 생각해봐! 영어는 '누가' 먼저 오고 '무엇을' 나중에 와. 다시 한번 도전!"
 
 Respond in JSON format:
 {
   "isCorrect": true/false,
-  "feedback": "Korean feedback text or null if correct"
+  "feedback": "Korean feedback text in ${this.fairy.name}'s style or null if correct"
 }`;
 
             const result = await this.callOpenAI(prompt);
@@ -225,37 +231,53 @@ Respond in JSON format:
         if (!CONFIG.AI_ENABLED) return null;
 
         try {
+            const scaffolderPersonality = this.fairy.personality || "친절한 선생님";
+            const scaffolderStyle = this.fairy.speechStyle || "부드럽고 차분한 말투";
+
             const prompt = `You are a friendly English teacher helping an elementary school student.
 
+IMPORTANT: You are speaking as "${this.fairy.name}" with this personality: ${scaffolderPersonality}
+Speech style: ${scaffolderStyle}
+
 Current situation: ${dialogue.guide.replace(/<br>/g, ' ')}
-Expected answer pattern: "${dialogue.perfect[0]}"
-Grammar structure: ${dialogue.syntax}
-Hint: ${dialogue.hint}
+Grammar structure needed: ${dialogue.syntax}
+Hint available: ${dialogue.hint}
+
+CRITICAL RULES:
+1. DO NOT give the answer directly
+2. DO NOT show the complete sentence
+3. DO NOT reveal the exact words to use
+4. ONLY provide guidance on HOW to think or approach the problem
+5. Use the speech style of ${this.fairy.name}: ${scaffolderStyle}
 
 Provide ONE helpful scaffolding message in Korean (3-4 sentences) that:
-- Explains the grammar pattern in simple, clear terms
-- Gives specific examples or hints
-- Uses encouraging, friendly language
-- Helps the student understand what to do step by step
+- Matches ${this.fairy.name}'s personality and speech style
+- Guides thinking process WITHOUT giving the answer
+- Uses encouraging, age-appropriate language
+- Helps understand the grammar pattern conceptually
 
 Choose the most appropriate scaffolding type:
 
-1. **Metacognitive** (사고 과정): Help them think about HOW to approach the problem
-   Example: "먼저 누가 무엇을 하는지 생각해보세요. 주어는 '누가'이고, 동사는 '무엇을 한다'예요. 이 순서대로 문장을 만들어보세요!"
+1. **Metacognitive** (사고 과정): Help them think about HOW to approach
+   - Guide: "What should you think about first?"
+   - Example tone: "먼저 '누가' 하는 건지 생각해봐! 그 다음에 '무엇을' 하는지 생각하면 돼!"
 
-2. **Strategic** (전략): Guide them on the sentence structure and order
-   Example: "영어 문장은 '주어 + 동사' 순서로 만들어요. 예를 들어 '나는 놀아'는 'I play'가 되는 거예요. 이 형태를 따라해보세요!"
+2. **Strategic** (전략): Guide on sentence structure approach
+   - Guide: "What order should the words go in?"
+   - Example tone: "영어는 순서가 중요해! 주어가 먼저 오고, 그 다음에 동사가 와!"
 
-3. **Conceptual** (개념): Explain the grammar concept clearly
-   Example: "현재형 문장은 지금 하는 일을 말해요. '주어 + 동사' 형태로 만들면 돼요. 주어가 '나'면 'I', 동사가 '놀다'면 'play'를 써요!"
+3. **Conceptual** (개념): Explain the grammar concept
+   - Guide: "What does this grammar pattern mean?"
+   - Example tone: "이 문장은 '지금' 하는 일을 말하는 거야. 현재형이라고 해!"
 
 4. **Motivational** (격려): Encourage and build confidence
-   Example: "잘하고 있어요! 영어 문장 만들기는 연습하면 쉬워져요. 천천히 생각하고 다시 한번 도전해보세요! 💪"
+   - Guide: "You can do it!"
+   - Example tone: "잘하고 있어! 조금만 더 생각해보면 답을 찾을 수 있을 거야!"
 
 Respond in JSON format:
 {
   "type": "Metacognitive|Strategic|Conceptual|Motivational",
-  "message": "Korean scaffolding message"
+  "message": "Korean scaffolding message in ${this.fairy.name}'s speech style"
 }`;
 
             const result = await this.callOpenAI(prompt);
@@ -337,15 +359,22 @@ Respond in JSON format:
 
             // Advance Dialogue Logic (only if monster still alive)
             if (!this.currentMonster.isBoss && this.currentMonster.currentDialogueIndex < this.currentMonster.dialogues.length - 1) {
+                // Regular monster: advance to next dialogue
                 this.currentMonster.currentDialogueIndex++;
                 const nextD = this.getCurrentDialogue();
                 setTimeout(() => {
                     this.ui.addChat('guide', `[가이드] ${nextD.guide}`);
                     this.showAIScaffolding(nextD);
                 }, 800);
-            } else {
+            } else if (this.currentMonster.isBoss) {
+                // Boss: show scaffolding for current phase
                 const currentD = this.getCurrentDialogue();
-                this.showAIScaffolding(currentD);
+                if (currentD) {
+                    setTimeout(() => {
+                        this.ui.addChat('guide', `[가이드] ${currentD.guide}`);
+                        this.showAIScaffolding(currentD);
+                    }, 800);
+                }
             }
 
             this.ui.updateRoundUI();
