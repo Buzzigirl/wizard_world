@@ -273,52 +273,51 @@ Respond in JSON format:
 
         let result = this.analyzeInput(input, dialogue);
 
-        // --- HYBRID AI EVALUATION ---
-        if ((result.type === 'Strategic' || result.type === 'Conceptual') && CONFIG.AI_ENABLED) {
-            this.ui.addChat('system', '🤔 AI가 답변을 검토 중...');
+        // --- IMMEDIATE AI EVALUATION FOR ALL ANSWERS ---
+        this.ui.addChat('system', '🤔 AI가 답변을 검토 중...');
 
-            const aiResult = await this.aiEvaluate(input, dialogue);
+        const aiResult = await this.aiEvaluate(input, dialogue);
 
-            if (aiResult && aiResult.isCorrect) {
-                result = { type: 'Perfect', msg: null };
-                this.ui.addChat('system', '✨ AI가 정답으로 인정했습니다!');
-            } else if (aiResult && aiResult.feedback) {
-                result.msg = aiResult.feedback;
-            }
+        if (aiResult && aiResult.isCorrect) {
+            // AI says it's correct! Override rule-based result
+            result = { type: 'Perfect', msg: null };
+            this.ui.addChat('system', '✨ AI가 정답으로 인정했습니다!');
+        } else if (aiResult && aiResult.feedback) {
+            // AI provides feedback for incorrect answers
+            result.msg = aiResult.feedback;
         }
 
         if (result.type === 'Perfect') {
-            // PERFECT HIT
             // PERFECT HIT
             this.consecutiveErrors = 0;
             const dmg = this.atk * 2;
             this.currentMonster.hp = Math.max(0, this.currentMonster.hp - dmg);
 
-            this.ui.addChat('perfect', `✨ Perfect! ${this.playerClass.action}!! (${dmg} DMG)`); // New type 'perfect'
+            this.ui.addChat('perfect', `✨ Perfect! ${this.playerClass.action}!! (${dmg} DMG)`);
             this.ui.animateMonsterHit();
 
-            // Advance Dialogue Logic
+            // Check if monster is defeated FIRST
+            if (this.currentMonster.hp <= 0) {
+                this.ui.animateMonsterDeath();
+                this.ui.addChat('system', "적을 물리쳤습니다!");
+                setTimeout(() => this.stageClear(), 1500);
+                return; // Exit early to prevent dialogue advancement
+            }
+
+            // Advance Dialogue Logic (only if monster still alive)
             if (!this.currentMonster.isBoss && this.currentMonster.currentDialogueIndex < this.currentMonster.dialogues.length - 1) {
                 this.currentMonster.currentDialogueIndex++;
                 const nextD = this.getCurrentDialogue();
                 setTimeout(() => {
                     this.ui.addChat('guide', `[가이드] ${nextD.guide}`);
-                    // Provide AI scaffolding for new dialogue
                     this.showAIScaffolding(nextD);
                 }, 800);
             } else {
-                // Same dialogue, provide scaffolding
                 const currentD = this.getCurrentDialogue();
                 this.showAIScaffolding(currentD);
             }
 
-            if (this.currentMonster.hp <= 0) {
-                this.ui.animateMonsterDeath();
-                this.ui.addChat('system', "적을 물리쳤습니다!");
-                setTimeout(() => this.stageClear(), 1500);
-            } else {
-                this.ui.updateRoundUI();
-            }
+            this.ui.updateRoundUI();
 
         } else {
             // SCAFFOLDING FEEDBACK (Weak Hit or Miss logic can be adapted)
