@@ -16,12 +16,14 @@ export class AudioManager {
         // Sound effects
         this.soundEffects = {
             hit: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3'),
-            perfect: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3')
+            perfect: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3'),
+            buttonHover: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3'),
+            buttonClick: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3')
         };
 
         // Preload sound effects
         Object.values(this.soundEffects).forEach(sfx => {
-            sfx.volume = 0.5;
+            sfx.volume = 0.3; // Lower volume for UI sounds
             sfx.load();
         });
     }

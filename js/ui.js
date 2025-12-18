@@ -88,6 +88,29 @@ export class UIManager {
             }
         });
         document.querySelector('.hint-btn').addEventListener('click', () => this.game.useHint());
+
+        // Setup button sounds
+        this.setupButtonSounds();
+    }
+
+    setupButtonSounds() {
+        // Add sound effects to all buttons
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                this.game.audio.playSoundEffect('buttonHover');
+            });
+            btn.addEventListener('click', () => {
+                this.game.audio.playSoundEffect('buttonClick');
+            });
+        });
+    }
+
+    screenFlash(isPerfect = false) {
+        const flash = document.createElement('div');
+        flash.className = isPerfect ? 'screen-flash perfect' : 'screen-flash';
+        document.body.appendChild(flash);
+        setTimeout(() => flash.remove(), 400);
     }
 
     showScreen(id) {

@@ -301,6 +301,7 @@ Respond in JSON format:
 
             this.ui.addChat('perfect', `✨ Perfect! ${this.playerClass.action}!! (${dmg} DMG)`);
             this.audio.playSoundEffect('perfect'); // Perfect hit sound
+            this.ui.screenFlash(true); // Perfect flash effect
             this.ui.animateMonsterHit();
 
             // Check if monster is defeated FIRST
@@ -340,6 +341,7 @@ Respond in JSON format:
                 this.currentMonster.hp = Math.max(0, this.currentMonster.hp - dmg);
                 this.ui.addChat('system', `⚠️ 부분 적중! (${dmg} DMG)`);
                 this.audio.playSoundEffect('hit'); // Normal hit sound
+                this.ui.screenFlash(false); // Normal flash effect
                 this.ui.addChat('scaffold', result.msg, result.type); // type passed for styling
                 this.ui.animateMonsterHit();
                 this.ui.updateRoundUI();
