@@ -5,19 +5,11 @@
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
 /* Make battle-zone flexible */
 .battle-zone {
-    flex: 1;
-    min-height: 0;
-    /* Allow shrinking */
     overflow-y: auto;
-    /* Enable scrolling if needed */
-    display: flex;
-    flex-direction: column;
 }
 
 /* Adjust chat overlay for better visibility */
