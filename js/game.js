@@ -56,7 +56,7 @@ export class GameState {
         const mobTemplate = theme.monsters[stage - 1]; // Map 1,2 to index 0,1
         const mob = mobTemplate || theme.monsters[0];
 
-        const baseHp = 80 + (stage * 20) + (this.themeIdx * 30);
+        const baseHp = Math.floor((80 + (stage * 20) + (this.themeIdx * 30)) * 0.5); // Reduced to 50%
         const phases = [
             { hp: Math.floor(baseHp * 0.6), msg: `${mob.name}이(가) 위협합니다.`, target: mob.target },
             { hp: Math.floor(baseHp * 0.3), msg: `${mob.name}이(가) 주춤합니다.`, target: mob.target },

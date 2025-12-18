@@ -30,7 +30,8 @@
     padding: 20px 25px;
     background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 193, 7, 0.9));
     border-radius: 20px;
-    color: #1a1a1a;
+    color: #000000 !important;
+    /* Black text for better readability */
     margin-top: 15px;
     text-align: center;
     box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
@@ -51,6 +52,25 @@
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-bottom: 15px solid rgba(255, 215, 0, 0.95);
+}
+
+/* Improved Hint Button */
+.hint-btn {
+    margin-top: 20px !important;
+    padding: 15px 30px !important;
+    font-size: 1.3rem !important;
+    font-weight: bold !important;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+    color: #1a1a1a !important;
+    border: 3px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5) !important;
+    transition: all 0.3s ease !important;
+}
+
+.hint-btn:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(251, 191, 36, 0.7) !important;
+    background: linear-gradient(135deg, #fcd34d, #fbbf24) !important;
 }
 
 /* Responsive adjustments for smaller screens */
