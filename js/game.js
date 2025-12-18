@@ -1,4 +1,5 @@
 import { CLASSES, THEMES, CONFIG } from './data.js';
+import { AudioManager } from './audio.js';
 
 export class GameState {
     constructor() {
@@ -6,6 +7,7 @@ export class GameState {
         this.baseAtk = 0; this.bonusHp = 0; this.bonusMana = 0;
         this.ui = null; // To be injected
         this.aiCache = new Map(); // Cache AI responses
+        this.audio = new AudioManager(); // Audio system
         this.reset();
     }
 
@@ -298,6 +300,7 @@ Respond in JSON format:
             this.currentMonster.hp = Math.max(0, this.currentMonster.hp - dmg);
 
             this.ui.addChat('perfect', `✨ Perfect! ${this.playerClass.action}!! (${dmg} DMG)`);
+            this.audio.playSoundEffect('perfect'); // Perfect hit sound
             this.ui.animateMonsterHit();
 
             // Check if monster is defeated FIRST
@@ -336,6 +339,7 @@ Respond in JSON format:
                 const dmg = Math.floor(this.atk * 0.5);
                 this.currentMonster.hp = Math.max(0, this.currentMonster.hp - dmg);
                 this.ui.addChat('system', `⚠️ 부분 적중! (${dmg} DMG)`);
+                this.audio.playSoundEffect('hit'); // Normal hit sound
                 this.ui.addChat('scaffold', result.msg, result.type); // type passed for styling
                 this.ui.animateMonsterHit();
                 this.ui.updateRoundUI();

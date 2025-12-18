@@ -116,6 +116,7 @@ export class UIManager {
 
     showWorldMap() {
         this.showScreen('world');
+        this.game.audio.playBGMusic('lobby'); // Play lobby music
         const container = this.els.world.points;
         container.innerHTML = '';
         THEMES.forEach((t, i) => {
@@ -172,6 +173,9 @@ export class UIManager {
 
         const theme = this.game.getTheme();
         this.setBackground(theme.bg);
+
+        // Play theme-specific background music
+        this.game.audio.playBGMusic(theme.id); // forest, desert, castle
 
         this.els.hud.displayTheme.textContent = theme.name;
         this.els.hud.displayStage.textContent = mob.isBoss ? "BOSS" : `Stage ${this.game.stage}`;
