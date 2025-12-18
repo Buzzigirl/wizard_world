@@ -1,43 +1,68 @@
-/* Enhanced Scaffolder (Fairy) Panel - Larger dialogue area */
-.fairy-area {
-    min-height: 250px;
-    /* Increased from default */
+/* Responsive Layout Fixes - Prevent chat cutoff */
+
+/* Ensure game screen fits viewport */
+#screen-game {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    flex-direction: column;
 }
 
-.fairy-info-box {
-    min-height: 180px;
-    /* Larger dialogue box */
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    margin-top: 15px;
+/* Make battle-zone flexible */
+.battle-zone {
+    flex: 1;
+    min-height: 0;
+    /* Allow shrinking */
+    overflow-y: auto;
+    /* Enable scrolling if needed */
+    display: flex;
+    flex-direction: column;
 }
 
-.scaffold-msg {
-    font-size: 1.1rem;
-    /* Larger text */
-    line-height: 1.6;
-    min-height: 120px;
-    /* More space for scaffolding messages */
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    color: #fff;
-    margin-top: 10px;
+/* Adjust chat overlay for better visibility */
+.chat-overlay {
+    max-height: 40vh !important;
+    /* Limit chat height */
+    overflow-y: auto !important;
+    flex-shrink: 0;
 }
 
-#fairy-scaffold {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    min-height: 120px;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    color: #ffd700;
-    margin-top: 10px;
-    text-align: center;
+/* Responsive adjustments for smaller screens */
+@media (max-height: 800px) {
+    .monster-zone {
+        gap: 10px !important;
+    }
+
+    #monster-situation {
+        font-size: 1.2rem !important;
+        padding: 10px 30px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .monster-img {
+        width: 150px !important;
+        height: 150px !important;
+    }
+
+    .chat-overlay {
+        max-height: 30vh !important;
+    }
+}
+
+@media (max-height: 600px) {
+    .monster-img {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .chat-overlay {
+        max-height: 25vh !important;
+        font-size: 0.9rem !important;
+    }
+
+    #monster-situation {
+        font-size: 1rem !important;
+        padding: 8px 20px !important;
+    }
 }
