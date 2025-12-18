@@ -203,6 +203,14 @@ export class UIManager {
         this.els.hud.displayTheme.textContent = theme.name;
         this.els.hud.displayStage.textContent = mob.isBoss ? "BOSS" : `Stage ${this.game.stage}`;
 
+        // Update stage objective
+        const dialogue = this.game.getCurrentDialogue();
+        const objective = dialogue ? dialogue.syntax : "Complete the stage";
+        const objectiveEl = document.getElementById('display-objective');
+        if (objectiveEl) {
+            objectiveEl.textContent = `🎯 ${objective}`;
+        }
+
         this.els.game.mImg.src = mob.img;
         this.els.game.mImg.className = 'monster-img'; // Reset animations
         this.els.game.mName.textContent = mob.name;
