@@ -72,7 +72,7 @@ export const THEMES = [
                 img: 'assets/1.png', // Explicit img
                 dialogues: [
                     {
-                        guide: "꼬마 버섯이 놀고 싶어해요.<br>'play' (놀다)를 써서<br>같이 놀자고 말해보세요.",
+                        guide: "꼬마 버섯이 놀고 싶어해요.<br>'같이 놀자'라는 문장을<br>영어로 어떻게 말할 수 있을까요?",
                         keywords: ["play"],
                         syntax: "Let's (Aux) + play (V)",
                         perfect: ["Let's play", "Let us play", "Lets play", "Let's play together", "Play with me"],
@@ -80,7 +80,7 @@ export const THEMES = [
                         hint: "정답 형식: L____ play"
                     },
                     {
-                        guide: "버섯이 배가 고픈가 봐요.<br>'eat' (먹다)과 'apple' (사과)을<br>주세요.",
+                        guide: "버섯이 배가 고픈가 봐요.<br>'이 사과를 먹어'라는 문장을<br>영어로 어떻게 말할 수 있을까요?",
                         keywords: ["eat", "apple"],
                         syntax: "Eat (V) + this apple (O)",
                         perfect: ["Eat this apple", "Eat apple", "Eat the apple", "Eat an apple", "Have this apple", "Have an apple"],
@@ -94,7 +94,7 @@ export const THEMES = [
                 img: 'assets/2.png',
                 dialogues: [
                     {
-                        guide: "아기 나무가 춤추고 있어요!<br>'dance' (춤추다)라고 말해서<br>응원해주세요.",
+                        guide: "아기 나무가 춤추고 있어요!<br>'너 춤 잘 춠다'라는 문장을<br>영어로 어떻게 말할 수 있을까요?",
                         keywords: ["dance"],
                         syntax: "You (S) + dance (V) + well (Adv)",
                         perfect: ["You dance well", "Dance tree", "You dance", "Dance well", "You're dancing", "Keep dancing"],
