@@ -1,10 +1,11 @@
-import { CLASSES, THEMES } from './data.js';
+import { CLASSES, THEMES, CONFIG } from './data.js';
 
 export class GameState {
     constructor() {
         this.clearedThemes = JSON.parse(localStorage.getItem('clearedThemes') || '[]');
         this.baseAtk = 0; this.bonusHp = 0; this.bonusMana = 0;
         this.ui = null; // To be injected
+        this.aiCache = new Map(); // Cache AI responses
         this.reset();
     }
 
@@ -146,16 +147,89 @@ export class GameState {
         return matrix[b.length][a.length];
     }
 
-    castSpell(input) {
+    // --- AI Evaluation (Phase 3) ---
+    async aiEvaluate(userAnswer, dialogue) {
+        if (!CONFIG.AI_ENABLED) return null;
+
+        const cacheKey = `${userAnswer.toLowerCase()}:${dialogue.perfect[0]}`;
+        if (this.aiCache.has(cacheKey)) {
+            return this.aiCache.get(cacheKey);
+        }
+
+        try {
+            const prompt = `You are an English grammar teacher evaluating a student's answer.
+
+Expected answer: "${dialogue.perfect[0]}"
+Student's answer: "${userAnswer}"
+Context: ${dialogue.guide.replace(/<br>/g, ' ')}
+
+Task 1: Is the student's answer semantically correct and grammatically acceptable? Consider synonyms (e.g., "hit" vs "punch"), different phrasings, and natural variations.
+
+Task 2: If incorrect, provide brief scaffolding feedback in Korean (1-2 sentences) that guides the student without giving the full answer.
+
+Respond in JSON format:
+{
+  "isCorrect": true/false,
+  "feedback": "Korean feedback text or null if correct"
+}`;
+
+            const result = await this.callOpenAI(prompt);
+            this.aiCache.set(cacheKey, result);
+            return result;
+        } catch (error) {
+            console.error('AI Evaluation Error:', error);
+            return null;
+        }
+    }
+
+    async callOpenAI(prompt) {
+        const response = await fetch('/api/evaluate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || `Server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0].message.content.trim();
+
+        try {
+            return JSON.parse(content);
+        } catch (e) {
+            console.error('Failed to parse AI response:', content);
+            return null;
+        }
+    }
+
+    async castSpell(input) {
         if (!input) return;
         this.ui.addChat('user', input);
 
         const dialogue = this.getCurrentDialogue();
         if (!dialogue) { console.error("No dialogue"); return; }
 
-        const result = this.analyzeInput(input, dialogue);
+        let result = this.analyzeInput(input, dialogue);
+
+        // --- HYBRID AI EVALUATION ---
+        if ((result.type === 'Strategic' || result.type === 'Conceptual') && CONFIG.AI_ENABLED) {
+            this.ui.addChat('system', '🤔 AI가 답변을 검토 중...');
+
+            const aiResult = await this.aiEvaluate(input, dialogue);
+
+            if (aiResult && aiResult.isCorrect) {
+                result = { type: 'Perfect', msg: null };
+                this.ui.addChat('system', '✨ AI가 정답으로 인정했습니다!');
+            } else if (aiResult && aiResult.feedback) {
+                result.msg = aiResult.feedback;
+            }
+        }
 
         if (result.type === 'Perfect') {
+            // PERFECT HIT
             // PERFECT HIT
             this.consecutiveErrors = 0;
             const dmg = this.atk * 2;

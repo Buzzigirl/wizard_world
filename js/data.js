@@ -1,5 +1,9 @@
 // Game Configuration & Data
-export const CONFIG = { API_KEY: "" };
+export const CONFIG = {
+    API_KEY: "", // Set via Railway environment variable: OPENAI_API_KEY
+    AI_MODEL: "gpt-4o-mini",
+    AI_ENABLED: true
+};
 export const LOBBY_BG = 'assets/bg_lobby.png';
 
 export const CLASSES = {
