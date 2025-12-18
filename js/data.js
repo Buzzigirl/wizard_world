@@ -64,18 +64,18 @@ export const THEMES = [
                 img: 'assets/1.png', // Explicit img
                 dialogues: [
                     {
-                        guide: "아기 멧돼지가 놀고 싶어해요. 'play' (놀다)를 써서 같이 놀자고 말해보세요.",
+                        guide: "아기 멧돼지가 놀고 싶어해요.<br>'play' (놀다)를 써서<br>같이 놀자고 말해보세요.",
                         keywords: ["play"],
                         syntax: "Let's (Aux) + play (V)",
-                        perfect: ["Let's play", "Let us play"],
+                        perfect: ["Let's play", "Let us play", "Lets play", "Let's play together", "Play with me"],
                         feedback: "Let's(하자) + play(놀다).",
                         hint: "정답 형식: L____ play"
                     },
                     {
-                        guide: "배가 고픈가 봐요. 'eat' (먹다)과 'apple' (사과)을 주세요.",
+                        guide: "배가 고픈가 봐요.<br>'eat' (먹다)과 'apple' (사과)을<br>주세요.",
                         keywords: ["eat", "apple"],
                         syntax: "Eat (V) + this apple (O)",
-                        perfect: ["Eat this apple", "Eat apple"],
+                        perfect: ["Eat this apple", "Eat apple", "Eat the apple", "Eat an apple", "Have this apple", "Have an apple"],
                         feedback: "Eat(먹어라) + apple(사과를).",
                         hint: "정답 형식: E__ this a____"
                     }
@@ -86,18 +86,18 @@ export const THEMES = [
                 img: 'assets/2.png',
                 dialogues: [
                     {
-                        guide: "버섯이 춤추고 있어요! 'dance' (춤추다)라고 말해서 응원해주세요.",
+                        guide: "버섯이 춤추고 있어요!<br>'dance' (춤추다)라고 말해서<br>응원해주세요.",
                         keywords: ["dance"],
                         syntax: "You (S) + dance (V) + well (Adv)",
-                        perfect: ["You dance well", "Dance mushroom"],
+                        perfect: ["You dance well", "Dance mushroom", "You dance", "Dance well", "You're dancing", "Keep dancing"],
                         feedback: "You(너는) + dance(춤춘다).",
                         hint: "정답 형식: You d____ well"
                     },
                     {
-                        guide: "버섯이 쑥쑥 자라네요. 'grow' (자라다)를 써보세요.",
+                        guide: "버섯이 쑥쑥 자라네요.<br>'grow' (자라다)를<br>써보세요.",
                         keywords: ["grow"],
                         syntax: "Grow (V) + tall (Adj)",
-                        perfect: ["Grow tall", "Grow fast"],
+                        perfect: ["Grow tall", "Grow fast", "Grow big", "Grow up", "Keep growing", "Grow taller"],
                         feedback: "Grow(자라라) + tall(키가 크게).",
                         hint: "정답 형식: G___ tall"
                     }
@@ -112,10 +112,10 @@ export const THEMES = [
                     hp: 200, msg: "엔트가 인자하게 웃습니다.",
                     dialogues: [
                         {
-                            guide: "엔트에게 숲이 아름답다고 말해주세요. 'forest' (숲)와 'beautiful' (아름다운).",
+                            guide: "엔트에게 숲이 아름답다고 말해주세요.<br>'forest' (숲)와 'beautiful' (아름다운)을<br>사용하세요.",
                             keywords: ["forest", "beautiful"],
                             syntax: "The forest (S) + is (V) + beautiful (C)",
-                            perfect: ["The forest is beautiful", "Forest is beautiful"],
+                            perfect: ["The forest is beautiful", "Forest is beautiful", "This forest is beautiful", "The forest looks beautiful", "It's beautiful"],
                             feedback: "The forest(숲은) + is(이다) + beautiful(아름다운).",
                             hint: "정답 형식: The f_____ is b________"
                         }
@@ -125,10 +125,10 @@ export const THEMES = [
                     hp: 100, msg: "엔트가 가지를 흔듭니다.",
                     dialogues: [
                         {
-                            guide: "엔트와 친구가 되고 싶나요? 'be' (되다)와 'friends' (친구)를 쓰세요.",
+                            guide: "엔트와 친구가 되고 싶나요?<br>'be' (되다)와 'friends' (친구)를<br>쓰세요.",
                             keywords: ["friends"],
                             syntax: "Let's (Aux) + be (V) + friends (C)",
-                            perfect: ["Let's be friends", "We are friends"],
+                            perfect: ["Let's be friends", "We are friends", "Lets be friends", "Be my friend", "We're friends", "Become friends"],
                             feedback: "Let's be(되자) + friends(친구가).",
                             hint: "정답 형식: Let's be f______"
                         }
@@ -138,10 +138,10 @@ export const THEMES = [
                     hp: 0, msg: "엔트가 꽃을 피웁니다.",
                     dialogues: [
                         {
-                            guide: "이제 작별 인사를 해요. 'goodbye' (안녕)!",
+                            guide: "이제 작별 인사를 해요.<br>'goodbye' (안녕)를<br>말해보세요!",
                             keywords: ["goodbye", "bye"],
                             syntax: "Goodbye (Interj) + friend (N)",
-                            perfect: ["Goodbye friend", "Bye bye"],
+                            perfect: ["Goodbye friend", "Bye bye", "Goodbye", "Bye friend", "See you", "Farewell"],
                             feedback: "Goodbye(안녕) + friend(친구야).",
                             hint: "정답 형식: G______ friend"
                         }
@@ -161,10 +161,10 @@ export const THEMES = [
                 name: "사막 돌맹이",
                 img: 'assets/7.png',
                 dialogues: [{
-                    guide: "전갈이 모래 속에 숨었습니다. 'freeze' (얼리다) 단어를 써서 모래를 얼려보세요!",
+                    guide: "전갈이 모래 속에 숨었습니다.<br>'freeze' (얼리다) 단어를 써서<br>모래를 얼려보세요!",
                     keywords: ["freeze", "sand"],
                     syntax: "I (S) + freeze (V) + sand (O)",
-                    perfect: ["I freeze sand", "Freeze sand"],
+                    perfect: ["I freeze sand", "Freeze sand", "I freeze the sand", "Freeze the sand", "I'll freeze sand", "Let me freeze sand"],
                     feedback: "I(나는) + freeze(얼린다) + sand(모래를).",
                     hint: "정답 형식: I f_____ sand"
                 }]
@@ -173,10 +173,10 @@ export const THEMES = [
                 name: "꼬마 도마뱀", // Renamed for Cute Cactus feel (d2.png)
                 img: 'assets/8.png', // New Asset
                 dialogues: [{
-                    guide: "독침이 위험합니다! 'remove' (제거하다)와 'poison' (독)을 사용해 해독하세요.",
+                    guide: "독침이 위험합니다!<br>'remove' (제거하다)와 'poison' (독)을<br>사용해 해독하세요.",
                     keywords: ["remove", "poison"],
                     syntax: "Remove (V) + poison (O)",
-                    perfect: ["Remove poison", "Remove the poison"],
+                    perfect: ["Remove poison", "Remove the poison", "I remove poison", "Get rid of poison", "Take out poison", "Clear poison"],
                     feedback: "Remove(제거해) + poison(독을).",
                     hint: "정답 형식: R_____ poison"
                 }]
@@ -190,10 +190,10 @@ export const THEMES = [
                 {
                     hp: 300, msg: "샌드웜이 모래폭풍을 일으킵니다!",
                     dialogues: [{
-                        guide: "폭풍이 몰아칩니다! 'stop' (멈추다)과 'storm' (폭풍)으로 막으세요!",
+                        guide: "폭풍이 몰아칩니다!<br>'stop' (멈추다)과 'storm' (폭풍)으로<br>막으세요!",
                         keywords: ["stop", "storm"],
                         syntax: "Stop (V) + the storm (O)",
-                        perfect: ["Stop the storm", "Stop storm"],
+                        perfect: ["Stop the storm", "Stop storm", "I stop the storm", "Stop this storm", "I'll stop storm", "Halt the storm"],
                         feedback: "Stop(멈춰라) + the storm(그 폭풍을).",
                         hint: "정답 형식: S___ the storm"
                     }]
@@ -201,10 +201,10 @@ export const THEMES = [
                 {
                     hp: 150, msg: "샌드웜이 삼키려 합니다!",
                     dialogues: [{
-                        guide: "입을 벌리고 달려듭니다! 'block' (막다)과 'mouth' (입)으로 방어하세요!",
+                        guide: "입을 벌리고 달려듭니다!<br>'block' (막다)과 'mouth' (입)으로<br>방어하세요!",
                         keywords: ["block", "mouth"],
                         syntax: "I (S) + block (V) + mouth (O)",
-                        perfect: ["I block mouth", "Block the mouth"],
+                        perfect: ["I block mouth", "Block the mouth", "I block the mouth", "Block its mouth", "I'll block mouth", "Stop the mouth"],
                         feedback: "I(나는) + block(막는다) + mouth(입을).",
                         hint: "정답 형식: I b____ mouth"
                     }]
@@ -212,10 +212,10 @@ export const THEMES = [
                 {
                     hp: 0, msg: "샌드웜이 힘을 잃습니다.",
                     dialogues: [{
-                        guide: "마지막 일격입니다! 'finish' (끝내다)를 외쳐요!",
+                        guide: "마지막 일격입니다!<br>'finish' (끝내다)를<br>외쳐요!",
                         keywords: ["finish"],
                         syntax: "I (S) + finish (V) + it (O)",
-                        perfect: ["I finish it", "Finish it"],
+                        perfect: ["I finish it", "Finish it", "I'll finish it", "Finish this", "End it", "Complete it"],
                         feedback: "Finish(끝내라) + it(그것을).",
                         hint: "정답 형식: F_____ it"
                     }]
@@ -234,10 +234,10 @@ export const THEMES = [
                 name: "꼬마 박쥐", // Renamed for Cute Imp (m1.png)
                 img: 'assets/4.png',
                 dialogues: [{
-                    guide: "문을 지키고 있습니다. 'open' (열다)과 'gate' (문)를 사용하세요.",
+                    guide: "문을 지키고 있습니다.<br>'open' (열다)과 'gate' (문)를<br>사용하세요.",
                     keywords: ["open", "gate"],
                     syntax: "Open (V) + the gate (O)",
-                    perfect: ["Open the gate", "Open gate"],
+                    perfect: ["Open the gate", "Open gate", "I open the gate", "Open this gate", "I'll open gate", "Unlock the gate"],
                     feedback: "Open(열어라) + the gate(문을).",
                     hint: "정답 형식: O___ the gate"
                 }]
@@ -246,10 +246,10 @@ export const THEMES = [
                 name: "장난 유령", // Renamed for Cute Armor (m2.png)
                 img: 'assets/5.png',
                 dialogues: [{
-                    guide: "갑옷이 혼자 움직입니다! 'stop' (멈추다)을 외쳐보세요.",
+                    guide: "갑옷이 혼자 움직입니다!<br>'fight' (싸우다)를<br>외쳐보세요.",
                     keywords: ["fight"],
                     syntax: "I (S) + will (Aux) + fight (V)",
-                    perfect: ["I will fight", "I fight you"],
+                    perfect: ["I will fight", "I fight you", "I'll fight", "I will fight you", "Let's fight", "I'm fighting"],
                     feedback: "I will(나는 할 것이다) + fight(싸우다).",
                     hint: "정답 형식: I w___ fight"
                 }]
@@ -263,10 +263,10 @@ export const THEMES = [
                 {
                     hp: 350, msg: "마왕이 어둠의 힘을 모읍니다.",
                     dialogues: [{
-                        guide: "어둠을 걷어내야 해요! 'light' (빛)여 비추어라!",
+                        guide: "어둠을 걷어내야 해요!<br>'light' (빛)여<br>비추어라!",
                         keywords: ["light"],
                         syntax: "Let (V) + light (S) + shine (V)",
-                        perfect: ["Let light shine", "Light shine"],
+                        perfect: ["Let light shine", "Light shine", "Let the light shine", "Light shines", "Shine light", "Bring light"],
                         feedback: "Let light(빛이 하게 해라) + shine(비추도록).",
                         hint: "정답 형식: L__ light shine"
                     }]
@@ -274,10 +274,10 @@ export const THEMES = [
                 {
                     hp: 150, msg: "마왕이 최후의 발악을 합니다.",
                     dialogues: [{
-                        guide: "결계가 무너집니다. 'strike' (공격하다)로 끝내세요!",
+                        guide: "결계가 무너집니다.<br>'strike' (공격하다)로<br>끝내세요!",
                         keywords: ["strike"],
                         syntax: "Strike (V) + now (Adv)",
-                        perfect: ["Strike now", "I strike now"],
+                        perfect: ["Strike now", "I strike now", "I'll strike now", "Strike it now", "Hit now", "Attack now"],
                         feedback: "Strike(공격해) + now(지금).",
                         hint: "정답 형식: S_____ now"
                     }]
@@ -285,10 +285,10 @@ export const THEMES = [
                 {
                     hp: 0, msg: "마왕이 쓰러집니다.",
                     dialogues: [{
-                        guide: "세상을 구했습니다! 'victory' (승리)를 외치세요!",
+                        guide: "세상을 구했습니다!<br>'victory' (승리)를<br>외치세요!",
                         keywords: ["victory"],
                         syntax: "This (S) + is (V) + victory (C)",
-                        perfect: ["This is victory", "Victory"],
+                        perfect: ["This is victory", "Victory", "We won", "This is our victory", "Victory is ours", "We achieved victory"],
                         feedback: "This is(이것은 ~이다) + victory(승리).",
                         hint: "정답 형식: This is v______"
                     }]
