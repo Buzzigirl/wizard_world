@@ -203,12 +203,25 @@ export class UIManager {
         this.els.hud.displayTheme.textContent = theme.name;
         this.els.hud.displayStage.textContent = mob.isBoss ? "BOSS" : `Stage ${this.game.stage}`;
 
-        // Update stage objective
+        // Update stage objective - show learning goal, not the answer
         const dialogue = this.game.getCurrentDialogue();
-        const objective = dialogue ? dialogue.syntax : "Complete the stage";
+        let objective = "문법 학습 중";
+        if (dialogue) {
+            // Extract learning goal from syntax or create descriptive goal
+            const syntax = dialogue.syntax || "";
+            if (syntax.includes("Subject + Verb")) {
+                objective = "주어 + 동사 구조 학습";
+            } else if (syntax.includes("be동사")) {
+                objective = "be동사 활용 학습";
+            } else if (syntax.includes("형용사")) {
+                objective = "형용사 사용법 학습";
+            } else if (syntax) {
+                objective = `${syntax} 구조 학습`;
+            }
+        }
         const objectiveEl = document.getElementById('display-objective');
         if (objectiveEl) {
-            objectiveEl.textContent = `🎯 ${objective}`;
+            objectiveEl.textContent = objective;
         }
 
         this.els.game.mImg.src = mob.img;
