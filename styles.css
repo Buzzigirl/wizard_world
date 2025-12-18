@@ -385,8 +385,8 @@ body.low-hp::after {
     margin: 10px auto;
     padding: 15px 20px;
 
-    /* Enhanced Glass Morphism */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    /* Enhanced Glass Morphism with darker background */
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -400,8 +400,8 @@ body.low-hp::after {
         inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 
     /* Text Style */
-    color: #4a90e2;
-    /* Blue color for guide text */
+    color: #fff;
+    /* White color for guide text */
     font-size: 1.05rem;
     font-weight: 600;
     text-align: center;
