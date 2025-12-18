@@ -350,8 +350,8 @@ body.low-hp::after {
 /* 2. Monster Image */
 .monster-img {
     order: 2;
-    width: 585px;
-    height: 585px;
+    width: 293px;
+    height: 293px;
     object-fit: contain;
     background: none;
     border-radius: 0;
