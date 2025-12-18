@@ -256,7 +256,11 @@ export class UIManager {
         */
         if (!mob.isBoss && mob.dialogues.length > 0) {
             const d = this.game.getCurrentDialogue();
-            if (d) this.addChat('guide', `[가이드] ${d.guide}`);
+            if (d) {
+                this.addChat('guide', `[가이드] ${d.guide}`);
+                // Show initial AI scaffolding
+                this.game.showAIScaffolding(d);
+            }
         } else if (mob.isBoss) {
             // Initial Boss msg
             const phase = this.game.getMonsterPhase();

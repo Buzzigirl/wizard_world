@@ -397,6 +397,12 @@ Respond in JSON format:
                 this.ui.addChat('scaffold', result.msg, result.type); // type passed for styling
                 this.ui.animateMonsterHit();
                 this.ui.updateRoundUI();
+
+                // Show AI scaffolding for guidance
+                const currentD = this.getCurrentDialogue();
+                if (currentD) {
+                    this.showAIScaffolding(currentD);
+                }
             } else {
                 // Miss (Conceptual, Motivational)
                 this.consecutiveErrors++;
@@ -405,6 +411,13 @@ Respond in JSON format:
                 this.ui.addChat('monster', `실패! 반격을 당합니다. (-${dmg} HP)`);
                 this.ui.addChat('scaffold', result.msg, result.type);
                 this.ui.updateRoundUI();
+
+                // Show AI scaffolding for guidance
+                const currentD = this.getCurrentDialogue();
+                if (currentD) {
+                    this.showAIScaffolding(currentD);
+                }
+
                 if (this.hp <= 0) this.gameOver();
             }
         }
