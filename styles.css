@@ -350,8 +350,8 @@ body.low-hp::after {
 /* 2. Monster Image */
 .monster-img {
     order: 2;
-    width: 780px;
-    height: 780px;
+    width: 1170px;
+    height: 1170px;
     object-fit: contain;
     background: none;
     border-radius: 0;
@@ -400,7 +400,8 @@ body.low-hp::after {
         inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 
     /* Text Style */
-    color: #fbbf24;
+    color: #4a90e2;
+    /* Blue color for guide text */
     font-size: 1.05rem;
     font-weight: 600;
     text-align: center;
