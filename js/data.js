@@ -62,7 +62,7 @@ export const FAIRIES = {
 export const THEMES = [
     {
         id: 'FOREST', name: '신비한 숲',
-        desc: '초급 모험가를 위한 숲입니다. 멧돼지와 엔트가 출현합니다.',
+        desc: '초급 모험가를 위한 숲입니다.',
         bg: 'assets/bg_forest.png',
         music: 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
         mobImg: 'assets/1.png', bossImg: 'assets/3.png',
@@ -160,7 +160,7 @@ export const THEMES = [
     },
     {
         id: 'DESERT', name: '작열하는 사막',
-        desc: '중급 모험가를 위한 사막입니다. 전갈과 샌드웜을 조심하세요.',
+        desc: '중급 모험가를 위한 사막입니다.',
         bg: 'assets/bg_desert.png',
         music: 'https://cdn.pixabay.com/audio/2021/11/01/audio_00fa556557.mp3',
         mobImg: 'assets/7.png', bossImg: 'assets/9.png',
